@@ -1,18 +1,20 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:promotion_dashboard/core/constants/app_text/font_colors.dart';
+import 'package:promotion_dashboard/core/constants/app_text/text_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/font_weight_enum.dart';
 
 const TextStyle _baseStyle = TextStyle(
   fontFamily: MyText._fontFamily,
   fontWeight: FontWeight.w400,
   fontSize: 16,
-  color: FontColors.text,
+  color: TextColors.text,
   height: 1,
   backgroundColor: null,
 );
 
 class MyText {
-  static const String _fontFamily = 'Tajawal';
+  static const String _fontFamily = 'Montserrat';
   static const double _bodyFontSize = 16;
   final TextStyle _style;
 
@@ -45,8 +47,11 @@ class MyText {
 //region Spacing variations
 
   //Application Defentions
-  MyText get fs50 => MyText._(_style.copyWith(fontSize: 50));
   MyText get fs30 => MyText._(_style.copyWith(fontSize: 30));
+  MyText get fs29 => MyText._(_style.copyWith(fontSize: 29));
+  MyText get fs28 => MyText._(_style.copyWith(fontSize: 28));
+  MyText get fs27 => MyText._(_style.copyWith(fontSize: 27));
+  MyText get fs26 => MyText._(_style.copyWith(fontSize: 26));
   MyText get fs25 => MyText._(_style.copyWith(fontSize: 25));
   MyText get fs24 => MyText._(_style.copyWith(fontSize: 24));
   MyText get fs23 => MyText._(_style.copyWith(fontSize: 23));
@@ -69,6 +74,9 @@ class MyText {
   MyText get fs6 => MyText._(_style.copyWith(fontSize: 6));
   MyText get fs5 => MyText._(_style.copyWith(fontSize: 5));
   MyText get fs4 => MyText._(_style.copyWith(fontSize: 4));
+  MyText get fs3 => MyText._(_style.copyWith(fontSize: 3));
+  MyText get fs2 => MyText._(_style.copyWith(fontSize: 2));
+  MyText get fs1 => MyText._(_style.copyWith(fontSize: 1));
   //Custom font size
   MyText customSize(num value) =>
       MyText._(_style.copyWith(fontSize: value.toDouble()));
@@ -132,40 +140,22 @@ class MyText {
 
   //Application defenations
 
-  MyText get reColorPrimary =>
-      MyText._(_style.copyWith(color: FontColors.primary));
-  MyText get reColorSecondry =>
-      MyText._(_style.copyWith(color: FontColors.secondry));
-  MyText get reColorCustomBackground =>
-      MyText._(_style.copyWith(color: FontColors.customBackground));
-  MyText get reColorThird => MyText._(_style.copyWith(color: FontColors.third));
-  MyText get reColorWhite => MyText._(_style.copyWith(color: FontColors.white));
-  MyText get reColorBlack => MyText._(_style.copyWith(color: FontColors.black));
-  MyText get reColorGrey => MyText._(_style.copyWith(color: FontColors.grey));
-  MyText get reColorGrey2 => MyText._(_style.copyWith(color: FontColors.grey2));
-  MyText get reColorLightGrey =>
-      MyText._(_style.copyWith(color: FontColors.lightGrey));
-  MyText get reColorRating =>
-      MyText._(_style.copyWith(color: FontColors.rating));
-  MyText get reColorRed => MyText._(_style.copyWith(color: FontColors.red));
-  MyText get reColorText => MyText._(_style.copyWith(color: FontColors.text));
-  MyText get reColorLightText =>
-      MyText._(_style.copyWith(color: FontColors.lightText));
-  MyText get reColorXLightText =>
-      MyText._(_style.copyWith(color: FontColors.xLightText));
-  MyText get reColorNotoficationSignal =>
-      MyText._(_style.copyWith(color: FontColors.notoficationSignal));
-  MyText get reColorIncrease =>
-      MyText._(_style.copyWith(color: FontColors.increase));
-  MyText get reColorDecrease =>
-      MyText._(_style.copyWith(color: FontColors.decrease));
-  MyText get reColorGreen => MyText._(_style.copyWith(color: FontColors.green));
-  MyText get reColorCustomGreen =>
-      MyText._(_style.copyWith(color: FontColors.customGreen));
-  MyText get reColorSpecialOffer =>
-      MyText._(_style.copyWith(color: FontColors.specialOffer));
-  MyText get reColorBlue => MyText._(_style.copyWith(color: FontColors.blue));
+  MyText get reColorText => MyText._(_style.copyWith(color: TextColors.text));
+  MyText get reColorWhite => MyText._(_style.copyWith(color: TextColors.white));
+  MyText get reColorLightGray =>
+      MyText._(_style.copyWith(color: TextColors.lightGray));
+  MyText get reColor_208CC8 =>
+      MyText._(_style.copyWith(color: TextColors.color_208CC8));
+  MyText get reColor_4EB7F2 =>
+      MyText._(_style.copyWith(color: TextColors.color_4EB7F2));
+  MyText get reColor_7DD97B =>
+      MyText._(_style.copyWith(color: TextColors.color_7DD97B));
+  MyText get reColor_FAFAFA =>
+      MyText._(_style.copyWith(color: TextColors.color_FAFAFA));
+  MyText get reColor_F3735E =>
+      MyText._(_style.copyWith(color: TextColors.color_F3735E));
 
+//Custom color
   MyText reCustomColor(Color color) => MyText._(_style.copyWith(color: color));
   MyText reColorIf(bool condition, Color color) =>
       MyText._(_style.copyWith(color: condition ? color : null));

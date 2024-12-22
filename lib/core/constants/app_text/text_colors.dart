@@ -1,30 +1,17 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
-abstract class FontColors {
+abstract class TextColors {
   //Application definitions
-  static const Color primary = Color(0xFF02BED3);
-  static const Color secondry = Color(0xFF24414B);
-  static const Color transparent = Colors.transparent;
-  static const Color customBackground = Color(0XFFDFFEFE);
-  static Color third = const Color(0xFF00749F);
-  static const Color white = Color(0xffffffff);
-  static Color black = const Color(0xFF000000);
-  static Color grey = const Color(0xFF707070);
-  static Color grey2 = const Color(0xFF707070);
-  static Color lightGrey = const Color(0xFFCECECE);
-  static const Color rating = Color(0xFFF3D000);
-  static const Color red = Colors.red;
-  static const Color text = Color(
-      0xFF24414B); //This color is secondry color in the app and it is main
-  static const Color lightText = Color(0xFF8D8D8D);
-  static const Color xLightText = Color(0xFFA9A9A9);
-  static const Color notoficationSignal = Color(0xFF00E76C);
-  static const Color increase = Color(0xFF1AD598);
-  static const Color decrease = Color(0xFFEA3A3D);
-  static const Color green = Color(0xFF0DD106);
-  static const Color customGreen = Color(0xFF1AD598);
-  static const Color specialOffer = Color(0xFF9A51E0);
-  static const Color blue = Colors.blue;
+  static const Color text = Color(0xFF064061);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color lightGray = Color(0xFFAAAAAA);
+  static const Color color_208CC8 = Color(0xFF208CC8); //Ocean Blue
+  static const Color color_4EB7F2 = Color(0xFF4EB7F2); //Sky Blue
+  static const Color color_7DD97B = Color(0xFF7DD97B); //Fresh green
+  static const Color color_FAFAFA = Color(0xFFFAFAFA); // Snow white
+  static const Color color_F3735E = Color(0xFFF3735E); //Coral orange
 
   static Color customColor(Color color) => color;
 
