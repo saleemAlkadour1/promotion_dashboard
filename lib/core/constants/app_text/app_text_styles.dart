@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_dashboard/app_text/font_colors.dart';
-import 'package:promotion_dashboard/app_text/font_weight_enum.dart';
+import 'package:promotion_dashboard/core/constants/app_text/font_colors.dart';
+import 'package:promotion_dashboard/core/constants/app_text/font_weight_enum.dart';
 
 const TextStyle _baseStyle = TextStyle(
   fontFamily: MyText._fontFamily,
