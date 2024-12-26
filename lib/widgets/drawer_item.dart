@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/data/model/drawer_item_model.dart';
+import 'package:promotion_dashboard/widgets/active_and_inactive_item.dart';
 
 class DrawerItem extends StatelessWidget {
   const DrawerItem(
@@ -11,12 +10,10 @@ class DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: SvgPicture.asset(drawerItemModel.imagePath),
-      title: Text(
-        drawerItemModel.title,
-        style: MyText.appStyle.fs16.wMedium.reColorText.style(context),
-      ),
-    );
+    return isActive
+        ? ActiveDrawerItem(
+            drawerItemModel: drawerItemModel,
+          )
+        : InActiveDrawerItem(drawerItemModel: drawerItemModel);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/core/functions/size.dart';
 import 'package:promotion_dashboard/data/model/drawer_item_model.dart';
 import 'package:promotion_dashboard/widgets/drawer_item.dart';
 
@@ -27,9 +26,7 @@ class _DrawerItemsListViewState extends State<DrawerItemsListView> {
   int activeIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    return SliverList.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
         return GestureDetector(
@@ -41,8 +38,8 @@ class _DrawerItemsListViewState extends State<DrawerItemsListView> {
             }
           },
           child: Padding(
-            padding: EdgeInsets.only(
-              top: height(20),
+            padding: const EdgeInsets.only(
+              top: 20,
             ),
             child: DrawerItem(
               drawerItemModel: items[index],

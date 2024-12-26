@@ -20,3 +20,8 @@ double emp(x) {
   var r = ((x * getHeiht() / 826.909) + (x * getWidth() / 392.727)) / 2;
   return r;
 }
+
+/*
+Mobile width:  392.727
+Mobile height: 826.909
+*/
