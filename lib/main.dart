@@ -6,9 +6,10 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/view/screens/dashboard.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     DevicePreview(
-      enabled: true,
+      enabled: false,
       builder: (context) => const PromotionDashboard(),
     ),
   );
@@ -20,7 +21,7 @@ class PromotionDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      locale: DevicePreview.locale(context),
+      debugShowCheckedModeBanner: false,
       builder: DevicePreview.appBuilder,
       home: Dashboard(),
     );
