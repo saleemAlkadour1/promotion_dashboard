@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/data/model/user_info_model.dart';
 
 class UserInfoListTile extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String subtitle;
-  const UserInfoListTile(
-      {super.key,
-      required this.imagePath,
-      required this.title,
-      required this.subtitle});
+  final UserInfoModel userInfoModel;
+  const UserInfoListTile({
+    super.key,
+    required this.userInfoModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +17,13 @@ class UserInfoListTile extends StatelessWidget {
       color: AppColors.color_FAFAFA,
       elevation: 0,
       child: ListTile(
-        leading: SvgPicture.asset(imagePath),
+        leading: SvgPicture.asset(userInfoModel.imagePath),
         title: Text(
-          title,
+          userInfoModel.title,
           style: MyText.appStyle.fs16.wSemiBold.reColorText.style(context),
         ),
         subtitle: Text(
-          subtitle,
+          userInfoModel.subTitle,
           style: MyText.appStyle.fs12.wRegular.reColorLightGray.style(context),
         ),
       ),

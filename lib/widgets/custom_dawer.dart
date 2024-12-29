@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/data/model/drawer_item_model.dart';
+import 'package:promotion_dashboard/data/model/user_info_model.dart';
 import 'package:promotion_dashboard/widgets/active_and_inactive_item.dart';
 import 'package:promotion_dashboard/widgets/drawer_items_list_view.dart';
 import 'package:promotion_dashboard/widgets/size.dart';
@@ -20,9 +21,11 @@ class CustomDawer extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: UserInfoListTile(
-              imagePath: Assets.imagesSvgAvatar3,
-              title: 'Lekan Okeowo',
-              subtitle: 'demo@gmail.com',
+              userInfoModel: UserInfoModel(
+                imagePath: Assets.imagesSvgAvatar3,
+                title: 'Lekan Okeowo',
+                subTitle: 'demo@gmail.com',
+              ),
             ),
           ),
           SliverToBoxAdapter(child: SizedBoxHeight(8)),

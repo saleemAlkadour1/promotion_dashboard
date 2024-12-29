@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:promotion_dashboard/widgets/all_expenses.dart';
+import 'package:promotion_dashboard/widgets/all_expensess_and_quickInvoice_section.dart';
 import 'package:promotion_dashboard/widgets/custom_dawer.dart';
 
 class DashboardDesktopLayout extends StatelessWidget {
@@ -20,13 +20,7 @@ class DashboardDesktopLayout extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: Column(
-            children: [
-              Expanded(
-                child: AllExpenses(),
-              )
-            ],
-          ),
+          child: AllExpensessAndQuickInvoiceSection(),
         ),
       ],
     );
