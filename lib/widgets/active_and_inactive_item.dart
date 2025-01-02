@@ -16,9 +16,13 @@ class InActiveDrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: SvgPicture.asset(drawerItemModel.imagePath),
-      title: Text(
-        drawerItemModel.title,
-        style: MyText.appStyle.fs16.wMedium.reColorText.style(context),
+      title: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(
+          drawerItemModel.title,
+          style: MyText.appStyle.fs16.wMedium.reColorText.style(context),
+        ),
       ),
     );
   }
@@ -36,9 +40,13 @@ class ActiveDrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: SvgPicture.asset(drawerItemModel.imagePath),
-      title: Text(
-        drawerItemModel.title,
-        style: MyText.appStyle.fs16.wBold.reColor_4EB7F2.style(context),
+      title: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(
+          drawerItemModel.title,
+          style: MyText.appStyle.fs16.wBold.reColor_4EB7F2.style(context),
+        ),
       ),
       trailing: Container(
         width: 3.27,

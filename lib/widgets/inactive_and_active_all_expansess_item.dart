@@ -35,24 +35,37 @@ class InActiveAllExpansessItem extends StatelessWidget {
           const SizedBox(
             height: 34,
           ),
-          Text(
-            itemModel.title,
-            style: MyText.appStyle.fs16.wBold.reColorText.style(context),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              itemModel.title,
+              style: MyText.appStyle.fs16.wBold.reColorText.style(context),
+            ),
           ),
           const SizedBox(
             height: 8,
           ),
-          Text(
-            itemModel.date,
-            style:
-                MyText.appStyle.fs14.wRegular.reColorLightGray.style(context),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              itemModel.date,
+              style:
+                  MyText.appStyle.fs14.wRegular.reColorLightGray.style(context),
+            ),
           ),
           const SizedBox(
             height: 34,
           ),
-          Text(
-            itemModel.price,
-            style: MyText.appStyle.fs24.wSemiBold.reColor_4EB7F2.style(context),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              itemModel.price,
+              style:
+                  MyText.appStyle.fs24.wSemiBold.reColor_4EB7F2.style(context),
+            ),
           )
         ],
       ),
@@ -78,7 +91,7 @@ class ActiveAllExpansessItem extends StatelessWidget {
       decoration: ShapeDecoration(
         color: AppColors.color_4EB7F2,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 1, color: AppColors.color_F1F1F1),
+          side: const BorderSide(width: 1, color: AppColors.color_4EB7F2),
           borderRadius: BorderRadius.circular(12),
         ),
       ),
@@ -94,23 +107,36 @@ class ActiveAllExpansessItem extends StatelessWidget {
           const SizedBox(
             height: 34,
           ),
-          Text(
-            itemModel.title,
-            style: MyText.appStyle.fs16.wBold.reColorWhite.style(context),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              itemModel.title,
+              style: MyText.appStyle.fs16.wBold.reColorWhite.style(context),
+            ),
           ),
           const SizedBox(
             height: 8,
           ),
-          Text(
-            itemModel.date,
-            style: MyText.appStyle.fs14.wRegular.reColor_FAFAFA.style(context),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              itemModel.date,
+              style:
+                  MyText.appStyle.fs14.wRegular.reColor_FAFAFA.style(context),
+            ),
           ),
           const SizedBox(
             height: 34,
           ),
-          Text(
-            itemModel.price,
-            style: MyText.appStyle.fs24.wSemiBold.reColorWhite.style(context),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              itemModel.price,
+              style: MyText.appStyle.fs24.wSemiBold.reColorWhite.style(context),
+            ),
           )
         ],
       ),

@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/widgets/all_expensess_and_quickInvoice_section.dart';
 import 'package:promotion_dashboard/widgets/custom_dawer.dart';
+import 'package:promotion_dashboard/widgets/income_section.dart';
+import 'package:promotion_dashboard/widgets/my_cards_and_transaction_history_section.dart';
 
 class DashboardDesktopLayout extends StatelessWidget {
   const DashboardDesktopLayout({super.key});
@@ -19,8 +21,42 @@ class DashboardDesktopLayout extends StatelessWidget {
           width: 32,
         ),
         Expanded(
-          flex: 2,
-          child: AllExpensessAndQuickInvoiceSection(),
+          flex: 3,
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 40),
+                        child: AllExpensessAndQuickInvoiceSection(),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          MyCardsAndTransactionHistorySection(),
+                          SizedBox(
+                            height: 24,
+                          ),
+                          Expanded(child: IncomeSection()),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 32,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

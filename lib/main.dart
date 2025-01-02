@@ -18,10 +18,11 @@ class PromotionDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      home: Dashboard(),
+      home: const Dashboard(),
     );
   }
 }

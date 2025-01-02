@@ -21,6 +21,7 @@ abstract class AppColors {
   static const Color color_E2DECD = Color(0xFFE2DECD); //Sand Beige
   static const Color color_F7F9FA = Color(0xFFF7F9FA); //Mist White
   static const Color color_C4C4C4 = Color(0xFFC4C4C4); //Neutral Gray
+  static const Color color_E7E7E7 = Color(0xFFE7E7E7); //Neutral Gray
   static const Color transparent = Colors.transparent;
 
   static Color customColor(Color color) => color;

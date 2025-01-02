@@ -189,11 +189,18 @@ double getResponsiveFontSize(BuildContext context, {required double fontSize}) {
 
 double getScaleFactor(BuildContext context) {
   double width = MediaQuery.sizeOf(context).width;
-  if (width < 600) {
-    return width / 400;
-  } else if (width < 900) {
-    return width / 700;
-  } else {
+  if (width < 800) {
+    return width / 550;
+  } else if (width < 1200) {
     return width / 1000;
+  } else {
+    return width / 1920;
   }
 }
+
+
+
+//  var dispatcher = PlatformDispatcher.instance;
+//     var physicalWidth = dispatcher.views.first.physicalSize.width;
+//     var devicePixelRatio= dispatcher.views.first.devicePixelRatio;
+//     double width = physicalWidth/devicePixelRatio;

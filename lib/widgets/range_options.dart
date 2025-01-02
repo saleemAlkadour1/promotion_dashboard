@@ -33,7 +33,7 @@ class RangeOptions extends StatelessWidget {
           Transform.rotate(
               angle: -1.57079633,
               child: const Icon(
-                Icons.arrow_back_ios_outlined,
+                Icons.arrow_back_ios_new,
                 color: AppColors.color_064061,
               ))
         ],

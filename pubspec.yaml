@@ -9,6 +9,8 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.8
   device_preview: ^1.2.0
+  expandable_page_view: ^1.0.17
+  fl_chart: ^0.65.0
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.16
@@ -40,4 +42,3 @@ flutter_assets:
   filename: assets.dart
   field_prefix: null
   ignore_comments: true
-

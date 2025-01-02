@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
+import 'package:promotion_dashboard/core/functions/size.dart';
 
 class AllExpensesItemHeader extends StatelessWidget {
   const AllExpensesItemHeader({
@@ -18,18 +19,26 @@ class AllExpensesItemHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: ShapeDecoration(
-            color: imageBackgroundColor ?? AppColors.color_FAFAFA,
-            shape: OvalBorder(),
-          ),
-          child: Center(
-            child: SvgPicture.asset(
-              imagePath,
-              colorFilter: ColorFilter.mode(
-                  color ?? AppColors.color_4EB7F2, BlendMode.srcIn),
+        Flexible(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 60),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: ShapeDecoration(
+                  color: imageBackgroundColor ?? AppColors.color_FAFAFA,
+                  shape: OvalBorder(),
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    imagePath,
+                    colorFilter: ColorFilter.mode(
+                        color ?? AppColors.color_4EB7F2, BlendMode.srcIn),
+                  ),
+                ),
+              ),
             ),
           ),
         ),

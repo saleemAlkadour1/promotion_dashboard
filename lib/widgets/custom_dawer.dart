@@ -16,6 +16,7 @@ class CustomDawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.sizeOf(context).width * 0.7,
       color: AppColors.white,
       child: CustomScrollView(
         slivers: [
