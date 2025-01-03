@@ -14,13 +14,23 @@ class Assets {
 
   static const String imagesSvgDashboard = "assets/images/svg/dashboard.svg";
 
+  static const String imagesSvgDelete = "assets/images/svg/delete.svg";
+
+  static const String imagesSvgDownload = "assets/images/svg/download.svg";
+
+  static const String imagesSvgEdit = "assets/images/svg/edit.svg";
+
   static const String imagesSvgExpenses = "assets/images/svg/expenses.svg";
+
+  static const String imagesSvgEye = "assets/images/svg/eye.svg";
 
   static const String imagesSvgGallery = "assets/images/svg/gallery.svg";
 
   static const String imagesSvgIncome = "assets/images/svg/income.svg";
 
   static const String imagesSvgLogout = "assets/images/svg/logout.svg";
+
+  static const String imagesSvgMenuCircleVertical = "assets/images/svg/menu_circle_vertical.svg";
 
   static const String imagesSvgMyInvestments = "assets/images/svg/my_investments.svg";
 
