@@ -1,0 +1,15 @@
+const Map<String, String> tr = {
+  'arabic': "Arapça",
+  'english': "İngilizce",
+  'turkey': "Türkçe",
+  'choose_language': "Uygun dilinizi seçin",
+  'next': "sonraki",
+  'enter_your_account': 'Platformda hesabınıza giriş yapın',
+  'email': 'E-posta',
+  'password': 'Şifre',
+  'forget_password': 'Şifrenizi mi unuttunuz?',
+  'remember_me': 'Beni hatırla',
+  'login': 'Giriş yap',
+  'you_have_not_account': 'Hesabınız yok mu?',
+  'create_account': 'Hesap oluştur',
+};

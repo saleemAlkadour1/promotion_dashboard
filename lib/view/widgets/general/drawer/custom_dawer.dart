@@ -5,10 +5,13 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
+import 'package:promotion_dashboard/core/constants/size_config.dart';
 import 'package:promotion_dashboard/data/model/drawer_item_model.dart';
+import 'package:promotion_dashboard/data/model/user_info_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/active_and_inactive_drawer_item.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/drawer_items_list_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/size.dart';
+import 'package:promotion_dashboard/view/widgets/general/user_info_list_tile.dart';
 
 class CustomDawer extends StatelessWidget {
   const CustomDawer({super.key, required this.onIndexSelected});
@@ -23,7 +26,14 @@ class CustomDawer extends StatelessWidget {
         color: AppColors.white,
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(child: SizedBoxHeight(8)),
+            SliverToBoxAdapter(
+              child: UserInfoListTile(
+                  color: AppColors.white,
+                  userInfoModel: UserInfoModel(
+                      imagePath: Assets.imagesSvgAvatar1,
+                      title: 'Saleem Alkadour',
+                      subTitle: 'saleem8@gmail.com')),
+            ),
             DrawerItemsListView(
               activeIndex: controller.activeIndex,
               onIndexSelected: (index) {

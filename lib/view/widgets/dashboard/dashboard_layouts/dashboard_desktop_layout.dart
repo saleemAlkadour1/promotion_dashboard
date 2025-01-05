@@ -37,6 +37,9 @@ class DashboardDesktopLayout extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: 32,
+                          ),
                           MyCardsAndTransactionHistorySection(),
                           SizedBox(
                             height: 24,

@@ -6,15 +6,17 @@ import 'package:promotion_dashboard/data/model/user_info_model.dart';
 
 class UserInfoListTile extends StatelessWidget {
   final UserInfoModel userInfoModel;
+  final Color? color;
   const UserInfoListTile({
     super.key,
     required this.userInfoModel,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColors.color_FAFAFA,
+      color: color ?? AppColors.color_FAFAFA,
       elevation: 0,
       child: ListTile(
         leading: SvgPicture.asset(userInfoModel.imagePath),

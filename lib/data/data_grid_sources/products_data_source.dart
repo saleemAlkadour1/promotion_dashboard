@@ -1,19 +1,21 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:promotion_dashboard/data/model/product_model.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class ProductsDataSource extends DataGridSource {
   ProductsDataSource(
-      {required this.customBuildRow, required List<ProductModel> products}) {
+      {required this.custombuildRow, required List<ProductModel> products}) {
     _products = products;
     buildPaginatedData();
   }
 
-  final DataGridRowAdapter Function(DataGridRow, int) customBuildRow;
+  final DataGridRowAdapter Function(DataGridRow row, bool isEvenRow)
+      custombuildRow;
   late List<ProductModel> _products;
   List<DataGridRow> paginatedRows = [];
   int rowsPerPage = 10;
 
-  // تحديث البيانات لتصبح حسب الصفحة
   void buildPaginatedData({int startIndex = 0}) {
     paginatedRows = _products
         .skip(startIndex)
@@ -33,7 +35,8 @@ class ProductsDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
-    final int rowIndex = paginatedRows.indexOf(row);
-    return customBuildRow(row, rowIndex);
+    bool isEvenRow = rows.indexOf(row) % 2 == 0;
+
+    return custombuildRow(row, isEvenRow);
   }
 }

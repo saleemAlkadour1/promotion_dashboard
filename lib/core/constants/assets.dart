@@ -2,7 +2,13 @@
 class Assets {
   Assets._();
   
+  static const String imagesPicturesArabic = "assets/images/pictures/arabic.png";
+
   static const String imagesPicturesCardBackground = "assets/images/pictures/card_background.png";
+
+  static const String imagesPicturesEnglish = "assets/images/pictures/english.png";
+
+  static const String imagesPicturesTurkey = "assets/images/pictures/turkey.png";
 
   static const String imagesSvgAvatar1 = "assets/images/svg/avatar_1.svg";
 
