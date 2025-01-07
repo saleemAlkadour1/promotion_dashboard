@@ -6,6 +6,7 @@ import 'package:promotion_dashboard/controller/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/data/model/user_info_model.dart';
+import 'package:promotion_dashboard/view/screens/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/dashboard.dart';
 import 'package:promotion_dashboard/view/screens/products_management.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/drawer_item.dart';
@@ -140,7 +141,7 @@ class CustomDawer extends StatelessWidget {
 
 enum DrawerItems {
   dashboard(0, Dashboard()),
-  categoriesManagement(1, SizedBox()),
+  categoriesManagement(1, CategoriesManagement()),
   productsManagement(2, ProductsManagement()),
   transaction(3, SizedBox()),
   notifications(4, SizedBox()),

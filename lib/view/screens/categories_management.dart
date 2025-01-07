@@ -4,19 +4,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/products/products_management_controller.dart';
+import 'package:promotion_dashboard/controller/categories/categories_management_controller.dart';
+import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/view/screens/add_product.dart';
+import 'package:promotion_dashboard/view/screens/category.dart';
+import 'package:promotion_dashboard/view/widgets/category/sf_data_grid_categories.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
-import 'package:promotion_dashboard/view/widgets/products/sf_data_grid_products.dart';
 
-class ProductsManagementDesktopLayout extends StatelessWidget {
-  const ProductsManagementDesktopLayout({super.key});
+class CategoriesManagement extends StatelessWidget {
+  const CategoriesManagement({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ProductsManagementControllerImp());
-    return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
+    Get.put(CategoriesManagementControllerImp());
+    return GetBuilder<CategoriesManagementControllerImp>(builder: (controller) {
       return Row(
         children: [
           const SizedBox(
@@ -35,7 +36,7 @@ class ProductsManagementDesktopLayout extends StatelessWidget {
                         height: 32,
                       ),
                       Text(
-                        'Products',
+                        'Categories',
                         style: MyText.appStyle.fs24.wBold.reColorText
                             .responsiveStyle(context),
                       ),
@@ -46,10 +47,10 @@ class ProductsManagementDesktopLayout extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CustomButton(
-                                title: 'Add product',
+                                title: 'Add category',
                                 height: 45,
                                 onPressed: () {
-                                  Get.to(Product());
+                                  Get.to(Category());
                                 }),
                           ),
                         ],
@@ -57,12 +58,17 @@ class ProductsManagementDesktopLayout extends StatelessWidget {
                       SizedBox(
                         height: 32,
                       ),
-                      SizedBox(
-                        height: 500,
-                        child: SFDataGridProducts(
-                          products: controller.products,
-                        ),
-                      ),
+                      controller.loading == true
+                          ? Expanded(
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: AppColors.color_4EB7F2,
+                              )),
+                            )
+                          : SizedBox(
+                              height: 500,
+                              child: SFDataGridCategories(),
+                            ),
                     ],
                   ),
                 )

@@ -25,7 +25,7 @@ class Product extends StatelessWidget {
               scrolledUnderElevation: 0,
               shadowColor: AppColors.transparent,
               title: Text(
-                'Add Product',
+                'Product',
                 style: MyText.appStyle.fs16.wBold.reColorText.style,
               ),
               automaticallyImplyLeading: false,

@@ -128,7 +128,7 @@ class SFDataGridProducts extends StatelessWidget {
                       )),
                 ),
                 GridColumn(
-                  columnName: 'Type',
+                  columnName: 'Visible',
                   label: Container(
                       color: AppColors.white,
                       alignment: Alignment.center,

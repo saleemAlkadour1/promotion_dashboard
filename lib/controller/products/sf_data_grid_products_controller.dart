@@ -10,7 +10,8 @@ class SfDataGridProductsControllerImp extends SfDataGridProductsController {
   @override
   void onInit() {
     super.onInit();
-    var productsController = Get.find<ProductsManagementControllerImp>();
-    products = productsController.products;
+    var productsManagementController =
+        Get.find<ProductsManagementControllerImp>();
+    products = productsManagementController.products;
   }
 }

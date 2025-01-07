@@ -34,13 +34,14 @@ final class User {
 @immutable
 final class General {
   const General();
-  final String productsData = '${EndPoints.baseApi}/store/products';
 }
 
 @immutable
 final class Store {
   const Store();
-
-  final String productCategory =
+  final String productsData = '${EndPoints.baseApi}/store/products';
+  final String categoriesData = '${EndPoints.baseApi}/store/product-categories';
+  final String createCategory = '${EndPoints.baseApi}/store/product-categories';
+  final String deleteCategory =
       '${EndPoints.baseApi}/store/product-categories/{id}';
 }

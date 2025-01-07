@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/data/model/product2_model.dart';
 import 'package:promotion_dashboard/data/model/product_model.dart';
 import 'package:promotion_dashboard/data/resource/product_data.dart';
 
@@ -8,6 +7,7 @@ abstract class ProductsManagementController extends GetxController {
 }
 
 class ProductsManagementControllerImp extends ProductsManagementController {
+  bool loading = false;
   @override
   void onInit() {
     super.onInit();
@@ -16,22 +16,17 @@ class ProductsManagementControllerImp extends ProductsManagementController {
 
   ProductData productData = ProductData();
   List<ProductModel> products = [];
-
-  List<Product2Model> products2 = List.generate(
-      50,
-      (index) => Product2Model(
-          id: index.toString(),
-          name: 'Name $index',
-          type: 'type $index',
-          price: 'Price $index'));
-
   @override
   getProductsData() async {
+    loading = true;
+    update();
     var response = await productData.get();
     if (response.isSuccess) {
       products = List.generate(response.data.length,
           (index) => ProductModel.fromJson(response.data[index]));
     }
+    loading = false;
+
     update();
   }
 }
