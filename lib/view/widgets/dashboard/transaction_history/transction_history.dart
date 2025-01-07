@@ -17,7 +17,8 @@ class TransctionHistory extends StatelessWidget {
         ),
         Text(
           '13 April 2022',
-          style: MyText.appStyle.fs16.wMedium.reColorLightGray.style(context),
+          style: MyText.appStyle.fs16.wMedium.reColorLightGray
+              .responsiveStyle(context),
         ),
         const SizedBox(
           height: 16,

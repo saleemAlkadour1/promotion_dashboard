@@ -31,12 +31,13 @@ class MyCard extends StatelessWidget {
             ListTile(
               title: Text(
                 'Name card',
-                style:
-                    MyText.appStyle.fs16.wRegular.reColorWhite.style(context),
+                style: MyText.appStyle.fs16.wRegular.reColorWhite
+                    .responsiveStyle(context),
               ),
               subtitle: Text(
                 'Syah Bandi',
-                style: MyText.appStyle.fs20.wMedium.reColorWhite.style(context),
+                style: MyText.appStyle.fs20.wMedium.reColorWhite
+                    .responsiveStyle(context),
               ),
               trailing: SvgPicture.asset(Assets.imagesSvgGallery),
             ),
@@ -48,14 +49,14 @@ class MyCard extends StatelessWidget {
                   '0918 8124 0042 8129',
                   style: width > SizeConfig.tablet && width <= 1392
                       ? MyText.appStyle.fs18.wSemiBold.reColorWhite
-                          .style(context)
+                          .responsiveStyle(context)
                       : MyText.appStyle.fs18.wSemiBold.reColorWhite
-                          .style(context),
+                          .responsiveStyle(context),
                 ),
                 Text(
                   '12/20 - 124',
-                  style:
-                      MyText.appStyle.fs16.wRegular.reColorWhite.style(context),
+                  style: MyText.appStyle.fs16.wRegular.reColorWhite
+                      .responsiveStyle(context),
                 ),
               ],
             ),

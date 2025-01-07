@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/view/widgets/dashboard/quick_invoice/custom_text_field.dart';
+import 'package:promotion_dashboard/view/widgets/dashboard/quick_invoice/quick_invoice_text_field.dart';
 
 class TitleTextField extends StatelessWidget {
   final String title;
@@ -15,12 +15,13 @@ class TitleTextField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: MyText.appStyle.fs16.wMedium.reColorText.style(context),
+          style:
+              MyText.appStyle.fs16.wMedium.reColorText.responsiveStyle(context),
         ),
         const SizedBox(
           height: 16,
         ),
-        CustomTextField(
+        QuickInvoiceTextField(
           hintText: hintTextField,
         ),
       ],

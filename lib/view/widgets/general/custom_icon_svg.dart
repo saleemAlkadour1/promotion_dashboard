@@ -8,6 +8,7 @@ class CustomIconSvg extends StatelessWidget {
   final Color? color;
   final EdgeInsetsGeometry? padding;
   final void Function()? onTap;
+  final MouseCursor? cursor;
   const CustomIconSvg({
     super.key,
     required this.path,
@@ -15,20 +16,25 @@ class CustomIconSvg extends StatelessWidget {
     this.onTap,
     this.color,
     this.padding,
+    this.cursor,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: padding,
-        child: SvgPicture.asset(
-          path,
-          width: width(size),
-          height: height(size),
-          // ignore: deprecated_member_use
-          color: color,
+      child: MouseRegion(
+        cursor: cursor ??
+            (onTap != null ? SystemMouseCursors.click : MouseCursor.defer),
+        child: Container(
+          padding: padding,
+          child: SvgPicture.asset(
+            path,
+            width: width(size),
+            height: height(size),
+            // ignore: deprecated_member_use
+            color: color,
+          ),
         ),
       ),
     );

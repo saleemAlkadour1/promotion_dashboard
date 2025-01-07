@@ -18,6 +18,8 @@ class Assets {
 
   static const String imagesSvgBalance = "assets/images/svg/balance.svg";
 
+  static const String imagesSvgCategories = "assets/images/svg/categories.svg";
+
   static const String imagesSvgDashboard = "assets/images/svg/dashboard.svg";
 
   static const String imagesSvgDelete = "assets/images/svg/delete.svg";
@@ -29,6 +31,8 @@ class Assets {
   static const String imagesSvgExpenses = "assets/images/svg/expenses.svg";
 
   static const String imagesSvgEye = "assets/images/svg/eye.svg";
+
+  static const String imagesSvgFqa = "assets/images/svg/fqa.svg";
 
   static const String imagesSvgGallery = "assets/images/svg/gallery.svg";
 
@@ -42,9 +46,15 @@ class Assets {
 
   static const String imagesSvgMyTransctions = "assets/images/svg/my_transctions.svg";
 
+  static const String imagesSvgNotifications = "assets/images/svg/notifications.svg";
+
+  static const String imagesSvgProducts = "assets/images/svg/products.svg";
+
   static const String imagesSvgSettings = "assets/images/svg/settings.svg";
 
   static const String imagesSvgStatistics = "assets/images/svg/statistics.svg";
+
+  static const String imagesSvgTransaction = "assets/images/svg/transaction.svg";
 
   static const String imagesSvgWalletAccount = "assets/images/svg/wallet_account.svg";
 }

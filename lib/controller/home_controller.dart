@@ -1,23 +1,25 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/view/screens/dashboard.dart';
-import 'package:promotion_dashboard/view/screens/products.dart';
+import 'package:promotion_dashboard/view/widgets/general/drawer/custom_dawer.dart';
 
 abstract class HomeController extends GetxController {}
 
 class HomeControllerImp extends HomeController {
-  var selectedIndex = 0;
+  int selectedIndex = 0;
 
-  final List screens = const [
-    Dashboard(),
-    Products(),
-    SizedBox(),
-    SizedBox(),
-    SizedBox(),
+  final List screens = [
+    DrawerItems.dashboard.screen,
+    DrawerItems.categoriesManagement.screen,
+    DrawerItems.productsManagement.screen,
+    DrawerItems.transaction.screen,
+    DrawerItems.notifications.screen,
+    DrawerItems.faq.screen,
+    DrawerItems.settings.screen,
   ];
 
   void changeIndex(int index) {
-    selectedIndex = index;
-    update();
+    if (selectedIndex != index) {
+      selectedIndex = index;
+      update();
+    }
   }
 }

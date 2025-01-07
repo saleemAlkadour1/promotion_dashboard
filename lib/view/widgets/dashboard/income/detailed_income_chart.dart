@@ -39,7 +39,7 @@ class _DetailedIncomeChartState extends State<DetailedIncomeChart> {
           titleStyle: MyText.appStyle.fs16.wMedium
               .reCustomColor(
                   activeIndex == 0 ? AppColors.color_064061 : AppColors.white)
-              .style(context),
+              .responsiveStyle(context),
           value: 40,
           radius: activeIndex == 0 ? 60 : 50,
           color: AppColors.color_208CC8,
@@ -50,7 +50,7 @@ class _DetailedIncomeChartState extends State<DetailedIncomeChart> {
           titleStyle: MyText.appStyle.fs16.wMedium
               .reCustomColor(
                   activeIndex == 1 ? AppColors.color_064061 : AppColors.white)
-              .style(context),
+              .responsiveStyle(context),
           value: 25,
           radius: activeIndex == 1 ? 60 : 50,
           color: AppColors.color_4EB7F2,
@@ -61,7 +61,7 @@ class _DetailedIncomeChartState extends State<DetailedIncomeChart> {
           titleStyle: MyText.appStyle.fs16.wMedium
               .reCustomColor(
                   activeIndex == 2 ? AppColors.color_064061 : AppColors.white)
-              .style(context),
+              .responsiveStyle(context),
           value: 20,
           radius: activeIndex == 2 ? 60 : 50,
           color: AppColors.color_064061,
@@ -72,7 +72,7 @@ class _DetailedIncomeChartState extends State<DetailedIncomeChart> {
           titleStyle: MyText.appStyle.fs16.wMedium
               .reCustomColor(
                   activeIndex == 3 ? AppColors.color_064061 : AppColors.white)
-              .style(context),
+              .responsiveStyle(context),
           value: 22,
           radius: activeIndex == 3 ? 60 : 50,
           color: AppColors.color_E2DECD,

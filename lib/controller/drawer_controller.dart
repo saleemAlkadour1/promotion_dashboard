@@ -1,11 +1,20 @@
 import 'package:get/get.dart';
+import 'package:promotion_dashboard/controller/home_controller.dart';
 
 class DrawerController extends GetxController {}
 
-class DrawerControllerImp extends DrawerController {
-  int activeIndex = 0;
+class DrawerControllerImp extends GetxController {
+  int selectedIndex = 0;
+
+  final HomeControllerImp homeController = Get.find<HomeControllerImp>();
+
   void updateIndex(int index) {
-    activeIndex = index;
-    update();
+    if (selectedIndex != index) {
+      selectedIndex = index;
+
+      homeController.changeIndex(index);
+
+      update();
+    }
   }
 }

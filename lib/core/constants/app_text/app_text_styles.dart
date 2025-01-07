@@ -18,12 +18,16 @@ class MyText {
   static const double _bodyFontSize = 16;
   final TextStyle _style;
 
-  TextStyle style(BuildContext context) => _style.copyWith(
+  TextStyle responsiveStyle(BuildContext context) => _style.copyWith(
         fontSize: getResponsiveFontSize(
           context,
           fontSize: (_style.fontSize ?? _bodyFontSize),
         ),
       );
+
+  TextStyle get style =>
+      _style.copyWith(fontSize: _style.fontSize ?? _bodyFontSize);
+
   // TextStyle get style =>
   //     _style.copyWith(fontSize: getResponsiveFontSize(context, fontSize: (_style.fontSize ?? _bodyFontSize)));
 

@@ -12,6 +12,8 @@ class AppBarMobile extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.white,
       foregroundColor: AppColors.white,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      shadowColor: AppColors.transparent,
       leading: IconButton(
         icon: const Icon(
           Icons.menu,

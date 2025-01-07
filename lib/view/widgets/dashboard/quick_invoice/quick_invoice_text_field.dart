@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 
-class CustomTextField extends StatelessWidget {
+class QuickInvoiceTextField extends StatelessWidget {
   final String? hintText;
-  const CustomTextField({super.key, this.hintText});
+  const QuickInvoiceTextField({super.key, this.hintText});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
           hintText: hintText,
-          hintStyle:
-              MyText.appStyle.fs16.wRegular.reColorLightGray.style(context),
+          hintStyle: MyText.appStyle.fs16.wRegular.reColorLightGray
+              .responsiveStyle(context),
           fillColor: AppColors.color_FAFAFA,
           filled: true,
           contentPadding: EdgeInsets.all(20),

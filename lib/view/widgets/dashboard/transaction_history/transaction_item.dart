@@ -25,11 +25,12 @@ class TransactionItem extends StatelessWidget {
           transactionModel.title,
           style: MyText.appStyle.fs16.wSemiBold.reColorText
               .customHeight(2)
-              .style(context),
+              .responsiveStyle(context),
         ),
         subtitle: Text(
           transactionModel.date,
-          style: MyText.appStyle.fs16.wRegular.reColorLightGray.style(context),
+          style: MyText.appStyle.fs16.wRegular.reColorLightGray
+              .responsiveStyle(context),
         ),
         trailing: Text(
           r'$' + transactionModel.amount,
@@ -39,7 +40,7 @@ class TransactionItem extends StatelessWidget {
                     ? AppColors.color_F3735E
                     : AppColors.color_7DD97B,
               )
-              .style(context),
+              .responsiveStyle(context),
         ),
       ),
     );

@@ -25,7 +25,8 @@ class UserInfoListTile extends StatelessWidget {
           alignment: AlignmentDirectional.centerStart,
           child: Text(
             userInfoModel.title,
-            style: MyText.appStyle.fs16.wSemiBold.reColorText.style(context),
+            style: MyText.appStyle.fs16.wSemiBold.reColorText
+                .responsiveStyle(context),
           ),
         ),
         subtitle: FittedBox(
@@ -33,8 +34,8 @@ class UserInfoListTile extends StatelessWidget {
           alignment: AlignmentDirectional.centerStart,
           child: Text(
             userInfoModel.subTitle,
-            style:
-                MyText.appStyle.fs12.wRegular.reColorLightGray.style(context),
+            style: MyText.appStyle.fs12.wRegular.reColorLightGray
+                .responsiveStyle(context),
           ),
         ),
       ),

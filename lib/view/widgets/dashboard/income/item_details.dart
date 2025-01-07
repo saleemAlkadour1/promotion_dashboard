@@ -19,11 +19,13 @@ class ItemDetails extends StatelessWidget {
       ),
       title: Text(
         itemDetailsModel.title,
-        style: MyText.appStyle.fs16.wRegular.reColorText.style(context),
+        style:
+            MyText.appStyle.fs16.wRegular.reColorText.responsiveStyle(context),
       ),
       trailing: Text(
         itemDetailsModel.value,
-        style: MyText.appStyle.fs16.wMedium.reColor_208CC8.style(context),
+        style: MyText.appStyle.fs16.wMedium.reColor_208CC8
+            .responsiveStyle(context),
       ),
     );
   }

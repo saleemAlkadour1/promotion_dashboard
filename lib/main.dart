@@ -1,10 +1,18 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:promotion_dashboard/core/bindings/initialbindings.dart';
+import 'package:promotion_dashboard/core/classes/shared_preferences.dart';
+import 'package:promotion_dashboard/core/constants/storage_keys.dart';
+import 'package:promotion_dashboard/core/services/services.dart';
 import 'package:promotion_dashboard/view/screens/home.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MyServices.initialServices();
+  Shared.setValue(StorageKeys.accessToken,
+      '37|HBUktmVwcCkT8wPdBbCJsYkdYx5sEJnByAm6Th07a5c6dd33');
+
   runApp(
     DevicePreview(
       enabled: false,
@@ -19,8 +27,9 @@ class PromotionDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: InitialBindings(),
       debugShowCheckedModeBanner: false,
-      locale: DevicePreview.locale(context),
+      locale: const Locale('en'),
       builder: DevicePreview.appBuilder,
       home: const Home(),
     );

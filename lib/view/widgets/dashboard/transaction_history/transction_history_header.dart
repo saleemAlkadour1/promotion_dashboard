@@ -14,11 +14,12 @@ class TransctionHistoryHeader extends StatelessWidget {
         Text(
           'Transaction History',
           style: MyText.appStyle.fs20.wSemiBold.wSemiBold.reColorText
-              .style(context),
+              .responsiveStyle(context),
         ),
         Text(
           'See all',
-          style: MyText.appStyle.fs16.wRegular.reColor_4EB7F2.style(context),
+          style: MyText.appStyle.fs16.wRegular.reColor_4EB7F2
+              .responsiveStyle(context),
         )
       ],
     );

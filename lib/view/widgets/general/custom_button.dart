@@ -34,7 +34,7 @@ class CustomButton extends StatelessWidget {
           title,
           style: MyText.appStyle.fs18.wSemiBold
               .reCustomColor(textColor ?? AppColors.white)
-              .style(context),
+              .responsiveStyle(context),
         ),
       ),
     );

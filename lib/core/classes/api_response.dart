@@ -61,7 +61,7 @@ class ApiResponse {
       printDebug("message: $message");
     }
 
-    int step = Shared.getValue(StorageKeys.step);
+    int? step = Shared.getValue(StorageKeys.step);
     if (step == 2 && statusCode == 401) {
       Shared.clear();
       Shared.setValue(StorageKeys.step, 1);

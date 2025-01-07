@@ -14,7 +14,8 @@ class LatestTransaction extends StatelessWidget {
       children: [
         Text(
           'Latest Transaction',
-          style: MyText.appStyle.fs16.wMedium.reColorText.style(context),
+          style:
+              MyText.appStyle.fs16.wMedium.reColorText.responsiveStyle(context),
         ),
         SizedBox(
           height: 12,

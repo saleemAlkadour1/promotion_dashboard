@@ -15,26 +15,18 @@ class Home extends StatelessWidget {
     Get.put(HomeControllerImp());
     return GetBuilder<HomeControllerImp>(builder: (controller) {
       return Scaffold(
-        backgroundColor: AppColors.color_F7F9FA,
+        backgroundColor: AppColors.screenColor,
         appBar: MediaQuery.sizeOf(context).width <= SizeConfig.tablet
             ? const AppBarMobile()
             : const AppBarDesktpAndTablet(),
         drawer: MediaQuery.sizeOf(context).width <= SizeConfig.tablet
-            ? CustomDawer(
-                onIndexSelected: (index) {
-                  controller.changeIndex(index);
-                },
-              )
+            ? CustomDawer()
             : null,
         body: Row(
           children: [
             MediaQuery.sizeOf(context).width > SizeConfig.tablet
                 ? Expanded(
-                    child: CustomDawer(
-                      onIndexSelected: (index) {
-                        controller.changeIndex(index);
-                      },
-                    ),
+                    child: CustomDawer(),
                   )
                 : const SizedBox(),
             Expanded(

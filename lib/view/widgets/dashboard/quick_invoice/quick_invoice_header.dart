@@ -12,7 +12,8 @@ class QuickInvoiceHeader extends StatelessWidget {
       children: [
         Text(
           'Quick Invoice',
-          style: MyText.appStyle.fs20.wSemiBold.reColorText.style(context),
+          style: MyText.appStyle.fs20.wSemiBold.reColorText
+              .responsiveStyle(context),
         ),
         Container(
           width: 48,

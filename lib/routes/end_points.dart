@@ -34,7 +34,7 @@ final class User {
 @immutable
 final class General {
   const General();
-  final String homeData = '${EndPoints.baseApi}/general/home';
+  final String productsData = '${EndPoints.baseApi}/store/products';
 }
 
 @immutable

@@ -21,7 +21,8 @@ class ProductsDataSource extends DataGridSource {
         .skip(startIndex)
         .take(rowsPerPage)
         .map<DataGridRow>((product) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'ID', value: product.id),
+              DataGridCell<String>(
+                  columnName: 'ID', value: product.id.toString()),
               DataGridCell<String>(columnName: 'Name', value: product.name),
               DataGridCell<String>(columnName: 'Type', value: product.type),
               DataGridCell<ProductModel>(columnName: 'Actions', value: product),

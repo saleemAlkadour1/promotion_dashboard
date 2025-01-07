@@ -40,7 +40,8 @@ class InActiveAllExpansessItem extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               itemModel.title,
-              style: MyText.appStyle.fs16.wBold.reColorText.style(context),
+              style: MyText.appStyle.fs16.wBold.reColorText
+                  .responsiveStyle(context),
             ),
           ),
           const SizedBox(
@@ -51,8 +52,8 @@ class InActiveAllExpansessItem extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               itemModel.date,
-              style:
-                  MyText.appStyle.fs14.wRegular.reColorLightGray.style(context),
+              style: MyText.appStyle.fs14.wRegular.reColorLightGray
+                  .responsiveStyle(context),
             ),
           ),
           const SizedBox(
@@ -63,8 +64,8 @@ class InActiveAllExpansessItem extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               itemModel.price,
-              style:
-                  MyText.appStyle.fs24.wSemiBold.reColor_4EB7F2.style(context),
+              style: MyText.appStyle.fs24.wSemiBold.reColor_4EB7F2
+                  .responsiveStyle(context),
             ),
           )
         ],
@@ -112,7 +113,8 @@ class ActiveAllExpansessItem extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               itemModel.title,
-              style: MyText.appStyle.fs16.wBold.reColorWhite.style(context),
+              style: MyText.appStyle.fs16.wBold.reColorWhite
+                  .responsiveStyle(context),
             ),
           ),
           const SizedBox(
@@ -123,8 +125,8 @@ class ActiveAllExpansessItem extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               itemModel.date,
-              style:
-                  MyText.appStyle.fs14.wRegular.reColor_FAFAFA.style(context),
+              style: MyText.appStyle.fs14.wRegular.reColor_FAFAFA
+                  .responsiveStyle(context),
             ),
           ),
           const SizedBox(
@@ -135,7 +137,8 @@ class ActiveAllExpansessItem extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               itemModel.price,
-              style: MyText.appStyle.fs24.wSemiBold.reColorWhite.style(context),
+              style: MyText.appStyle.fs24.wSemiBold.reColorWhite
+                  .responsiveStyle(context),
             ),
           )
         ],

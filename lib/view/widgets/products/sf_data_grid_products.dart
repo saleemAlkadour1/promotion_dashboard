@@ -10,67 +10,87 @@ import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/functions/size.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/products_data_source.dart';
+import 'package:promotion_dashboard/data/model/product_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class SFDataGridProducts extends StatelessWidget {
   const SFDataGridProducts({
     super.key,
+    required this.products,
   });
-
+  final List<ProductModel> products;
   @override
   Widget build(BuildContext context) {
     Get.put(SfDataGridProductsControllerImp());
     return GetBuilder<SfDataGridProductsControllerImp>(builder: (controller) {
       log(MediaQuery.sizeOf(context).width.toString());
       ProductsDataSource productsDataSource = ProductsDataSource(
-          custombuildRow: (row, isEvenRow) {
-            final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
-            return DataGridRowAdapter(
-              color: color,
-              cells: row.getCells().map<Widget>((cell) {
-                if (cell.columnName == 'Actions') {
-                  return Container(
-                      alignment: Alignment.center,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconSvg(path: Assets.imagesSvgEdit, size: 20),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          CustomIconSvg(path: Assets.imagesSvgDelete, size: 20),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          CustomIconSvg(
-                              path: Assets.imagesSvgDownload, size: 20),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          CustomIconSvg(path: Assets.imagesSvgEye, size: 16),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          CustomIconSvg(
-                              path: Assets.imagesSvgMenuCircleVertical,
-                              size: 20),
-                        ],
-                      ));
-                }
+        products: products,
+        custombuildRow: (row, isEvenRow) {
+          final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
+          return DataGridRowAdapter(
+            color: color,
+            cells: row.getCells().map<Widget>((cell) {
+              if (cell.columnName == 'Actions') {
                 return Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    cell.value.toString(),
-                    style:
-                        MyText.appStyle.fs16.wMedium.reColorText.style(context),
-                  ),
-                );
-              }).toList(),
-            );
-          },
-          products: controller.products);
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomIconSvg(
+                          path: Assets.imagesSvgEdit,
+                          size: 20,
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        CustomIconSvg(
+                          path: Assets.imagesSvgDelete,
+                          size: 20,
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        CustomIconSvg(
+                          path: Assets.imagesSvgDownload,
+                          size: 20,
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        CustomIconSvg(
+                          path: Assets.imagesSvgEye,
+                          size: 16,
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        CustomIconSvg(
+                          path: Assets.imagesSvgMenuCircleVertical,
+                          size: 20,
+                          onTap: () {},
+                        ),
+                      ],
+                    ));
+              }
+              return Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  cell.value.toString(),
+                  style: MyText.appStyle.fs16.wMedium.reColorText
+                      .responsiveStyle(context),
+                ),
+              );
+            }).toList(),
+          );
+        },
+      );
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -93,7 +113,7 @@ class SFDataGridProducts extends StatelessWidget {
                       child: Text(
                         'ID',
                         style: MyText.appStyle.fs16.wBold.reColorText
-                            .style(context),
+                            .responsiveStyle(context),
                       )),
                 ),
                 GridColumn(
@@ -104,7 +124,7 @@ class SFDataGridProducts extends StatelessWidget {
                       child: Text(
                         'Name',
                         style: MyText.appStyle.fs16.wBold.reColorText
-                            .style(context),
+                            .responsiveStyle(context),
                       )),
                 ),
                 GridColumn(
@@ -115,7 +135,7 @@ class SFDataGridProducts extends StatelessWidget {
                       child: Text(
                         'Type',
                         style: MyText.appStyle.fs16.wBold.reColorText
-                            .style(context),
+                            .responsiveStyle(context),
                       )),
                 ),
                 GridColumn(
@@ -126,7 +146,7 @@ class SFDataGridProducts extends StatelessWidget {
                       child: Text(
                         'Actions',
                         style: MyText.appStyle.fs16.wBold.reColorText
-                            .style(context),
+                            .responsiveStyle(context),
                       )),
                 ),
               ],
@@ -136,11 +156,13 @@ class SFDataGridProducts extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SfDataPager(
+                initialPageIndex: 1,
                 itemPadding: EdgeInsets.symmetric(horizontal: width(0)),
                 delegate: productsDataSource,
-                pageCount: (controller.products.length /
-                        productsDataSource.rowsPerPage)
-                    .ceilToDouble(),
+                pageCount: products.length < productsDataSource.rowsPerPage
+                    ? 1
+                    : (products.length / productsDataSource.rowsPerPage)
+                        .floorToDouble(),
                 onPageNavigationStart: (pageIndex) {
                   final startIndex = pageIndex * productsDataSource.rowsPerPage;
                   productsDataSource.buildPaginatedData(startIndex: startIndex);

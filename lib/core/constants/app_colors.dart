@@ -23,6 +23,9 @@ abstract class AppColors {
   static const Color color_C4C4C4 = Color(0xFFC4C4C4); //Neutral Gray
   static const Color color_E7E7E7 = Color(0xFFE7E7E7); //Neutral Gray
   static const Color transparent = Colors.transparent;
+  static const Color screenColor = Color(0xFFF7F9FA);
+  static const Color grey = Colors.grey;
+  static const Color red = Colors.red;
 
   static Color customColor(Color color) => color;
 
