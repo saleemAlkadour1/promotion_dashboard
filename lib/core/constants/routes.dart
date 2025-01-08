@@ -20,4 +20,5 @@ abstract class AppRoutes {
   static String proudctsSection = '/proudcts_section';
   static String requestNumber = '/request_number';
   static String detailsRequestNumber = '/details_request_number';
+  static String category = '/category';
 }

@@ -16,6 +16,15 @@ class CategoriesData {
     return response;
   }
 
+  Future<ApiResponse> updateCategory(int id, dynamic data) async {
+    var response = await apiService.post(
+      EndPoints.store.updateCategory,
+      data: data,
+      pathVariables: {'id': id},
+    );
+    return response;
+  }
+
   Future<ApiResponse> deleteCategory(int id) async {
     var response = await apiService
         .delete(EndPoints.store.deleteCategory, pathVariables: {'id': id});

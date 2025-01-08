@@ -42,6 +42,8 @@ final class Store {
   final String productsData = '${EndPoints.baseApi}/store/products';
   final String categoriesData = '${EndPoints.baseApi}/store/product-categories';
   final String createCategory = '${EndPoints.baseApi}/store/product-categories';
+  final String updateCategory =
+      '${EndPoints.baseApi}/store/product-categories/{id}';
   final String deleteCategory =
       '${EndPoints.baseApi}/store/product-categories/{id}';
 }

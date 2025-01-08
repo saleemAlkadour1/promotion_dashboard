@@ -6,7 +6,8 @@ import 'package:promotion_dashboard/controller/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/data/model/user_info_model.dart';
-import 'package:promotion_dashboard/view/screens/categories_management.dart';
+import 'package:promotion_dashboard/view/screens/categories/categories_management.dart';
+import 'package:promotion_dashboard/view/screens/chats.dart';
 import 'package:promotion_dashboard/view/screens/dashboard.dart';
 import 'package:promotion_dashboard/view/screens/products_management.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/drawer_item.dart';
@@ -98,6 +99,17 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
+                    title: 'Chats',
+                    imagePath: Assets.imagesSvgChats,
+                    isActive:
+                        controller.selectedIndex == DrawerItems.chats.value
+                            ? true
+                            : false,
+                    onTap: () {
+                      controller.updateIndex(DrawerItems.chats.value);
+                    },
+                  ),
+                  DrawerItem(
                     title: 'FQA',
                     imagePath: Assets.imagesSvgFqa,
                     isActive: controller.selectedIndex == DrawerItems.faq.value
@@ -144,9 +156,10 @@ enum DrawerItems {
   categoriesManagement(1, CategoriesManagement()),
   productsManagement(2, ProductsManagement()),
   transaction(3, SizedBox()),
-  notifications(4, SizedBox()),
-  faq(5, SizedBox()),
-  settings(6, SizedBox());
+  chats(4, Chats()),
+  notifications(5, SizedBox()),
+  faq(6, SizedBox()),
+  settings(7, SizedBox());
 
   final int value;
   final Widget screen;

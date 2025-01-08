@@ -4,12 +4,14 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final TextInputType inputType;
+  final bool? enabled;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.label,
     this.inputType = TextInputType.text,
+    this.enabled,
   });
 
   @override
@@ -17,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
+          enabled: enabled ?? true,
           labelText: label,
           border: buildBorder(),
           focusedBorder: buildBorder()),

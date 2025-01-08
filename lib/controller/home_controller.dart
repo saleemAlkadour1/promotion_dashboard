@@ -11,6 +11,7 @@ class HomeControllerImp extends HomeController {
     DrawerItems.categoriesManagement.screen,
     DrawerItems.productsManagement.screen,
     DrawerItems.transaction.screen,
+    DrawerItems.chats.screen,
     DrawerItems.notifications.screen,
     DrawerItems.faq.screen,
     DrawerItems.settings.screen,

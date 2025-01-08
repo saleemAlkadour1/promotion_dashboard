@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/categories/categories_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/view/screens/category.dart';
+import 'package:promotion_dashboard/view/screens/categories/category.dart';
 import 'package:promotion_dashboard/view/widgets/category/sf_data_grid_categories.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 

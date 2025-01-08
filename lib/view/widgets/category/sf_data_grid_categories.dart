@@ -9,6 +9,8 @@ import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/functions/size.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/categories_data_source.dart';
 import 'package:promotion_dashboard/data/model/category_model.dart';
+import 'package:promotion_dashboard/view/screens/categories/show_category.dart';
+import 'package:promotion_dashboard/view/screens/categories/update_category.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -36,7 +38,15 @@ class SFDataGridCategories extends StatelessWidget {
                         CustomIconSvg(
                           path: Assets.imagesSvgEdit,
                           size: 20,
-                          onTap: () {},
+                          onTap: () {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is CategoryModel) {
+                              final categoryModel = cell.value as CategoryModel;
+                              Get.to(UpdateCategory(
+                                categoryModel: categoryModel,
+                              ));
+                            }
+                          },
                         ),
                         SizedBox(
                           width: 8,
@@ -56,25 +66,17 @@ class SFDataGridCategories extends StatelessWidget {
                           width: 8,
                         ),
                         CustomIconSvg(
-                          path: Assets.imagesSvgDownload,
-                          size: 20,
-                          onTap: () {},
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        CustomIconSvg(
                           path: Assets.imagesSvgEye,
                           size: 16,
-                          onTap: () {},
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        CustomIconSvg(
-                          path: Assets.imagesSvgMenuCircleVertical,
-                          size: 20,
-                          onTap: () {},
+                          onTap: () {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is CategoryModel) {
+                              final categoryModel = cell.value as CategoryModel;
+                              Get.to(ShowCategory(
+                                categoryModel: categoryModel,
+                              ));
+                            }
+                          },
                         ),
                       ],
                     ));
@@ -157,15 +159,15 @@ class SFDataGridCategories extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SfDataPager(
-                initialPageIndex: 1,
                 itemPadding: EdgeInsets.symmetric(horizontal: width(0)),
                 delegate: categoriesDataSource,
+                initialPageIndex: 1,
                 pageCount: controller.categories.length <
                         categoriesDataSource.rowsPerPage
                     ? 1
                     : (controller.categories.length /
                             categoriesDataSource.rowsPerPage)
-                        .floorToDouble(),
+                        .ceilToDouble(),
                 onPageNavigationStart: (pageIndex) {
                   final startIndex =
                       pageIndex * categoriesDataSource.rowsPerPage;
