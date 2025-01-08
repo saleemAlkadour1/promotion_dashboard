@@ -1,28 +1,27 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile, FormData;
+import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/controller/categories/categories_management_controller.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
+import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/data/resource/categories_data.dart';
 
 abstract class CategoryController extends GetxController {
   // Text controllers
-  late TextEditingController nameController;
-  late TextEditingController descriptionController;
+  List<TextEditingController> nameController = [];
+  List<TextEditingController> descriptionController = [];
 
   // Dropdown values
   String visibleValue = 'Yes';
 
   // Images list
-  List<File> selectedImages = [];
+  File? image;
   bool loading = false;
 
   // Methods (abstract)
   void updateVisibleValue(String value);
-  Future<void> pickImages();
-  void removeImage(File image);
+  Future<void> pickImage();
   Future<void> addCategory();
 }
 
@@ -31,8 +30,10 @@ class CategoryControllerImp extends CategoryController {
 
   @override
   void onInit() {
-    nameController = TextEditingController();
-    descriptionController = TextEditingController();
+    for (var i = 0; i < myLanguages.length; i++) {
+      nameController.add(TextEditingController());
+      descriptionController.add(TextEditingController());
+    }
     super.onInit();
   }
 
@@ -43,93 +44,99 @@ class CategoryControllerImp extends CategoryController {
   }
 
   @override
-  Future<void> pickImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-    );
-
-    if (result != null) {
-      selectedImages.addAll(
-        result.paths.where((path) => path != null).map((path) => File(path!)),
-      );
+  Future<void> pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
       update();
     }
   }
 
-  @override
-  void removeImage(File image) {
-    selectedImages.remove(image);
-    update();
-  }
+  // Future<void> pickImagesFromGallery() async {
+  //   try {
+  //     final List<XFile> images = await picker.pickMultiImage();
+
+  //     if (images.isNotEmpty) {
+  //       selectedImages.addAll(images.map((image) => File(image.path)).toList());
+  //     } else {
+  //       Get.snackbar("إلغاء", "لم يتم اختيار أي صورة.", backgroundColor: Colors.orange, colorText: Colors.white);
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("خطأ", "حدث خطأ أثناء اختيار الصور: $e", backgroundColor: Colors.red, colorText: Colors.white);
+  //   } finally {
+  //     update();
+  //   }
+  // }
+
+  // Future<void> pickImagesFromCamera() async {
+  //   try {
+  //     final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
+  //     if (image != null) {
+  //       selectedImages.add(File(image.path));
+  //     } else {
+  //       Get.snackbar("إلغاء", "لم يتم التقاط أي صورة.", backgroundColor: Colors.orange, colorText: Colors.white);
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("خطأ", "حدث خطأ أثناء التقاط الصورة: $e", backgroundColor: Colors.red, colorText: Colors.white);
+  //   } finally {
+  //     update();
+  //   }
+  // }
 
   @override
   void onClose() {
-    nameController.dispose();
-    descriptionController.dispose();
+    nameController.clear();
+    descriptionController.clear();
     super.onClose();
   }
 
   @override
   Future<void> addCategory() async {
-    loading = true;
-    update();
-    // إعداد الحقول النصية
-    String nameEn = nameController.text.trim();
-    String descriptionEn = descriptionController.text.trim();
-
-    // تحقق من الحقول المطلوبة
-    if (nameEn.isEmpty || selectedImages.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill all fields and select at least one image.',
+    if (image == null) {
+      customSnackBar(
+        'Please select an image',
+        '',
+        snackType: SnackBarType.error,
         snackPosition: SnackPosition.TOP,
       );
       return;
     }
-    // تحضير الملفات للرفع
-    List<MultipartFile> multipartImages = [];
-    for (var image in selectedImages) {
-      multipartImages.add(await MultipartFile.fromFile(
-        image.path,
-        filename: image.path.split('/').last,
-      ));
-    }
+    loading = true;
+    update();
 
     // إرسال الطلب
-    var response = await categoriesData.createCategory({
-      'name[en]': nameEn,
-      'name[ar]': '',
-      'description[en]': descriptionEn,
-      'description[ar]': '',
-      'visible': visibleValue == 'Yes' ? 1 : 0,
-      'product_display_method': 'GridView',
-      'image': multipartImages,
-    });
+    var response = await categoriesData.create(
+      setValues(nameController),
+      setValues(descriptionController),
+      'GridView',
+      visibleValue == 'Yes',
+      true,
+      image!,
+    );
 
     // معالجة الاستجابة
-    if (response.statusCode == 200) {
+    if (response.isSuccess) {
+      Get.back();
       customSnackBar(
         'Success',
         'Added successfully',
         snackType: SnackBarType.correct,
         snackPosition: SnackPosition.TOP,
       );
-      // تحديث بيانات CategoriesManagementControllerImp
-      CategoriesManagementControllerImp controller =
-          Get.find<CategoriesManagementControllerImp>();
-      await controller.getPCategoriesData();
-      update();
-    } else {
-      //TODO: To solve problem show snack bar hree later
-      loading = false;
-      update();
-      customSnackBar(
-        'Error',
-        response.message!,
-        snackType: SnackBarType.error,
-        snackPosition: SnackPosition.TOP,
-      );
     }
+
+    loading = false;
+    update();
   }
+}
+
+Map setValues(List<TextEditingController> controllers) {
+  Map data = {};
+
+  for (var i = 0; i < myLanguages.length; i++) {
+    data[myLanguages.entries.toList()[i].key] = controllers[i].text.trim();
+  }
+
+  return data;
 }

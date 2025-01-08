@@ -5,13 +5,13 @@ import 'package:promotion_dashboard/core/bindings/initialbindings.dart';
 import 'package:promotion_dashboard/core/classes/shared_preferences.dart';
 import 'package:promotion_dashboard/core/constants/storage_keys.dart';
 import 'package:promotion_dashboard/core/services/services.dart';
+import 'package:promotion_dashboard/routes/getx_route.dart';
 import 'package:promotion_dashboard/view/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MyServices.initialServices();
-  Shared.setValue(StorageKeys.accessToken,
-      '37|HBUktmVwcCkT8wPdBbCJsYkdYx5sEJnByAm6Th07a5c6dd33');
+  Shared.setValue(StorageKeys.accessToken, '37|HBUktmVwcCkT8wPdBbCJsYkdYx5sEJnByAm6Th07a5c6dd33');
 
   runApp(
     DevicePreview(
@@ -32,6 +32,7 @@ class PromotionDashboard extends StatelessWidget {
       locale: const Locale('en'),
       builder: DevicePreview.appBuilder,
       home: const Home(),
+      getPages: getPages,
     );
   }
 }

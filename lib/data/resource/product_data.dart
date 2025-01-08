@@ -6,7 +6,10 @@ import 'package:promotion_dashboard/routes/end_points.dart';
 class ProductData {
   ApiService apiService = Get.find();
   Future<ApiResponse> get() async {
-    var response = await apiService.get(EndPoints.store.productsData);
+    var response = await apiService.get(
+      EndPoints.store.products,
+      params: {},
+    );
     return response;
   }
 }

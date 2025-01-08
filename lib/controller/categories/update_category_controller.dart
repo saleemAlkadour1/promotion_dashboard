@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile, FormData;
@@ -7,6 +6,7 @@ import 'package:promotion_dashboard/controller/categories/categories_management_
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/data/model/category_model.dart';
 import 'package:promotion_dashboard/data/resource/categories_data.dart';
+import 'package:promotion_dashboard/view/screens/categories/show_category.dart';
 
 abstract class UpdateCategoryController extends GetxController {
   // Text controllers
@@ -20,16 +20,19 @@ abstract class UpdateCategoryController extends GetxController {
   List<File> selectedImages = [];
   bool loading = false;
 
+  int categoryId = 0;
+
   // Methods (abstract)
   void updateVisibleValue(String value);
   Future<void> pickImages();
   void removeImage(File image);
   initialCategory(CategoryModel category);
   Future<void> updateCategory(int id);
+  showCategory();
 }
 
 class UpdateCategoryControllerImp extends UpdateCategoryController {
-  late CategoryModel categoryModel;
+  CategoryModel? categoryModel;
 
   CategoriesData categoriesData = CategoriesData();
 
@@ -37,7 +40,25 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
   void onInit() {
     nameController = TextEditingController();
     descriptionController = TextEditingController();
+
+    categoryId = int.parse(Get.parameters['category_id'] ?? '0');
+
+    showCategory();
+
     super.onInit();
+  }
+
+  @override
+  void showCategory() async {
+    loading = true;
+    update();
+    var response = await categoriesData.show(categoryId);
+    if (response.isSuccess) {
+      categoryModel = CategoryModel.fromJson(response.data);
+      initialCategory(categoryModel!);
+    }
+    loading = false;
+    update();
   }
 
   @override
@@ -102,7 +123,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
     // }
 
     // إرسال الطلب
-    var response = await categoriesData.updateCategory(id, {
+    var response = await categoriesData.update(id, {
       'name[en]': nameEn,
       'name[ar]': '',
       'description[en]': descriptionEn,
@@ -120,8 +141,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
         snackPosition: SnackPosition.TOP,
       );
       // تحديث بيانات CategoriesManagementControllerImp
-      CategoriesManagementControllerImp controller =
-          Get.find<CategoriesManagementControllerImp>();
+      CategoriesManagementControllerImp controller = Get.find<CategoriesManagementControllerImp>();
       await controller.getPCategoriesData();
       update();
     } else {

@@ -37,16 +37,21 @@ class LocaleController extends GetxController {
 }
 
 late bool ltr;
+
 Map<String, Map> myLanguages = {
   'en': {
     'name': 'english',
     'dir': 'ltr',
     'image': Assets.imagesPicturesEnglish,
   },
-  'ar': {'name': 'arabic', 'dir': 'rtl', 'image': Assets.imagesPicturesArabic},
-  'tr': {
-    'name': 'turkey',
-    'dir': 'ltr',
-    'image': Assets.imagesPicturesTurkey,
+  'ar': {
+    'name': 'arabic',
+    'dir': 'rtl',
+    'image': Assets.imagesPicturesArabic,
   },
+  // 'tr': {
+  //   'name': 'turkey',
+  //   'dir': 'ltr',
+  //   'image': Assets.imagesPicturesTurkey,
+  // },
 };

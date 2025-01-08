@@ -39,11 +39,7 @@ final class General {
 @immutable
 final class Store {
   const Store();
-  final String productsData = '${EndPoints.baseApi}/store/products';
-  final String categoriesData = '${EndPoints.baseApi}/store/product-categories';
-  final String createCategory = '${EndPoints.baseApi}/store/product-categories';
-  final String updateCategory =
-      '${EndPoints.baseApi}/store/product-categories/{id}';
-  final String deleteCategory =
-      '${EndPoints.baseApi}/store/product-categories/{id}';
+  final String products = '${EndPoints.baseApi}/store/products';
+  final String categories = '${EndPoints.baseApi}/store/product-categories';
+  final String category = '${EndPoints.baseApi}/store/product-categories/{id}';
 }

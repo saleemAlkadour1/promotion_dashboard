@@ -13,7 +13,7 @@ abstract class ShowCategoryController extends GetxController {
 }
 
 class ShowCategoryControllerImp extends ShowCategoryController {
-  late CategoryModel categoryModel;
+  CategoryModel? categoryModel;
 
   @override
   void onInit() {

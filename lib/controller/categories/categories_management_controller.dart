@@ -22,10 +22,9 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
   getPCategoriesData() async {
     loading = true;
     update();
-    var response = await categoriesData.getCategories();
+    var response = await categoriesData.get();
     if (response.isSuccess) {
-      categories = List.generate(response.data.length,
-          (index) => CategoryModel.fromJson(response.data[index]));
+      categories = List.generate(response.data.length, (index) => CategoryModel.fromJson(response.data[index]));
     }
     loading = false;
     update();
@@ -35,7 +34,7 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
   Future<void> deleteCategory(int id) async {
     loading = true;
     update();
-    var response = await categoriesData.deleteCategory(id);
+    var response = await categoriesData.delete(id);
     if (response.statusCode == 200) {
       getPCategoriesData();
       customSnackBar(

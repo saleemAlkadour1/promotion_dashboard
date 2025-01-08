@@ -21,4 +21,6 @@ abstract class AppRoutes {
   static String requestNumber = '/request_number';
   static String detailsRequestNumber = '/details_request_number';
   static String category = '/category';
+  static String showCategory = '/show-category';
+  static String updateCategory = '/update-category';
 }
