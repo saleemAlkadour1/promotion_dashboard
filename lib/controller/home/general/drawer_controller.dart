@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home_controller.dart';
+import 'package:promotion_dashboard/controller/home/general/home_controller.dart';
 
 class DrawerController extends GetxController {}
 

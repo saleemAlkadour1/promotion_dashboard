@@ -2,34 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/categories/update_category_controller.dart';
+import 'package:promotion_dashboard/controller/home/categories/show_category_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/data/model/category_model.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
-class UpdateCategory extends StatelessWidget {
-  const UpdateCategory({super.key});
-
+class ShowCategory extends StatelessWidget {
+  const ShowCategory({super.key});
   @override
   Widget build(BuildContext context) {
-    Get.put(UpdateCategoryControllerImp());
-
-    return GetBuilder<UpdateCategoryControllerImp>(
+    Get.put(ShowCategoryControllerImp());
+    return GetBuilder<ShowCategoryControllerImp>(
       builder: (controller) {
         var res = HandlingDataView(
-          loading: controller.loading,
+          loading: true,
           dataIsEmpty: controller.categoryModel == null,
         );
 
         if (res.isValid) {
           return res.response!;
         }
-
         return Scaffold(
             backgroundColor: AppColors.screenColor,
             appBar: AppBar(
@@ -63,54 +56,25 @@ class UpdateCategory extends StatelessWidget {
                   CustomTextField(
                     controller: controller.nameController,
                     label: 'Name',
+                    enabled: false,
                   ),
                   const SizedBox(height: 16.0),
                   // Description
                   CustomTextField(
                     controller: controller.descriptionController,
                     label: 'Description',
+                    enabled: false,
                   ),
                   const SizedBox(height: 16.0),
 
-                  // Visible Dropdown
-                  CustomDropdown(
+                  // Visible
+                  CustomTextField(
+                    controller: controller.visibleController,
                     label: 'Visible',
-                    value: controller.visibleValue,
-                    items: const ['Yes', 'No'],
-                    onChanged: controller.updateVisibleValue,
+                    enabled: false,
                   ),
+
                   const SizedBox(height: 16.0),
-                  // Pick and Display Images
-                  CustomImagePicker(
-                    images: controller.selectedImages,
-                    onAddImage: controller.pickImages,
-                    onRemoveImage: controller.removeImage,
-                  ),
-                  const SizedBox(height: 16.0),
-                  // Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomButton(
-                          height: 40,
-                          title: controller.loading == true ? 'Loading...' : 'Save',
-                          onPressed: () async {
-                            Get.back();
-                            await controller.updateCategory(1);
-                          }),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      CustomButton(
-                          title: 'Cancel',
-                          height: 40,
-                          backgroundColor: AppColors.white,
-                          textColor: Colors.blue,
-                          onPressed: () {
-                            Get.back();
-                          }),
-                    ],
-                  ),
                 ],
               ),
             ));

@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/chats_controller.dart';
-import 'package:promotion_dashboard/view/widgets/messages/chat_list.dart';
-import 'package:promotion_dashboard/view/widgets/messages/show_chat.dart';
+import 'package:promotion_dashboard/controller/home/chats/chats_controller.dart';
+import 'package:promotion_dashboard/view/widgets/chats/chat_list.dart';
+import 'package:promotion_dashboard/view/widgets/chats/show_chat.dart';
 
 class Chats extends StatelessWidget {
   const Chats({super.key});

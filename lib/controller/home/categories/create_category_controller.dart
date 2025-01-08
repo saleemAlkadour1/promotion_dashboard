@@ -2,12 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:image_picker/image_picker.dart';
-import 'package:promotion_dashboard/controller/categories/categories_management_controller.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/data/resource/categories_data.dart';
 
-abstract class CategoryController extends GetxController {
+abstract class CreateCategoryController extends GetxController {
   // Text controllers
   List<TextEditingController> nameController = [];
   List<TextEditingController> descriptionController = [];
@@ -25,7 +24,7 @@ abstract class CategoryController extends GetxController {
   Future<void> addCategory();
 }
 
-class CategoryControllerImp extends CategoryController {
+class CreateCategoryControllerImp extends CreateCategoryController {
   CategoriesData categoriesData = CategoriesData();
 
   @override
@@ -45,7 +44,8 @@ class CategoryControllerImp extends CategoryController {
 
   @override
   Future<void> pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       image = File(pickedFile.path);
       update();
@@ -98,7 +98,6 @@ class CategoryControllerImp extends CategoryController {
         'Please select an image',
         '',
         snackType: SnackBarType.error,
-        snackPosition: SnackPosition.TOP,
       );
       return;
     }
@@ -118,12 +117,9 @@ class CategoryControllerImp extends CategoryController {
     // معالجة الاستجابة
     if (response.isSuccess) {
       Get.back();
-      customSnackBar(
-        'Success',
-        'Added successfully',
-        snackType: SnackBarType.correct,
-        snackPosition: SnackPosition.TOP,
-      );
+      customSnackBar('Success', 'Added successfully',
+          snackType: SnackBarType.correct,
+          snackPosition: SnackBarPosition.topEnd);
     }
 
     loading = false;

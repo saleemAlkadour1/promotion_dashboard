@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide MultipartFile, FormData;
-import 'package:promotion_dashboard/controller/categories/categories_management_controller.dart';
+import 'package:get/get.dart';
+import 'package:promotion_dashboard/controller/home/categories/categories_management_controller.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/data/model/category_model.dart';
 import 'package:promotion_dashboard/data/resource/categories_data.dart';
-import 'package:promotion_dashboard/view/screens/categories/show_category.dart';
 
 abstract class UpdateCategoryController extends GetxController {
   // Text controllers
@@ -134,26 +133,21 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
 
     // معالجة الاستجابة
     if (response.statusCode == 200) {
-      customSnackBar(
-        'Success',
-        'Edited successfully',
-        snackType: SnackBarType.correct,
-        snackPosition: SnackPosition.TOP,
-      );
+      customSnackBar('Success', 'Edited successfully',
+          snackType: SnackBarType.correct,
+          snackPosition: SnackBarPosition.topEnd);
       // تحديث بيانات CategoriesManagementControllerImp
-      CategoriesManagementControllerImp controller = Get.find<CategoriesManagementControllerImp>();
+      CategoriesManagementControllerImp controller =
+          Get.find<CategoriesManagementControllerImp>();
       await controller.getPCategoriesData();
       update();
     } else {
       //TODO: To solve problem show snack bar hree later
       loading = false;
       update();
-      customSnackBar(
-        'Error',
-        response.message!,
-        snackType: SnackBarType.error,
-        snackPosition: SnackPosition.TOP,
-      );
+      customSnackBar('Error', response.message!,
+          snackType: SnackBarType.error,
+          snackPosition: SnackBarPosition.topEnd);
     }
   }
 

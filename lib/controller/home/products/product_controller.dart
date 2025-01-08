@@ -3,7 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class ProductController extends GetxController {
+abstract class CreateProductController extends GetxController {
   // Text controllers
   late TextEditingController nameController;
   late TextEditingController descriptionController;
@@ -28,7 +28,7 @@ abstract class ProductController extends GetxController {
   void removeImage(File image);
 }
 
-class ProductControllerImp extends ProductController {
+class CreateProductControllerImp extends CreateProductController {
   // Initialize text controllers
   @override
   void onInit() {

@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/drawer_controller.dart';
+import 'package:promotion_dashboard/controller/home/general/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/data/model/user_info_model.dart';
-import 'package:promotion_dashboard/view/screens/categories/categories_management.dart';
-import 'package:promotion_dashboard/view/screens/chats.dart';
-import 'package:promotion_dashboard/view/screens/dashboard.dart';
-import 'package:promotion_dashboard/view/screens/products_management.dart';
+import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
+import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
+import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
+import 'package:promotion_dashboard/view/screens/home/products/products_management.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/drawer_item.dart';
 import 'package:promotion_dashboard/view/widgets/general/user_info_list_tile.dart';
 

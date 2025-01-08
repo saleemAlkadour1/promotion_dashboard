@@ -15,7 +15,7 @@ class ProductsManagementControllerImp extends ProductsManagementController {
   }
 
   ProductData productData = ProductData();
-  List<ProductModel> products = [];
+  List<ProductModel>? products;
   @override
   getProductsData() async {
     loading = true;

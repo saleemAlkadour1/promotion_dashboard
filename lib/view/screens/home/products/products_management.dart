@@ -4,12 +4,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/products/products_management_controller.dart';
-import 'package:promotion_dashboard/core/constants/app_colors.dart';
+import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/view/screens/product.dart';
+import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
+import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
-import 'package:promotion_dashboard/view/widgets/product/sf_data_grid_products.dart';
+import 'package:promotion_dashboard/view/widgets/products/sf_data_grid_products.dart';
 
 class ProductsManagement extends StatelessWidget {
   const ProductsManagement({super.key});
@@ -18,6 +18,13 @@ class ProductsManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(ProductsManagementControllerImp());
     return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
+      var res = HandlingDataView(
+        loading: controller.loading,
+        dataIsEmpty: controller.products == null,
+      );
+      if (res.isValid) {
+        return res.response!;
+      }
       return Scaffold(
         body: Row(
           children: [
@@ -51,7 +58,7 @@ class ProductsManagement extends StatelessWidget {
                                   title: 'Add product',
                                   height: 45,
                                   onPressed: () {
-                                    Get.to(Product());
+                                    Get.to(CraeteProduct());
                                   }),
                             ),
                           ],
@@ -59,19 +66,12 @@ class ProductsManagement extends StatelessWidget {
                         SizedBox(
                           height: 32,
                         ),
-                        controller.loading == true
-                            ? Expanded(
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                  color: AppColors.color_4EB7F2,
-                                )),
-                              )
-                            : SizedBox(
-                                height: 500,
-                                child: SFDataGridProducts(
-                                  products: controller.products,
-                                ),
-                              ),
+                        SizedBox(
+                          height: 500,
+                          child: SFDataGridProducts(
+                            products: controller.products!,
+                          ),
+                        ),
                       ],
                     ),
                   )

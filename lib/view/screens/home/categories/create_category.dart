@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/categories/category_controller.dart';
+import 'package:promotion_dashboard/controller/home/categories/create_category_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
@@ -9,15 +9,14 @@ import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
-class Category extends StatelessWidget {
-  const Category({super.key});
+class CreateCategory extends StatelessWidget {
+  const CreateCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(CategoryControllerImp());
-    return GetBuilder<CategoryControllerImp>(
+    Get.put(CreateCategoryControllerImp());
+    return GetBuilder<CreateCategoryControllerImp>(
       builder: (controller) {
-        
         return Scaffold(
             backgroundColor: AppColors.screenColor,
             appBar: AppBar(
@@ -62,7 +61,8 @@ class Category extends StatelessWidget {
                         (index) {
                           return CustomTextField(
                             controller: controller.nameController[index],
-                            label: '(${myLanguages.entries.toList()[index].key})',
+                            label:
+                                '(${myLanguages.entries.toList()[index].key})',
                           );
                         },
                       )
@@ -84,8 +84,10 @@ class Category extends StatelessWidget {
                           myLanguages.entries.toList().length,
                           (index) {
                             return CustomTextField(
-                              controller: controller.descriptionController[index],
-                              label: '(${myLanguages.entries.toList()[index].key})',
+                              controller:
+                                  controller.descriptionController[index],
+                              label:
+                                  '(${myLanguages.entries.toList()[index].key})',
                             );
                           },
                         )
@@ -120,7 +122,8 @@ class Category extends StatelessWidget {
                     children: [
                       CustomButton(
                         height: 40,
-                        title: controller.loading == true ? 'Loading...' : 'Save',
+                        title:
+                            controller.loading == true ? 'Loading...' : 'Save',
                         onPressed: () async {
                           await controller.addCategory();
                         },

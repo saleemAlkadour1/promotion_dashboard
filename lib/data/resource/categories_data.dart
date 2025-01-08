@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/classes/api_response.dart';
 import 'package:promotion_dashboard/core/classes/curd.dart';

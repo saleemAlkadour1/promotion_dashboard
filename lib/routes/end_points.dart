@@ -18,11 +18,6 @@ final class Auth {
   const Auth();
 
   final String login = '${EndPoints.baseApi}/auth/login';
-  final String register = '${EndPoints.baseApi}/auth/register';
-  final String verifyCode = '${EndPoints.baseApi}/auth/verify-code';
-  final String forgetPassword = '${EndPoints.baseApi}/auth/forget-password';
-  final String resetPassword = '${EndPoints.baseApi}/auth/reset-password';
-  final String logout = '${EndPoints.baseApi}/auth/logout';
 }
 
 @immutable
@@ -39,6 +34,7 @@ final class General {
 @immutable
 final class Store {
   const Store();
+
   final String products = '${EndPoints.baseApi}/store/products';
   final String categories = '${EndPoints.baseApi}/store/product-categories';
   final String category = '${EndPoints.baseApi}/store/product-categories/{id}';

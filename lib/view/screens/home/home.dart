@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home_controller.dart';
+import 'package:promotion_dashboard/controller/home/general/home_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/size_config.dart';
 import 'package:promotion_dashboard/view/widgets/general/app_bar/app_bar_mobile.dart';

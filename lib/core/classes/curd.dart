@@ -25,11 +25,9 @@ class ApiService {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         if (!connectivityService.isConnected) {
-          customSnackBar(
-            "No internet connection",
-            '',
-            snackType: SnackBarType.error,
-          );
+          customSnackBar("No internet connection", '',
+              snackType: SnackBarType.error,
+              snackPosition: SnackBarPosition.topEnd);
           return handler.reject(DioException(
             requestOptions: options,
             error: "No internet connection",

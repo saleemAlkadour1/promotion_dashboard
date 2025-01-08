@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/chats_controller.dart';
+import 'package:promotion_dashboard/controller/home/chats/chats_controller.dart';
 
 class ShowChat extends StatelessWidget {
   const ShowChat({super.key});

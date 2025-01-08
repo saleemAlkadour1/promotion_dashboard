@@ -2,24 +2,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/categories/show_category_controller.dart';
+import 'package:promotion_dashboard/controller/home/categories/update_category_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
-class ShowCategory extends StatelessWidget {
-  const ShowCategory({super.key});
+class UpdateCategory extends StatelessWidget {
+  const UpdateCategory({super.key});
+
   @override
   Widget build(BuildContext context) {
-    Get.put(ShowCategoryControllerImp());
-    return GetBuilder<ShowCategoryControllerImp>(
+    Get.put(UpdateCategoryControllerImp());
+
+    return GetBuilder<UpdateCategoryControllerImp>(
       builder: (controller) {
         var res = HandlingDataView(
-          loading: true,
+          loading: controller.loading,
           dataIsEmpty: controller.categoryModel == null,
         );
-
         if (res.isValid) {
           return res.response!;
         }
@@ -56,25 +60,56 @@ class ShowCategory extends StatelessWidget {
                   CustomTextField(
                     controller: controller.nameController,
                     label: 'Name',
-                    enabled: false,
                   ),
                   const SizedBox(height: 16.0),
                   // Description
                   CustomTextField(
                     controller: controller.descriptionController,
                     label: 'Description',
-                    enabled: false,
                   ),
                   const SizedBox(height: 16.0),
 
-                  // Visible
-                  CustomTextField(
-                    controller: controller.visibleController,
+                  // Visible Dropdown
+                  CustomDropdown(
                     label: 'Visible',
-                    enabled: false,
+                    value: controller.visibleValue,
+                    items: const ['Yes', 'No'],
+                    onChanged: controller.updateVisibleValue,
                   ),
-
                   const SizedBox(height: 16.0),
+                  // Pick and Display Images
+                  CustomImagePicker(
+                    images: controller.selectedImages,
+                    onAddImage: controller.pickImages,
+                    onRemoveImage: controller.removeImage,
+                  ),
+                  const SizedBox(height: 16.0),
+                  // Buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomButton(
+                          height: 40,
+                          title: controller.loading == true
+                              ? 'Loading...'
+                              : 'Save',
+                          onPressed: () async {
+                            Get.back();
+                            await controller.updateCategory(1);
+                          }),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      CustomButton(
+                          title: 'Cancel',
+                          height: 40,
+                          backgroundColor: AppColors.white,
+                          textColor: Colors.blue,
+                          onPressed: () {
+                            Get.back();
+                          }),
+                    ],
+                  ),
                 ],
               ),
             ));
