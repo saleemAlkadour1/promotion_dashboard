@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/data/model/product_model.dart';
-import 'package:promotion_dashboard/data/resource/product_data.dart';
+import 'package:promotion_dashboard/data/model/home/product_model.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
 
 abstract class ProductsManagementController extends GetxController {
   getProductsData();

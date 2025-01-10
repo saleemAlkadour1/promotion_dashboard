@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/categories/update_category_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
@@ -56,16 +57,63 @@ class UpdateCategory extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Name
-                  CustomTextField(
-                    controller: controller.nameController,
-                    label: 'Name',
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Name',
+                        style: MyText.appStyle.fs16.wBold.reColorText.style,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      ...List.generate(
+                        myLanguages.entries.toList().length,
+                        (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: CustomTextField(
+                              controller: controller.nameController[index],
+                              label:
+                                  '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Description',
+                        style: MyText.appStyle.fs16.wBold.reColorText.style,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      ...List.generate(
+                        myLanguages.entries.toList().length,
+                        (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: CustomTextField(
+                              controller:
+                                  controller.descriptionController[index],
+                              label:
+                                  '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            ),
+                          );
+                        },
+                      )
+                    ],
                   ),
-                  const SizedBox(height: 16.0),
                   // Description
-                  CustomTextField(
-                    controller: controller.descriptionController,
-                    label: 'Description',
+
+                  const SizedBox(height: 16.0),
+
+                  // Avilable Dropdown
+                  CustomDropdown(
+                    label: 'Avilable',
+                    value: controller.avilableValue,
+                    items: const ['Yes', 'No'],
+                    onChanged: controller.updateAvilableValue,
                   ),
                   const SizedBox(height: 16.0),
 
@@ -79,9 +127,14 @@ class UpdateCategory extends StatelessWidget {
                   const SizedBox(height: 16.0),
                   // Pick and Display Images
                   CustomImagePicker(
-                    images: controller.selectedImages,
-                    onAddImage: controller.pickImages,
-                    onRemoveImage: controller.removeImage,
+                    images: [
+                      if (controller.image != null) controller.image!,
+                    ],
+                    onAddImage: controller.pickImage,
+                    onRemoveImage: (file) {
+                      controller.image = null;
+                      controller.update();
+                    },
                   ),
                   const SizedBox(height: 16.0),
                   // Buttons
@@ -93,9 +146,8 @@ class UpdateCategory extends StatelessWidget {
                           title: controller.loading == true
                               ? 'Loading...'
                               : 'Save',
-                          onPressed: () async {
-                            Get.back();
-                            await controller.updateCategory(1);
+                          onPressed: () {
+                            controller.updateCategory();
                           }),
                       SizedBox(
                         width: 20,

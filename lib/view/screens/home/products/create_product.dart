@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home/products/product_controller.dart';
+import 'package:promotion_dashboard/controller/home/products/create_product_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
@@ -25,7 +26,7 @@ class CraeteProduct extends StatelessWidget {
               scrolledUnderElevation: 0,
               shadowColor: AppColors.transparent,
               title: Text(
-                'Product',
+                'Add product',
                 style: MyText.appStyle.fs16.wBold.reColorText.style,
               ),
               automaticallyImplyLeading: false,
@@ -46,16 +47,59 @@ class CraeteProduct extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Name
-                CustomTextField(
-                  controller: controller.nameController,
-                  label: 'Name',
+                //Category
+                CustomDropdown(
+                  label: 'Category',
+                  items: controller.categoriesName,
+                  onChanged: controller.updateCategoryValue,
                 ),
                 const SizedBox(height: 16.0),
-                // Description
-                CustomTextField(
-                  controller: controller.descriptionController,
-                  label: 'Description',
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Name',
+                      style: MyText.appStyle.fs16.wBold.reColorText.style,
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    ...List.generate(
+                      myLanguages.entries.toList().length,
+                      (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: CustomTextField(
+                            controller: controller.nameController[index],
+                            label:
+                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      'Description',
+                      style: MyText.appStyle.fs16.wBold.reColorText.style,
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    ...List.generate(
+                      myLanguages.entries.toList().length,
+                      (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: CustomTextField(
+                            controller: controller.descriptionController[index],
+                            label:
+                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                          ),
+                        );
+                      },
+                    )
+                  ],
                 ),
                 const SizedBox(height: 16.0),
 
@@ -67,26 +111,14 @@ class CraeteProduct extends StatelessWidget {
                   onChanged: controller.updateVisibleValue,
                 ),
                 const SizedBox(height: 16.0),
-
-                // Type Dropdown
                 CustomDropdown(
-                  label: 'Type',
-                  value: controller.typeValue,
-                  items: const ['Live', 'Store'],
-                  onChanged: controller.updateTypeValue,
+                  label: 'Avilable',
+                  value: controller.availableValue,
+                  items: const ['Yes', 'No'],
+                  onChanged: controller.updateAvailableValue,
                 ),
                 const SizedBox(height: 16.0),
-                if (controller.typeValue == 'Live')
-                  const Text(
-                    'Live Product Selected',
-                    style: TextStyle(fontSize: 16.0, color: Colors.green),
-                  ),
-                if (controller.typeValue == 'Store')
-                  const Text(
-                    'Store Product Selected',
-                    style: TextStyle(fontSize: 16.0, color: Colors.blue),
-                  ),
-                const SizedBox(height: 16.0),
+
                 // Purchase Price
                 CustomTextField(
                   controller: controller.purchasePriceController,
@@ -99,6 +131,21 @@ class CraeteProduct extends StatelessWidget {
                 CustomTextField(
                   controller: controller.salePriceController,
                   label: 'Sale Price',
+                  inputType: TextInputType.number,
+                ),
+                const SizedBox(height: 16.0),
+                // Min
+                CustomTextField(
+                  controller: controller.minController,
+                  label: 'Min',
+                  inputType: TextInputType.number,
+                ),
+                const SizedBox(height: 16.0),
+
+                // Max
+                CustomTextField(
+                  controller: controller.maxController,
+                  label: 'Max',
                   inputType: TextInputType.number,
                 ),
                 const SizedBox(height: 16.0),
@@ -120,20 +167,26 @@ class CraeteProduct extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
 
-                // Min
-                CustomTextField(
-                  controller: controller.minController,
-                  label: 'Min',
-                  inputType: TextInputType.number,
+                // Type Dropdown
+                CustomDropdown(
+                  label: 'Type',
+                  value: controller.typeValue,
+                  items: const ['Live', 'Store'],
+                  onChanged: controller.updateTypeValue,
                 ),
                 const SizedBox(height: 16.0),
-
-                // Max
-                CustomTextField(
-                  controller: controller.maxController,
-                  label: 'Max',
-                  inputType: TextInputType.number,
-                ),
+                if (controller.typeValue == 'Live')
+                  CustomDropdown(
+                    label: 'Server name',
+                    value: controller.serverNameValue,
+                    items: const ['five_sim'],
+                    onChanged: controller.updateServerNameValue,
+                  ),
+                // if (controller.typeValue == 'Store')
+                //   const Text(
+                //     'Store Product Selected',
+                //     style: TextStyle(fontSize: 16.0, color: Colors.blue),
+                //   ),
                 const SizedBox(height: 16.0),
 
                 // Buttons
@@ -141,13 +194,10 @@ class CraeteProduct extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CustomButton(
-                        height: 40,
-                        title: 'Save',
-                        onPressed: () {
-                          // Handle form submission
-                          print('Form Submitted');
-                          Get.back();
-                        }),
+                      height: 40,
+                      title: 'Next',
+                      onPressed: controller.next,
+                    ),
                     SizedBox(
                       width: 20,
                     ),

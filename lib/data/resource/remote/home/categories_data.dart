@@ -49,13 +49,31 @@ class CategoriesData {
     return response;
   }
 
-  Future<ApiResponse> update(int id, dynamic data) async {
+  Future<ApiResponse> update(
+    int id,
+    Map name,
+    Map description,
+    String productDisplayMethod,
+    bool visible,
+    bool available,
+    // File image,
+  ) async {
     var response = await apiService.post(
       EndPoints.store.category,
-      data: data,
       pathVariables: {
         'id': id,
       },
+      data: {
+        'name': name,
+        'description': description,
+        'product_display_method': productDisplayMethod,
+        'visible': visible ? 1 : 0,
+        'available': available ? 1 : 0,
+      },
+      //TODO: To un later
+      // files: {
+      //   'image': image,
+      // },
     );
     return response;
   }

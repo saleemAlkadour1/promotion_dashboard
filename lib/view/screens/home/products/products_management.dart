@@ -5,10 +5,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
+import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 import 'package:promotion_dashboard/view/widgets/products/sf_data_grid_products.dart';
 
 class ProductsManagement extends StatelessWidget {
@@ -26,62 +28,45 @@ class ProductsManagement extends StatelessWidget {
         return res.response!;
       }
       return Scaffold(
-        body: Row(
-          children: [
-            const SizedBox(
-              width: 32,
-            ),
-            Expanded(
-              flex: 6,
-              child: CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 32,
-                        ),
-                        Text(
-                          'Products',
-                          style: MyText.appStyle.fs24.wBold.reColorText
-                              .responsiveStyle(context),
-                        ),
-                        SizedBox(
-                          height: 32,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomButton(
-                                  title: 'Add product',
-                                  height: 45,
-                                  onPressed: () {
-                                    Get.to(CraeteProduct());
-                                  }),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 32,
-                        ),
-                        SizedBox(
-                          height: 500,
-                          child: SFDataGridProducts(
-                            products: controller.products!,
-                          ),
-                        ),
-                      ],
+        backgroundColor: AppColors.screenColor,
+        body: SafeArea(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Products',
+                  style: MyText.appStyle.fs24.wBold.reColorText
+                      .responsiveStyle(context),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                          controller: TextEditingController(), label: 'Search'),
                     ),
-                  )
-                ],
-              ),
+                    const SizedBox(width: 10),
+                    CustomButton(
+                        title: 'Add product',
+                        height: 45,
+                        onPressed: () {
+                          Get.to(CraeteProduct());
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: SFDataGridProducts(
+                    products: controller.products!,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 32,
-            ),
-          ],
+          ),
         ),
       );
     });

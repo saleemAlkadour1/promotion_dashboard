@@ -1,32 +1,35 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home/categories/categories_management_controller.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
-import 'package:promotion_dashboard/data/model/category_model.dart';
-import 'package:promotion_dashboard/data/resource/categories_data.dart';
+import 'package:promotion_dashboard/core/localization/changelocale.dart';
+import 'package:promotion_dashboard/data/model/home/category_model.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
 
 abstract class UpdateCategoryController extends GetxController {
   // Text controllers
-  late TextEditingController nameController;
-  late TextEditingController descriptionController;
+  List<TextEditingController> nameController = [];
+  List<TextEditingController> descriptionController = [];
 
   // Dropdown values
   String visibleValue = 'Yes';
+  String avilableValue = 'Yes';
 
   // Images list
-  List<File> selectedImages = [];
+  File? image;
+
   bool loading = false;
 
   int categoryId = 0;
 
   // Methods (abstract)
   void updateVisibleValue(String value);
-  Future<void> pickImages();
-  void removeImage(File image);
+  void updateAvilableValue(String value);
+
+  Future<void> pickImage();
   initialCategory(CategoryModel category);
-  Future<void> updateCategory(int id);
+  Future<void> updateCategory();
   showCategory();
 }
 
@@ -37,11 +40,11 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
 
   @override
   void onInit() {
-    nameController = TextEditingController();
-    descriptionController = TextEditingController();
-
+    for (var i = 0; i < myLanguages.length; i++) {
+      nameController.add(TextEditingController());
+      descriptionController.add(TextEditingController());
+    }
     categoryId = int.parse(Get.parameters['category_id'] ?? '0');
-
     showCategory();
 
     super.onInit();
@@ -61,103 +64,97 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
   }
 
   @override
+  Future<void> pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+      update();
+    }
+  }
+
+  @override
   void updateVisibleValue(String value) {
     visibleValue = value;
     update();
   }
 
   @override
-  Future<void> pickImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-    );
-
-    if (result != null) {
-      selectedImages.addAll(
-        result.paths.where((path) => path != null).map((path) => File(path!)),
-      );
-      update();
-    }
-  }
-
-  @override
-  void removeImage(File image) {
-    selectedImages.remove(image);
+  void updateAvilableValue(String value) {
+    avilableValue = value;
     update();
   }
 
   @override
   void onClose() {
-    nameController.dispose();
-    descriptionController.dispose();
+    nameController.clear();
+    descriptionController.clear();
     super.onClose();
-  }
-
-  @override
-  Future<void> updateCategory(int id) async {
-    loading = true;
-    update();
-    // إعداد الحقول النصية
-    String nameEn = nameController.text.trim();
-    String descriptionEn = descriptionController.text.trim();
-
-    // تحقق من الحقول المطلوبة
-    if (nameEn.isEmpty) {
-      Get.snackbar(
-        'Error',
-        // 'Please fill all fields and select at least one image.',
-        'Please fill all fields.',
-        snackPosition: SnackPosition.TOP,
-      );
-      return;
-    }
-    // تحضير الملفات للرفع
-    // List<MultipartFile> multipartImages = [];
-    // for (var image in selectedImages) {
-    //   multipartImages.add(await MultipartFile.fromFile(
-    //     image.path,
-    //     filename: image.path.split('/').last,
-    //   ));
-    // }
-
-    // إرسال الطلب
-    var response = await categoriesData.update(id, {
-      'name[en]': nameEn,
-      'name[ar]': '',
-      'description[en]': descriptionEn,
-      'description[ar]': '',
-      'visible': visibleValue == 'Yes' ? 1 : 0,
-      'product_display_method': 'GridView',
-    });
-
-    // معالجة الاستجابة
-    if (response.statusCode == 200) {
-      customSnackBar('Success', 'Edited successfully',
-          snackType: SnackBarType.correct,
-          snackPosition: SnackBarPosition.topEnd);
-      // تحديث بيانات CategoriesManagementControllerImp
-      CategoriesManagementControllerImp controller =
-          Get.find<CategoriesManagementControllerImp>();
-      await controller.getPCategoriesData();
-      update();
-    } else {
-      //TODO: To solve problem show snack bar hree later
-      loading = false;
-      update();
-      customSnackBar('Error', response.message!,
-          snackType: SnackBarType.error,
-          snackPosition: SnackBarPosition.topEnd);
-    }
   }
 
   @override
   initialCategory(CategoryModel category) {
     categoryModel = category;
-    nameController.text = category.name.en!;
-    descriptionController.text = category.description.en!;
+    getValues(nameController, category.name.toJson());
+    getValues(descriptionController, category.description.toJson());
     visibleValue = category.visible == true ? 'Yes' : 'No';
     updateVisibleValue(visibleValue);
+    updateAvilableValue(avilableValue);
     update();
   }
+
+  @override
+  Future<void> updateCategory() async {
+    // if (image == null) {
+    //   customSnackBar(
+    //     'Please select an image',
+    //     '',
+    //     snackType: SnackBarType.error,
+    //   );
+    //   return;
+    // }
+    loading = true;
+    update();
+
+    // إرسال الطلب
+    var response = await categoriesData.update(
+      categoryId,
+      setValues(nameController),
+      setValues(descriptionController),
+      'GridView',
+      true,
+      true,
+    );
+
+    // معالجة الاستجابة
+    if (response.isSuccess) {
+      Get.back();
+      customSnackBar('Success', response.message!,
+          snackType: SnackBarType.correct,
+          snackPosition: SnackBarPosition.topEnd);
+    }
+    loading = false;
+    update();
+  }
+}
+
+Map setValues(List<TextEditingController> controllers) {
+  Map data = {};
+
+  for (var i = 0; i < myLanguages.length; i++) {
+    data[myLanguages.entries.toList()[i].key] = controllers[i].text.trim();
+  }
+
+  return data;
+}
+
+Map getValues(List<TextEditingController> controllers, Map categoryData) {
+  Map data = {};
+
+  for (var i = 0; i < myLanguages.length; i++) {
+    controllers[i].text =
+        categoryData[myLanguages.entries.toList()[i].key] ?? '';
+  }
+
+  return data;
 }

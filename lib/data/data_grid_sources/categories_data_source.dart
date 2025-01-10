@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:promotion_dashboard/data/model/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/category_model.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class CategoriesDataSource extends DataGridSource {

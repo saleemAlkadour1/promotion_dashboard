@@ -9,8 +9,8 @@ class AppBarMobile extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.white,
-      foregroundColor: AppColors.white,
+      backgroundColor: AppColors.screenColor,
+      foregroundColor: AppColors.screenColor,
       elevation: 0,
       scrolledUnderElevation: 0,
       shadowColor: AppColors.transparent,

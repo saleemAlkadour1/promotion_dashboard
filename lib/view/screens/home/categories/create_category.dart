@@ -48,6 +48,7 @@ class CreateCategory extends StatelessWidget {
                 children: [
                   // Name
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Name',
@@ -59,41 +60,41 @@ class CreateCategory extends StatelessWidget {
                       ...List.generate(
                         myLanguages.entries.toList().length,
                         (index) {
-                          return CustomTextField(
-                            controller: controller.nameController[index],
-                            label:
-                                '(${myLanguages.entries.toList()[index].key})',
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: CustomTextField(
+                              controller: controller.nameController[index],
+                              label:
+                                  '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Description',
+                        style: MyText.appStyle.fs16.wBold.reColorText.style,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      ...List.generate(
+                        myLanguages.entries.toList().length,
+                        (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: CustomTextField(
+                              controller:
+                                  controller.descriptionController[index],
+                              label:
+                                  '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            ),
                           );
                         },
                       )
                     ],
                   ),
-                  const SizedBox(height: 16.0),
-                  // Description
-                  Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Description',
-                          style: MyText.appStyle.fs16.wBold.reColorText.style,
-                        ),
-                        const SizedBox(
-                          height: 12.0,
-                        ),
-                        ...List.generate(
-                          myLanguages.entries.toList().length,
-                          (index) {
-                            return CustomTextField(
-                              controller:
-                                  controller.descriptionController[index],
-                              label:
-                                  '(${myLanguages.entries.toList()[index].key})',
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
+
                   const SizedBox(height: 16.0),
 
                   // Visible Dropdown
@@ -104,6 +105,16 @@ class CreateCategory extends StatelessWidget {
                     onChanged: controller.updateVisibleValue,
                   ),
                   const SizedBox(height: 16.0),
+
+                  // Avilable Dropdown
+                  CustomDropdown(
+                    label: 'Avilable',
+                    value: controller.avilableValue,
+                    items: const ['Yes', 'No'],
+                    onChanged: controller.updateAvilableValue,
+                  ),
+                  const SizedBox(height: 16.0),
+
                   // Pick and Display Images
                   CustomImagePicker(
                     images: [
@@ -116,6 +127,7 @@ class CreateCategory extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 16.0),
+
                   // Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,

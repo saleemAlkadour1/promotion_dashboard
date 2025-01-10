@@ -1,9 +1,4 @@
 abstract class AppRoutes {
-  static String chooseLanguage = '/chooseLanguage';
-  static String login = '/login';
-  static String homeScreen = '/homeScreen';
-
-  //Routes
   static String categoriesManagement = '/categories-management';
   static String createCategory = '/create-category';
   static String showCategory = '/show-category';
@@ -13,4 +8,7 @@ abstract class AppRoutes {
   static String chats = '/chats';
   static String dashboard = '/dashboard';
   static String home = '/home';
+  static String login = '/login';
+
+  static String selectProduct = '/select-product';
 }

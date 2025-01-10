@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/data/model/all_expensess_item_model.dart';
+import 'package:promotion_dashboard/data/model/general/all_expensess_item_model.dart';
 import 'package:promotion_dashboard/view/widgets/dashboard/all_expensess/all_expenses_item.dart';
 
 class AllExpensesItemsListView extends StatefulWidget {

@@ -10,6 +10,8 @@ class Assets {
 
   static const String imagesPicturesTurkey = "assets/images/pictures/turkey.png";
 
+  static const String imagesSvgAccounts = "assets/images/svg/accounts.svg";
+
   static const String imagesSvgAvatar1 = "assets/images/svg/avatar_1.svg";
 
   static const String imagesSvgAvatar2 = "assets/images/svg/avatar_2.svg";
@@ -21,6 +23,8 @@ class Assets {
   static const String imagesSvgCategories = "assets/images/svg/categories.svg";
 
   static const String imagesSvgChats = "assets/images/svg/chats.svg";
+
+  static const String imagesSvgClosedEye = "assets/images/svg/closed_eye.svg";
 
   static const String imagesSvgDashboard = "assets/images/svg/dashboard.svg";
 

@@ -4,7 +4,6 @@ import 'package:promotion_dashboard/controller/home/general/home_controller.dart
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/size_config.dart';
 import 'package:promotion_dashboard/view/widgets/general/app_bar/app_bar_mobile.dart';
-import 'package:promotion_dashboard/view/widgets/general/app_bar/app_bar_desktop_and_tablet.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/custom_dawer.dart';
 
 class Home extends StatelessWidget {
@@ -18,14 +17,14 @@ class Home extends StatelessWidget {
         backgroundColor: AppColors.screenColor,
         appBar: MediaQuery.sizeOf(context).width <= SizeConfig.tablet
             ? const AppBarMobile()
-            : const AppBarDesktpAndTablet(),
+            : null,
         drawer: MediaQuery.sizeOf(context).width <= SizeConfig.tablet
-            ? CustomDawer()
+            ? const CustomDawer()
             : null,
         body: Row(
           children: [
             MediaQuery.sizeOf(context).width > SizeConfig.tablet
-                ? Expanded(
+                ? const Expanded(
                     child: CustomDawer(),
                   )
                 : const SizedBox(),

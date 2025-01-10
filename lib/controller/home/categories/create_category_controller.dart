@@ -4,7 +4,7 @@ import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/resource/categories_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
 
 abstract class CreateCategoryController extends GetxController {
   // Text controllers
@@ -13,6 +13,7 @@ abstract class CreateCategoryController extends GetxController {
 
   // Dropdown values
   String visibleValue = 'Yes';
+  String avilableValue = 'Yes';
 
   // Images list
   File? image;
@@ -20,6 +21,7 @@ abstract class CreateCategoryController extends GetxController {
 
   // Methods (abstract)
   void updateVisibleValue(String value);
+  void updateAvilableValue(String value);
   Future<void> pickImage();
   Future<void> addCategory();
 }
@@ -43,6 +45,12 @@ class CreateCategoryControllerImp extends CreateCategoryController {
   }
 
   @override
+  void updateAvilableValue(String value) {
+    avilableValue = value;
+    update();
+  }
+
+  @override
   Future<void> pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -51,38 +59,6 @@ class CreateCategoryControllerImp extends CreateCategoryController {
       update();
     }
   }
-
-  // Future<void> pickImagesFromGallery() async {
-  //   try {
-  //     final List<XFile> images = await picker.pickMultiImage();
-
-  //     if (images.isNotEmpty) {
-  //       selectedImages.addAll(images.map((image) => File(image.path)).toList());
-  //     } else {
-  //       Get.snackbar("إلغاء", "لم يتم اختيار أي صورة.", backgroundColor: Colors.orange, colorText: Colors.white);
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("خطأ", "حدث خطأ أثناء اختيار الصور: $e", backgroundColor: Colors.red, colorText: Colors.white);
-  //   } finally {
-  //     update();
-  //   }
-  // }
-
-  // Future<void> pickImagesFromCamera() async {
-  //   try {
-  //     final XFile? image = await picker.pickImage(source: ImageSource.camera);
-
-  //     if (image != null) {
-  //       selectedImages.add(File(image.path));
-  //     } else {
-  //       Get.snackbar("إلغاء", "لم يتم التقاط أي صورة.", backgroundColor: Colors.orange, colorText: Colors.white);
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("خطأ", "حدث خطأ أثناء التقاط الصورة: $e", backgroundColor: Colors.red, colorText: Colors.white);
-  //   } finally {
-  //     update();
-  //   }
-  // }
 
   @override
   void onClose() {
@@ -109,7 +85,7 @@ class CreateCategoryControllerImp extends CreateCategoryController {
       setValues(nameController),
       setValues(descriptionController),
       'GridView',
-      visibleValue == 'Yes',
+      true,
       true,
       image!,
     );
@@ -117,9 +93,11 @@ class CreateCategoryControllerImp extends CreateCategoryController {
     // معالجة الاستجابة
     if (response.isSuccess) {
       Get.back();
-      customSnackBar('Success', 'Added successfully',
-          snackType: SnackBarType.correct,
-          snackPosition: SnackBarPosition.topEnd);
+      customSnackBar(
+        'Success',
+        response.message!,
+        snackType: SnackBarType.correct,
+      );
     }
 
     loading = false;

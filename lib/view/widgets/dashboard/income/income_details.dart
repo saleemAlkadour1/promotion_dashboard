@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
-import 'package:promotion_dashboard/data/model/item_details_model.dart';
+import 'package:promotion_dashboard/data/model/general/item_details_model.dart';
 import 'package:promotion_dashboard/view/widgets/dashboard/income/item_details.dart';
 
 class IncomeDetails extends StatelessWidget {

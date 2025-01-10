@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/general/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/data/model/user_info_model.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
 import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
@@ -29,13 +28,14 @@ class CustomDawer extends StatelessWidget {
                 height: 12,
               ),
             ),
+            // تحقق من صحة userModel
             SliverToBoxAdapter(
-              child: UserInfoListTile(
-                  color: AppColors.white,
-                  userInfoModel: UserInfoModel(
-                      imagePath: Assets.imagesSvgAvatar1,
-                      title: 'Saleem Alkadour',
-                      subTitle: 'saleem8@gmail.com')),
+              child: controller.user != null
+                  ? UserInfoListTile(
+                      color: AppColors.white,
+                      userModel: controller.user!,
+                    )
+                  : SizedBox(),
             ),
             SliverFillRemaining(
               hasScrollBody: false,
@@ -77,7 +77,7 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
-                    title: 'Tansaction',
+                    title: 'Transaction',
                     imagePath: Assets.imagesSvgTransaction,
                     isActive: controller.selectedIndex ==
                             DrawerItems.transaction.value
@@ -136,7 +136,9 @@ class CustomDawer extends StatelessWidget {
                     isActive: false,
                     activeIconColor: AppColors.red,
                     inActiveIconColor: AppColors.red,
-                    onTap: () {},
+                    onTap: () async {
+                      await controller.logout();
+                    },
                   ),
                   SizedBox(
                     height: 12,

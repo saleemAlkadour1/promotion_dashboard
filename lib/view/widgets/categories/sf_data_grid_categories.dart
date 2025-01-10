@@ -7,10 +7,10 @@ import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
-import 'package:promotion_dashboard/core/functions/size.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/categories_data_source.dart';
-import 'package:promotion_dashboard/data/model/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/category_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
+import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class SFDataGridCategories extends StatelessWidget {
@@ -37,15 +37,17 @@ class SFDataGridCategories extends StatelessWidget {
                         CustomIconSvg(
                           path: Assets.imagesSvgEdit,
                           size: 20,
-                          onTap: () {
+                          onTap: () async {
                             if (cell.columnName == 'Actions' &&
                                 cell.value is CategoryModel) {
-                              Get.toNamed(
+                              await Get.toNamed(
                                 AppRoutes.updateCategory,
                                 parameters: {
-                                  'category_id': cell.value.id.toString(),
+                                  'category_id':
+                                      cell.value.id?.toString() ?? '',
                                 },
                               );
+                              controller.getPCategoriesData();
                             }
                           },
                         ),
@@ -72,12 +74,13 @@ class SFDataGridCategories extends StatelessWidget {
                           onTap: () {
                             if (cell.columnName == 'Actions' &&
                                 cell.value is CategoryModel) {
-                              Get.toNamed(
-                                AppRoutes.showCategory,
-                                parameters: {
-                                  'category_id': cell.value.id,
-                                },
-                              );
+                              final category = cell.value as CategoryModel;
+
+                              Get.parameters.addAll({
+                                'category_id': category.id.toString(),
+                              });
+                              controller.update();
+                              controller.showCategoryDetailsDialog();
                             }
                           },
                         ),
@@ -98,7 +101,7 @@ class SFDataGridCategories extends StatelessWidget {
         },
       );
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: SfDataGrid(
@@ -158,28 +161,13 @@ class SFDataGridCategories extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SfDataPager(
-                itemPadding: EdgeInsets.symmetric(horizontal: width(0)),
-                delegate: categoriesDataSource,
-                initialPageIndex: 1,
-                pageCount: controller.categories!.length <
-                        categoriesDataSource.rowsPerPage
-                    ? 1
-                    : (controller.categories!.length /
-                            categoriesDataSource.rowsPerPage)
-                        .ceilToDouble(),
-                onPageNavigationStart: (pageIndex) {
-                  final startIndex =
-                      pageIndex * categoriesDataSource.rowsPerPage;
-                  categoriesDataSource.buildPaginatedData(
-                      startIndex: startIndex);
-                },
-              ),
-            ],
-          ),
+          ResponsiveSfDataPager(
+              dataSource: categoriesDataSource,
+              buildPaginatedData: (startIndex) {
+                categoriesDataSource.buildPaginatedData(startIndex: startIndex);
+              },
+              rowsPerPage: 10,
+              length: controller.categories!.length),
         ],
       );
     });

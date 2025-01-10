@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/data/model/user_info_model.dart';
-import 'package:promotion_dashboard/view/widgets/general/user_info_list_tile.dart';
+import 'package:promotion_dashboard/data/model/general/user_info_model.dart';
 
 class LatestTransactionListView extends StatelessWidget {
   const LatestTransactionListView({super.key});
@@ -26,9 +25,9 @@ class LatestTransactionListView extends StatelessWidget {
       child: Row(
         children: items
             .map(
-              (e) => IntrinsicWidth(
-                child: UserInfoListTile(userInfoModel: e),
-              ),
+              (e) => IntrinsicWidth(child: Container()
+                  //  UserInfoListTile(userInfoModel: e),
+                  ),
             )
             .toList(),
       ),

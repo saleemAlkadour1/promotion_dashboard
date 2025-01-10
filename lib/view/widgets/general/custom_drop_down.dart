@@ -4,14 +4,14 @@ import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart
 
 class CustomDropdown extends StatelessWidget {
   final String label;
-  final String value;
+  final String? value;
   final List<String> items;
   final Function(String) onChanged;
 
   const CustomDropdown({
     super.key,
     required this.label,
-    required this.value,
+    this.value,
     required this.items,
     required this.onChanged,
   });

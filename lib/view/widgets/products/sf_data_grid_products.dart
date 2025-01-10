@@ -8,10 +8,10 @@ import 'package:promotion_dashboard/controller/products/sf_data_grid_products_co
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/core/functions/size.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/products_data_source.dart';
-import 'package:promotion_dashboard/data/model/product_model.dart';
+import 'package:promotion_dashboard/data/model/home/product_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
+import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class SFDataGridProducts extends StatelessWidget {
@@ -152,24 +152,13 @@ class SFDataGridProducts extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SfDataPager(
-                initialPageIndex: 1,
-                itemPadding: EdgeInsets.symmetric(horizontal: width(0)),
-                delegate: productsDataSource,
-                pageCount: products.length < productsDataSource.rowsPerPage
-                    ? 1
-                    : (products.length / productsDataSource.rowsPerPage)
-                        .floorToDouble(),
-                onPageNavigationStart: (pageIndex) {
-                  final startIndex = pageIndex * productsDataSource.rowsPerPage;
-                  productsDataSource.buildPaginatedData(startIndex: startIndex);
-                },
-              ),
-            ],
-          ),
+          ResponsiveSfDataPager(
+              dataSource: productsDataSource,
+              buildPaginatedData: (startIndex) {
+                productsDataSource.buildPaginatedData(startIndex: startIndex);
+              },
+              rowsPerPage: 10,
+              length: controller.products.length),
         ],
       );
     });

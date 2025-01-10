@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_dashboard/data/model/transaction_model.dart';
+import 'package:promotion_dashboard/data/model/general/transaction_model.dart';
 import 'package:promotion_dashboard/view/widgets/dashboard/transaction_history/transaction_item.dart';
 
 class TransactionHistoryListView extends StatelessWidget {

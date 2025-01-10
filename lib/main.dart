@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MyServices.initialServices();
   Shared.setValue(StorageKeys.accessToken,
-      '37|HBUktmVwcCkT8wPdBbCJsYkdYx5sEJnByAm6Th07a5c6dd33');
+      '39|Kr3ZNxwGvGu2EEoNjTICbSmZhYPj9J9Cr8MhpdcQab5a72de');
 
   runApp(
     DevicePreview(
