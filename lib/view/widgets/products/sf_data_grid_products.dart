@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/products/sf_data_grid_products_controller.dart';
+import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
@@ -17,16 +15,12 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class SFDataGridProducts extends StatelessWidget {
   const SFDataGridProducts({
     super.key,
-    required this.products,
   });
-  final List<ProductModel> products;
   @override
   Widget build(BuildContext context) {
-    Get.put(SfDataGridProductsControllerImp());
-    return GetBuilder<SfDataGridProductsControllerImp>(builder: (controller) {
-      log(MediaQuery.sizeOf(context).width.toString());
+    return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
       ProductsDataSource productsDataSource = ProductsDataSource(
-        products: products,
+        products: controller.products!,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -44,36 +38,32 @@ class SFDataGridProducts extends StatelessWidget {
                           onTap: () {},
                         ),
                         SizedBox(
-                          width: 8,
+                          width: 16,
                         ),
                         CustomIconSvg(
                           path: Assets.imagesSvgDelete,
                           size: 20,
-                          onTap: () {},
+                          onTap: () async {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is ProductModel) {
+                              final category = cell.value as ProductModel;
+                              await controller.deleteProduct(category.id);
+                            }
+                          },
                         ),
                         SizedBox(
-                          width: 8,
-                        ),
-                        CustomIconSvg(
-                          path: Assets.imagesSvgDownload,
-                          size: 20,
-                          onTap: () {},
-                        ),
-                        SizedBox(
-                          width: 8,
+                          width: 16,
                         ),
                         CustomIconSvg(
                           path: Assets.imagesSvgEye,
                           size: 16,
-                          onTap: () {},
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        CustomIconSvg(
-                          path: Assets.imagesSvgMenuCircleVertical,
-                          size: 20,
-                          onTap: () {},
+                          onTap: () {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is ProductModel) {
+                              final product = cell.value as ProductModel;
+                              controller.showProductDetailsDialog(product.id);
+                            }
+                          },
                         ),
                       ],
                     ));
@@ -158,7 +148,7 @@ class SFDataGridProducts extends StatelessWidget {
                 productsDataSource.buildPaginatedData(startIndex: startIndex);
               },
               rowsPerPage: 10,
-              length: controller.products.length),
+              length: controller.products!.length),
         ],
       );
     });

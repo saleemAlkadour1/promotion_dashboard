@@ -3,20 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/core/functions/error_image.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/model/home/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/product_model.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class CategoryDetailsDialog extends StatelessWidget {
-  final CategoryModel categoryModel;
-
-  const CategoryDetailsDialog({
+class ProductDetailsDialog extends StatelessWidget {
+  const ProductDetailsDialog({
     super.key,
-    required this.categoryModel,
+    required this.productModel,
   });
-
+  final ProductModel productModel;
   @override
   Widget build(BuildContext context) {
+    PageController pageController = PageController();
     return Dialog(
       backgroundColor: AppColors.screenColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -32,7 +31,7 @@ class CategoryDetailsDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Category',
+                  'Product',
                   style: MyText.appStyle.fs18.wBold.reColorText
                       .responsiveStyle(context),
                 ),
@@ -56,6 +55,8 @@ class CategoryDetailsDialog extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Close Button
+
                     // Name Section
                     Text(
                       'Name:',
@@ -70,7 +71,7 @@ class CategoryDetailsDialog extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8),
                         child: _buildLabelValueRow(
                             '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
-                            categoryModel.name.toJson()[
+                            productModel.name.toJson()[
                                     myLanguages.entries.toList()[index].key] ??
                                 'No name',
                             context),
@@ -92,7 +93,7 @@ class CategoryDetailsDialog extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8),
                         child: _buildLabelValueRow(
                             '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
-                            categoryModel.description.toJson()[
+                            productModel.description.toJson()[
                                     myLanguages.entries.toList()[index].key] ??
                                 'No description',
                             context),
@@ -103,7 +104,7 @@ class CategoryDetailsDialog extends StatelessWidget {
                     // Available
                     _buildLabelValueRow(
                       'Available',
-                      categoryModel.available == true ? 'Yes' : 'No',
+                      productModel.available == true ? 'Yes' : 'No',
                       context,
                     ),
                     const SizedBox(height: 12),
@@ -111,9 +112,31 @@ class CategoryDetailsDialog extends StatelessWidget {
                     // Visible
                     _buildLabelValueRow(
                       'Visible',
-                      categoryModel.available == true ? 'Yes' : 'No',
+                      productModel.visible == true ? 'Yes' : 'No',
                       context,
                     ),
+                    _buildLabelValueRow('Category id',
+                        productModel.productCategoryId.toString(), context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow('Type', productModel.type, context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow('Purchase price',
+                        productModel.purchasePrice.toString(), context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow('Sale price',
+                        productModel.salePrice.toString(), context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow('Numberly',
+                        productModel.numberly ? 'Yes' : 'No', context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow('Source', productModel.source, context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow(
+                        'Min', productModel.min ?? '0', context),
+                    const SizedBox(height: 12),
+                    _buildLabelValueRow(
+                        'Max', productModel.max ?? '0', context),
+
                     const SizedBox(height: 16),
 
                     // Image Section
@@ -124,19 +147,44 @@ class CategoryDetailsDialog extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: CachedNetworkImage(
-                          imageUrl: categoryModel.image!,
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
-                          errorWidget: myErrorWidget,
-                          width: double.infinity,
-                          height: 150,
-                          fit: BoxFit.cover,
+                      child: SizedBox(
+                        height: 200,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: PageView.builder(
+                            controller: pageController,
+                            itemCount: productModel.images.length,
+                            itemBuilder: (context, index) {
+                              return CachedNetworkImage(
+                                imageUrl: productModel.images[index].path,
+                                placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) =>
+                                    const Center(child: Icon(Icons.error)),
+                                width: double.infinity,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    // SmoothPageIndicator
+                    Center(
+                      child: SmoothPageIndicator(
+                        controller: pageController,
+                        count: productModel.images.length,
+                        effect: const ExpandingDotsEffect(
+                          dotHeight: 8,
+                          dotWidth: 8,
+                          activeDotColor: Colors.blue,
+                          dotColor: Colors.grey,
+                        ),
+                      ),
+                    ),
+
                     const SizedBox(height: 12),
                   ],
                 ),

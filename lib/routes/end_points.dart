@@ -38,6 +38,7 @@ final class Store {
   const Store();
 
   final String products = '${EndPoints.baseApi}/store/products';
+  final String product = '${EndPoints.baseApi}/store/products/{id}';
   final String categories = '${EndPoints.baseApi}/store/product-categories';
   final String category = '${EndPoints.baseApi}/store/product-categories/{id}';
 }
@@ -47,4 +48,6 @@ final class Server {
   const Server();
   final String productsFiveSim =
       '${EndPoints.baseApi}/servers/five-sim/products';
+  final String countriesAndOperators =
+      '${EndPoints.baseApi}/servers/five-sim/countries-and-operators?product={product}';
 }

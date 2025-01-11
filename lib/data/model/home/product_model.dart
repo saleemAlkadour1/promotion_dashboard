@@ -31,12 +31,13 @@ class ProductModel {
   final int id;
   final int? externalId;
   final int productCategoryId;
-  final String name;
+  final Name name;
   final String type;
   final int purchasePrice;
-  final int oldPrice;
-  final String description;
-  final bool visible;
+  final int salePrice;
+  final Name description;
+  final bool? visible;
+  final bool? available;
   final dynamic metadata;
   final dynamic min;
   final dynamic max;
@@ -54,9 +55,10 @@ class ProductModel {
     required this.name,
     required this.type,
     required this.purchasePrice,
-    required this.oldPrice,
+    required this.salePrice,
     required this.description,
-    required this.visible,
+    this.visible,
+    this.available,
     this.metadata,
     this.min,
     this.max,
@@ -73,12 +75,13 @@ class ProductModel {
       id: json['id'],
       externalId: json['external_id'],
       productCategoryId: json['product_category_id'],
-      name: json['name']['en'],
+      name: Name.fromJson(json['name']),
       type: json['type'],
       purchasePrice: json['purchase_price'],
-      oldPrice: json['old_price'],
-      description: json['description']['en'],
+      salePrice: json['old_price'],
+      description: Name.fromJson(json['description']),
       visible: json['visible'],
+      available: json['available'],
       metadata: json['metadata'],
       min: json['min'],
       max: json['max'],
@@ -96,12 +99,13 @@ class ProductModel {
       'id': id,
       'external_id': externalId,
       'product_category_id': productCategoryId,
-      'name': name,
+      'name': name.toJson(),
       'type': type,
       'purchase_price': purchasePrice,
-      'old_price': oldPrice,
-      'description': description,
+      'old_price': salePrice,
+      'description': description.toJson(),
       'visible': visible,
+      'available': available,
       'metadata': metadata,
       'min': min,
       'max': max,
@@ -183,6 +187,27 @@ class Meta {
       'last_page': lastPage,
       'per_page': perPage,
       'total': total,
+    };
+  }
+}
+
+class Name {
+  final String? en;
+  final String? ar;
+
+  Name({this.en, this.ar});
+
+  factory Name.fromJson(Map<String, dynamic> json) {
+    return Name(
+      en: json['en'],
+      ar: json['ar'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'en': en,
+      'ar': ar,
     };
   }
 }

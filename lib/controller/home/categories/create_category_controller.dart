@@ -80,7 +80,6 @@ class CreateCategoryControllerImp extends CreateCategoryController {
     loading = true;
     update();
 
-    // إرسال الطلب
     var response = await categoriesData.create(
       setValues(nameController),
       setValues(descriptionController),

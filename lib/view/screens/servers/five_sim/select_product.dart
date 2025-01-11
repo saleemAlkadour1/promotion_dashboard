@@ -6,8 +6,7 @@ import 'package:promotion_dashboard/controller/servers/five_sim_controller.dart'
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/data/model/servers/five_sim_product_model.dart';
-import 'package:promotion_dashboard/view/screens/servers/five_sim/select_country_and_operator.dart';
+import 'package:promotion_dashboard/data/model/servers/five_sim/five_sim_product_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
 class SelectProduct extends StatelessWidget {
@@ -26,6 +25,7 @@ class SelectProduct extends StatelessWidget {
         return res.response!;
       }
       return Scaffold(
+        backgroundColor: AppColors.screenColor,
         appBar: AppBar(
             backgroundColor: AppColors.color_F7F9FA,
             elevation: 0,
@@ -67,8 +67,15 @@ class SelectProduct extends StatelessWidget {
                       Wrap(
                         spacing: 16,
                         runSpacing: 16,
-                        children: controller.filteredProducts!.map((product) {
+                        children: controller.filteredProducts!
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          FiveSimProductModel product = entry.value;
                           return ProductCard(
+                            onTap: () {
+                              controller.selectProduct(product);
+                            },
                             product: product,
                           );
                         }).toList(),
@@ -89,18 +96,17 @@ class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
     required this.product,
+    this.onTap,
   });
 
   final FiveSimProductModel product;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FiveSimControllerImp>(builder: (controller) {
       return GestureDetector(
-        onTap: () {
-          controller.selectProduct(product);
-          Get.to(() => SelectCountryAndOperator());
-        },
+        onTap: onTap,
         child: Container(
           width: MediaQuery.of(context).size.width > 600
               ? 200
@@ -109,7 +115,7 @@ class ProductCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: controller.selectedProduct == product
                 ? Colors.blue.shade100
-                : Colors.grey.shade200,
+                : Colors.white.withOpacity(0.9),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(

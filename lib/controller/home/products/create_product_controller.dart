@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
+import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/data/model/home/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
@@ -20,8 +22,9 @@ abstract class CreateProductController extends GetxController {
   // Dropdown values
   String visibleValue = 'Yes';
   String availableValue = 'Yes';
-  String typeValue = 'Live';
-  String categoryValue = 'Live';
+  String typeValue = 'live';
+  String numberlyValue = 'Yes';
+  String categoryValue = '';
   String sourceValue = 'Internal';
   String serverNameValue = 'five_sim';
 
@@ -35,6 +38,7 @@ abstract class CreateProductController extends GetxController {
   // Methods (abstract)
   void updateVisibleValue(String value);
   void updateTypeValue(String value);
+  void updateNumberlyValue(String value);
   void updateSourceValue(String value);
   void updateCategoryValue(String value);
   void updateAvailableValue(String value);
@@ -105,6 +109,11 @@ class CreateProductControllerImp extends CreateProductController {
   }
 
   @override
+  void updateNumberlyValue(String value) {
+    numberlyValue = value;
+  }
+
+  @override
   void updateSourceValue(String value) {
     sourceValue = value;
     update();
@@ -132,23 +141,87 @@ class CreateProductControllerImp extends CreateProductController {
 
   @override
   Future<void> pickImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-    );
+    try {
+      ImagePicker picker = ImagePicker();
 
-    if (result != null) {
-      selectedImages.addAll(
-        result.paths.where((path) => path != null).map((path) => File(path!)),
-      );
+      final List<XFile> images = await picker.pickMultiImage();
+      if (images.isNotEmpty) {
+        selectedImages.addAll(images.map((image) => File(image.path)).toList());
+      } else {
+        customSnackBar(
+          "إلغاء",
+          "لم يتم اختيار أي صورة.",
+          snackType: SnackBarType.warning,
+        );
+      }
+    } catch (e) {
+      customSnackBar("خطأ", "حدث خطأ أثناء اختيار الصور: $e",
+          snackType: SnackBarType.error);
+    } finally {
       update();
     }
   }
+  // @override
+  // Future<void> pickImages() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.image,
+  //     allowMultiple: true,
+  //   );
+
+  //   if (result != null) {
+  //     selectedImages.addAll(
+  //       result.paths.where((path) => path != null).map((path) => File(path!)),
+  //     );
+  //     update();
+  //   }
+  // }
 
   @override
   void removeImage(File image) {
     selectedImages.remove(image);
     update();
+  }
+
+  @override
+  void updateServerNameValue(String value) {
+    serverNameValue = value;
+  }
+
+  next() {
+    if (typeValue == 'live' && serverNameValue == 'five_sim') {
+      if (selectedImages.isNotEmpty) {
+        for (final image in selectedImages) {
+          if (image.path.contains('||unique_separator||')) {
+            customSnackBar('خطأ', 'يرجى التحقق من أسماء الملفات التي ترسلها',
+                snackType: SnackBarType.error);
+            return;
+          }
+        }
+      } else {
+        customSnackBar('error', 'لم تقم باختيار صورة ',
+            snackType: SnackBarType.error);
+        return;
+      }
+
+      List<String> imagePaths =
+          selectedImages.map((image) => image.path).toList();
+      Get.toNamed(AppRoutes.selectProduct, parameters: {
+        'name': jsonEncode(setValues(nameController)),
+        'description': jsonEncode(setValues(descriptionController)),
+        'visible': visibleValue,
+        'product_category_id': categoryId.toString(),
+        'type': 'live',
+        'purchase_price': purchasePriceController.text,
+        'sale_price': salePriceController.text,
+        'numberly': numberlyValue,
+        'source': 'internal',
+        'images': imagePaths.join('||unique_separator||'),
+        'min': minController.text,
+        'max': maxController.text,
+        'available': availableValue,
+        'server_name': 'five_sim',
+      });
+    }
   }
 
   @override
@@ -160,17 +233,6 @@ class CreateProductControllerImp extends CreateProductController {
     minController.dispose();
     maxController.dispose();
     super.onClose();
-  }
-
-  @override
-  void updateServerNameValue(String value) {
-    serverNameValue = value;
-  }
-
-  next() {
-    if (typeValue == 'Live' && serverNameValue == 'five_sim') {
-      Get.toNamed(AppRoutes.selectProduct);
-    }
   }
 }
 

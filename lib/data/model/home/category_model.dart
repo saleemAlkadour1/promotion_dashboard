@@ -4,6 +4,7 @@ class CategoryModel {
   final Name name;
   final String? image;
   final bool? visible;
+  final bool? available;
   final String? productDisplayMethod;
   final String createdAt;
   final String updatedAt;
@@ -14,6 +15,7 @@ class CategoryModel {
     required this.description,
     this.image,
     this.visible,
+    this.available,
     this.productDisplayMethod,
     required this.createdAt,
     required this.updatedAt,
@@ -26,6 +28,7 @@ class CategoryModel {
       description: Name.fromJson(json['description']),
       image: json['image'],
       visible: json['visible'],
+      available: json['available'],
       productDisplayMethod: json['product_display_method'],
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
@@ -39,6 +42,7 @@ class CategoryModel {
       'description': description.toJson(),
       'image': image,
       'visible': visible,
+      'available': available,
       'product_display_method': productDisplayMethod,
       'created_at': createdAt,
       'updated_at': updatedAt,

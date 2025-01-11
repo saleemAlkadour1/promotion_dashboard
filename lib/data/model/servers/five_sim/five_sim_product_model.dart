@@ -11,17 +11,15 @@ class FiveSimProductModel {
     required this.price,
   });
 
-  // دالة لتحويل JSON إلى كائن من نوع Item
   factory FiveSimProductModel.fromJson(Map<String, dynamic> json) {
     return FiveSimProductModel(
-      name: json['name'].toString(), // لتحويل الاسم إلى String إذا كان رقماً
+      name: json['name'].toString(),
       category: json['category'],
       quantity: json['quantity'],
       price: json['price'],
     );
   }
 
-  // دالة لتحويل كائن من نوع Item إلى JSON
   Map<String, dynamic> toJson() {
     return {
       'name': name,

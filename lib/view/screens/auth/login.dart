@@ -17,71 +17,101 @@ class Login extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: width(16)),
-            child: Form(
-              key: controller.formState,
-              child: ListView(
-                children: [
-                  SizedBox(height: height(180)),
-                  Text(
-                    'Enter your account',
-                    textAlign: TextAlign.center,
-                    style: MyText.appStyle.fs25.wMedium.reColorLightGray.style,
-                  ),
-                  SizedBox(height: height(50)),
+          body: Center(
+            child: SingleChildScrollView(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  bool isDesktop = constraints.maxWidth >= 600;
 
-                  // Email Field
-                  LoginTextField(
-                    prefixIcon: const Icon(Icons.email),
-                    hintText: 'Email',
-                    controller: controller.email,
-                    validator: (value) => MyValidator.validate(
-                      value,
-                      type: ValidatorType.email,
-                      fieldName: 'the email',
-                    ),
-                  ),
-                  SizedBox(height: height(20)),
+                  // Container decoration for desktop
+                  BoxDecoration? containerDecoration = isDesktop
+                      ? BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        )
+                      : null;
 
-                  // Password Field
-                  LoginTextField(
-                    prefixIcon: const Icon(Icons.lock),
-                    hintText: 'Password',
-                    isPassword: true,
-                    isSeen: controller.isSeenPassword,
-                    onTapEye: controller.showPassword,
-                    controller: controller.password,
-                    validator: (value) => MyValidator.validate(
-                      value,
-                      type: ValidatorType.password,
-                      fieldName: 'the password',
-                      min: 8,
-                    ),
-                  ),
-                  SizedBox(height: height(20)),
-
-                  // Remember Me and Forget Password
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: controller.rememberMe,
-                        onChanged: controller.toggleRememberMe,
-                      ),
-                      Text('Remember me',
+                  Widget content = Form(
+                    key: controller.formState,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Enter your account',
+                          textAlign: TextAlign.center,
                           style: MyText
-                              .appStyle.fs13.wMedium.reColorLightGray.style),
-                    ],
-                  ),
-                  SizedBox(height: height(40)),
+                              .appStyle.fs25.wMedium.reColorLightGray.style,
+                        ),
+                        const SizedBox(height: 30),
 
-                  // Login Button
-                  CustomButton(
-                    title: !controller.loading ? 'login' : 'Loading...',
-                    onPressed: controller.login,
-                  ),
-                  SizedBox(height: height(50)),
-                ],
+                        // Email Field
+                        LoginTextField(
+                          prefixIcon: const Icon(Icons.email),
+                          hintText: 'Email',
+                          controller: controller.email,
+                          validator: (value) => MyValidator.validate(
+                            value,
+                            type: ValidatorType.email,
+                            fieldName: 'the email',
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Password Field
+                        LoginTextField(
+                          prefixIcon: const Icon(Icons.lock),
+                          hintText: 'Password',
+                          isPassword: true,
+                          isSeen: controller.isSeenPassword,
+                          onTapEye: controller.showPassword,
+                          controller: controller.password,
+                          validator: (value) => MyValidator.validate(
+                            value,
+                            type: ValidatorType.password,
+                            fieldName: 'the password',
+                            min: 8,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Remember Me and Forget Password
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: controller.rememberMe,
+                              onChanged: controller.toggleRememberMe,
+                            ),
+                            Text('Remember me',
+                                style: MyText.appStyle.fs13.wMedium
+                                    .reColorLightGray.style),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Login Button
+                        CustomButton(
+                          title: !controller.loading ? 'login' : 'Loading...',
+                          onPressed: controller.login,
+                        ),
+                      ],
+                    ),
+                  );
+
+                  return Container(
+                    width: isDesktop ? 400 : null,
+                    padding: const EdgeInsets.all(16),
+                    decoration: containerDecoration,
+                    child: content,
+                  );
+                },
               ),
             ),
           ),

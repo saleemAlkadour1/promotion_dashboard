@@ -167,15 +167,23 @@ class CraeteProduct extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
 
+                // Numberly Dropdown
+                CustomDropdown(
+                  label: 'Numberly',
+                  value: controller.numberlyValue,
+                  items: const ['Yes', 'No'],
+                  onChanged: controller.updateNumberlyValue,
+                ),
+                const SizedBox(height: 16.0),
                 // Type Dropdown
                 CustomDropdown(
                   label: 'Type',
                   value: controller.typeValue,
-                  items: const ['Live', 'Store'],
+                  items: const ['live', 'store'],
                   onChanged: controller.updateTypeValue,
                 ),
                 const SizedBox(height: 16.0),
-                if (controller.typeValue == 'Live')
+                if (controller.typeValue == 'live')
                   CustomDropdown(
                     label: 'Server name',
                     value: controller.serverNameValue,
@@ -217,8 +225,3 @@ class CraeteProduct extends StatelessWidget {
     });
   }
 }
-
-final Map<String, Widget> typeSpecificWidgets = {
-  'Live': Text('Customized for Live', style: TextStyle(color: Colors.green)),
-  'Store': Text('Customized for Store', style: TextStyle(color: Colors.blue)),
-};

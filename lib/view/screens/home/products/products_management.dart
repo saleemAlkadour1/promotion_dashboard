@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 import 'package:promotion_dashboard/view/widgets/products/sf_data_grid_products.dart';
@@ -54,15 +54,13 @@ class ProductsManagement extends StatelessWidget {
                         title: 'Add product',
                         height: 45,
                         onPressed: () {
-                          Get.to(CraeteProduct());
+                          Get.toNamed(AppRoutes.createProduct);
                         }),
                   ],
                 ),
                 const SizedBox(height: 16),
                 Expanded(
-                  child: SFDataGridProducts(
-                    products: controller.products!,
-                  ),
+                  child: SFDataGridProducts(),
                 ),
               ],
             ),

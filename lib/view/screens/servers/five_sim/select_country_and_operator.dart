@@ -5,6 +5,9 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/servers/five_sim_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/constants/routes.dart';
+import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 
 class SelectCountryAndOperator extends StatelessWidget {
   const SelectCountryAndOperator({super.key});
@@ -14,6 +17,13 @@ class SelectCountryAndOperator extends StatelessWidget {
     Get.find<FiveSimControllerImp>();
 
     return GetBuilder<FiveSimControllerImp>(builder: (controller) {
+      var res = HandlingDataView(
+        loading: controller.loading,
+        dataIsEmpty: controller.countries == null,
+      );
+      if (res.isValid) {
+        return res.response!;
+      }
       return Scaffold(
         appBar: AppBar(
             backgroundColor: AppColors.color_F7F9FA,
@@ -39,58 +49,95 @@ class SelectCountryAndOperator extends StatelessWidget {
             )),
         body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ListView.builder(
-              itemCount: controller.countries.length,
-              itemBuilder: (context, index) {
-                final country = controller.countries[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Card(
-                    elevation: 5,
-                    margin: EdgeInsets.only(bottom: 16),
-                    child: ExpansionTile(
-                      shape: RoundedRectangleBorder(side: BorderSide.none),
-                      title: Text(
-                        country.name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      children: country.operators.map((operator) {
-                        return GestureDetector(
-                          onTap: () {
-                            controller.selectOperator(operator);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: controller.selectedOperator == operator
-                                  ? Colors.blue.shade100
-                                  : Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(2, 2),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.countries!.length,
+                    itemBuilder: (context, index) {
+                      final country = controller.countries![index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Card(
+                          elevation: 5,
+                          margin: EdgeInsets.only(bottom: 16),
+                          child: ExpansionTile(
+                            shape:
+                                RoundedRectangleBorder(side: BorderSide.none),
+                            title: Text(
+                              country.countryName,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            children: country.operators.map((operator) {
+                              return GestureDetector(
+                                onTap: () {
+                                  controller.selectCountry(country);
+                                  controller.selectOperator(operator);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        controller.selectedOperator == operator
+                                            ? Colors.blue.shade100
+                                            : Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 4,
+                                        offset: Offset(2, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(operator.name),
+                                      Text(
+                                          "${operator.price.amount.toStringAsFixed(3)} ${operator.price.currency}"),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(operator.name),
-                                Text(
-                                    "${operator.price.amount.toStringAsFixed(2)} ${operator.price.currency}"),
-                              ],
-                            ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomButton(
+                      height: 40,
+                      title: controller.loading ? 'Loading...' : 'Save',
+                      onPressed: () async {
+                        await controller.createProuct();
+                      },
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    CustomButton(
+                        title: 'Cancel',
+                        height: 40,
+                        backgroundColor: AppColors.white,
+                        textColor: Colors.blue,
+                        onPressed: () {
+                          Get.offAndToNamed(AppRoutes.home);
+                        }),
+                  ],
+                ),
+              ],
             )),
       );
     });

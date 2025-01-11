@@ -11,4 +11,5 @@ abstract class AppRoutes {
   static String login = '/login';
 
   static String selectProduct = '/select-product';
+  static String selectCountryAndOperator = '/select-country-and-operator';
 }

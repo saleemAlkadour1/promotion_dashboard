@@ -52,7 +52,7 @@ class SFDataGridCategories extends StatelessWidget {
                           },
                         ),
                         SizedBox(
-                          width: 8,
+                          width: 16,
                         ),
                         CustomIconSvg(
                           path: Assets.imagesSvgDelete,
@@ -66,7 +66,7 @@ class SFDataGridCategories extends StatelessWidget {
                           },
                         ),
                         SizedBox(
-                          width: 8,
+                          width: 16,
                         ),
                         CustomIconSvg(
                           path: Assets.imagesSvgEye,
@@ -76,11 +76,7 @@ class SFDataGridCategories extends StatelessWidget {
                                 cell.value is CategoryModel) {
                               final category = cell.value as CategoryModel;
 
-                              Get.parameters.addAll({
-                                'category_id': category.id.toString(),
-                              });
-                              controller.update();
-                              controller.showCategoryDetailsDialog();
+                              controller.showCategoryDetailsDialog(category.id);
                             }
                           },
                         ),

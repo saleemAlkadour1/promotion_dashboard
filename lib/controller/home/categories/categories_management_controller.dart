@@ -10,7 +10,7 @@ abstract class ProductsManagementController extends GetxController {
   getPCategoriesData();
   Future<void> deleteCategory(int id);
   late DataPagerController dataPagerController;
-  showCategory();
+  showCategory(int id);
 }
 
 class CategoriesManagementControllerImp extends ProductsManagementController {
@@ -25,7 +25,6 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
   CategoriesData categoriesData = CategoriesData();
   List<CategoryModel>? categories;
   CategoryModel? categoryModel;
-  int? categoryId;
   @override
   getPCategoriesData() async {
     loading = true;
@@ -40,18 +39,32 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
   }
 
   @override
-  Future<void> showCategory() async {
+  Future<void> showCategory(int id) async {
     loading = true;
     update();
-    categoryId = int.parse(Get.parameters['category_id'] ?? '0');
     Get.parameters.clear();
-    var response = await categoriesData.show(categoryId);
+    var response = await categoriesData.show(id);
     if (response.isSuccess) {
       categoryModel = CategoryModel.fromJson(response.data);
     }
 
     loading = false;
     update();
+  }
+
+  void showCategoryDetailsDialog(int id) async {
+    await showCategory(id);
+    if (categoryModel != null) {
+      Get.dialog(
+        CategoryDetailsDialog(
+          categoryModel: categoryModel!,
+        ),
+      );
+      update();
+    } else {
+      customSnackBar('Error', 'Category details not found!',
+          snackType: SnackBarType.error);
+    }
   }
 
   @override
@@ -82,24 +95,5 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
         update();
       },
     );
-  }
-
-  void showCategoryDetailsDialog() async {
-    await showCategory();
-    if (categoryModel != null) {
-      Get.dialog(
-        CategoryDetailsDialog(
-          name: categoryModel!.name.toJson(),
-          description: categoryModel!.description.toJson(),
-          available: 'Yes',
-          visible: categoryModel!.visible == true ? 'Yes' : 'No',
-          imageUrl: categoryModel!.image!,
-        ),
-      );
-      update();
-    } else {
-      customSnackBar('Error', 'Category details not found!',
-          snackType: SnackBarType.error);
-    }
   }
 }

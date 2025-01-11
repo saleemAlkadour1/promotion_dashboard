@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-enum SnackBarType { correct, info, error }
+enum SnackBarType { correct, info, warning, error }
 
 enum SnackBarPosition { topStart, topEnd, bottomStart, bottomEnd }
 
@@ -103,6 +103,14 @@ class _SnackBarDialogState extends State<_SnackBarDialog>
         );
         break;
 
+      case SnackBarType.warning:
+        snackbarColor = Colors.orange;
+        icon = const Icon(
+          Icons.error_outline,
+          color: Colors.white,
+          size: 24,
+        );
+        break;
       case SnackBarType.error:
         snackbarColor = const Color(0xFFE82832);
         icon = const Icon(
