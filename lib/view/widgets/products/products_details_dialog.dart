@@ -132,10 +132,10 @@ class ProductDetailsDialog extends StatelessWidget {
                     _buildLabelValueRow('Source', productModel.source, context),
                     const SizedBox(height: 12),
                     _buildLabelValueRow(
-                        'Min', productModel.min ?? '0', context),
+                        'Min', productModel.min.toString(), context),
                     const SizedBox(height: 12),
                     _buildLabelValueRow(
-                        'Max', productModel.max ?? '0', context),
+                        'Max', productModel.max.toString(), context),
 
                     const SizedBox(height: 16),
 

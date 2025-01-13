@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
-import 'package:promotion_dashboard/data/model/home/products/products_type/store/product_store_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_type/store/create_product_dialog.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_type/store/update_product_dialog.dart';
@@ -34,6 +33,7 @@ class StoreControllerImp extends StoreController {
   List values = [];
   int? updateIndex;
   bool addingNewValue = false;
+  int porductStoreId = 0;
 
   @override
   void onInit() {
@@ -75,7 +75,8 @@ class StoreControllerImp extends StoreController {
   @override
   void addDynamicValue() {
     if (labelController.text.isEmpty || valueController.text.isEmpty) {
-      customSnackBar('Error', 'Please fill in all fields', snackType: SnackBarType.error);
+      customSnackBar('Error', 'Please fill in all fields',
+          snackType: SnackBarType.error);
       return;
     } else {
       values.add({
@@ -100,7 +101,8 @@ class StoreControllerImp extends StoreController {
   @override
   Future<void> createProduct() async {
     if (values.isEmpty) {
-      customSnackBar('Error', 'Please fill in all fields', snackType: SnackBarType.error);
+      customSnackBar('Error', 'Please fill in all fields',
+          snackType: SnackBarType.error);
     } else {
       loading = true;
       update();
@@ -113,7 +115,8 @@ class StoreControllerImp extends StoreController {
       );
       if (response.isSuccess) {
         await getStoreItems();
-        customSnackBar('', response.message ?? '', snackType: SnackBarType.correct);
+        customSnackBar('', response.message ?? '',
+            snackType: SnackBarType.correct);
       }
       loading = false;
       update();
@@ -129,7 +132,8 @@ class StoreControllerImp extends StoreController {
     update();
     var response = await productData.deleteStore(id);
     if (response.isSuccess) {
-      customSnackBar('', response.message ?? '', snackType: SnackBarType.correct);
+      customSnackBar('', response.message ?? '',
+          snackType: SnackBarType.correct);
     }
     loading = false;
     update();
@@ -137,11 +141,10 @@ class StoreControllerImp extends StoreController {
 
   //Update
   Future<void> showUpdateProductDialog(int id) async {
-    // استدعاء البيانات من API وإظهارها في واجهة التعديل
     var response = await productData.showProductStore(id);
     if (response.isSuccess) {
       values = response.data['values'];
-      // productId = id;
+      porductStoreId = id;
     }
     Get.dialog(const UpdateProductDialog());
   }
@@ -155,7 +158,8 @@ class StoreControllerImp extends StoreController {
   }
 
   void saveUpdatedValue(int index) {
-    if (updateLabelController.text.isNotEmpty && updateValueController.text.isNotEmpty) {
+    if (updateLabelController.text.isNotEmpty &&
+        updateValueController.text.isNotEmpty) {
       values[index] = {
         'id': values[index]['id'],
         'label': updateLabelController.text,
@@ -200,7 +204,8 @@ class StoreControllerImp extends StoreController {
   }
 
   void saveNewValue() {
-    if (updateLabelController.text.isNotEmpty && updateValueController.text.isNotEmpty) {
+    if (updateLabelController.text.isNotEmpty &&
+        updateValueController.text.isNotEmpty) {
       values[values.length - 1] = {
         'label': updateLabelController.text,
         'value': updateValueController.text,
@@ -220,7 +225,6 @@ class StoreControllerImp extends StoreController {
     loading = true;
     update();
     Get.back();
-
     var filteredValues = values.map((item) {
       if (item.containsKey('delete') && item['delete'] == 1) {
         return {'id': item['id'], 'delete': 1};
@@ -234,7 +238,7 @@ class StoreControllerImp extends StoreController {
     }).toList();
 
     var response = await productData.updateStore(
-      productId: productId!,
+      productId: porductStoreId,
       visible: true,
       values: filteredValues,
     );
