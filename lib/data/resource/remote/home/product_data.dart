@@ -96,7 +96,6 @@ class ProductData {
       'id': productId
     }, data: {
       'visible': visible ? 1 : 0,
-      'product_id': productId,
       'values': values,
     });
     return response;

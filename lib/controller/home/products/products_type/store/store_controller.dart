@@ -11,8 +11,8 @@ abstract class StoreController extends GetxController {
   late TextEditingController poductIdController;
   late TextEditingController labelController;
   late TextEditingController valueController;
-  late TextEditingController editLabelController;
-  late TextEditingController editValueController;
+  late TextEditingController updateLabelController;
+  late TextEditingController updateValueController;
 
   Future<void> createProduct();
   Future<void> deleteProduct(int id);
@@ -27,7 +27,7 @@ class StoreControllerImp extends StoreController {
   List<ProductStoreModel>? products;
   ProductData productData = ProductData();
   List values = [];
-  int? editingIndex;
+  int? updateIndex;
   bool addingNewValue = false;
   int? productId;
 
@@ -37,8 +37,8 @@ class StoreControllerImp extends StoreController {
     poductIdController = TextEditingController();
     labelController = TextEditingController();
     valueController = TextEditingController();
-    editLabelController = TextEditingController();
-    editValueController = TextEditingController();
+    updateLabelController = TextEditingController();
+    updateValueController = TextEditingController();
     getStore();
   }
 
@@ -62,7 +62,6 @@ class StoreControllerImp extends StoreController {
     update();
   }
 
-  // استدعاء تصميم الـ Dialog
   @override
   void showCreateProductDialog() {
     Get.dialog(const CreateProductDialog());
@@ -137,7 +136,7 @@ class StoreControllerImp extends StoreController {
     update();
   }
 
-  //Edit
+  //Update
   Future<void> showUpdateProductDialog(int id) async {
     // استدعاء البيانات من API وإظهارها في واجهة التعديل
     var response = await productData.showProductStore(id);
@@ -149,24 +148,22 @@ class StoreControllerImp extends StoreController {
   }
 
   void startEdit(int index) {
-    // بدء التعديل على قيمة موجودة
-    editingIndex = index;
+    updateIndex = index;
     addingNewValue = false;
-    editLabelController.text = values[index]['label'] ?? '';
-    editValueController.text = values[index]['value'] ?? '';
+    updateLabelController.text = values[index]['label'] ?? '';
+    updateValueController.text = values[index]['value'] ?? '';
     update();
   }
 
-  void saveEditedValue(int index) {
-    // حفظ القيمة المعدلة محليًا
-    if (editLabelController.text.isNotEmpty &&
-        editValueController.text.isNotEmpty) {
+  void saveUpdatedValue(int index) {
+    if (updateLabelController.text.isNotEmpty &&
+        updateValueController.text.isNotEmpty) {
       values[index] = {
-        'id': values[index]['id'], // الحفاظ على الـ ID إذا كانت القيمة موجودة
-        'label': editLabelController.text,
-        'value': editValueController.text,
+        'id': values[index]['id'],
+        'label': updateLabelController.text,
+        'value': updateValueController.text,
       };
-      editingIndex = null;
+      updateIndex = null;
       update();
     } else {
       customSnackBar(
@@ -177,43 +174,39 @@ class StoreControllerImp extends StoreController {
     }
   }
 
-  void cancelEdit() {
-    // إلغاء عملية التعديل
+  void cancelUpdate() {
     if (addingNewValue) {
       values.removeLast();
       addingNewValue = false;
     }
-    editingIndex = null;
+    updateIndex = null;
     update();
   }
 
   void deleteUpdateDynamicValue(int index) {
-    // وضع علامة حذف على العنصر بدلاً من حذفه مباشرةً
     if (values[index]['id'] != null) {
       values[index]['delete'] = 1;
     } else {
-      values.removeAt(index); // إذا كانت قيمة جديدة لم تحفظ  احذفها نهائيًا
+      values.removeAt(index);
     }
     update();
   }
 
   void startAddingNewValue() {
-    // إضافة قيمة جديدة
     addingNewValue = true;
-    editingIndex = null;
-    editLabelController.clear();
-    editValueController.clear();
-    values.add({'label': '', 'value': ''}); // إضافة عنصر جديد بقيمة فارغة
+    updateIndex = null;
+    updateLabelController.clear();
+    updateValueController.clear();
+    values.add({'label': '', 'value': ''});
     update();
   }
 
   void saveNewValue() {
-    // حفظ القيمة الجديدة محليًا
-    if (editLabelController.text.isNotEmpty &&
-        editValueController.text.isNotEmpty) {
+    if (updateLabelController.text.isNotEmpty &&
+        updateValueController.text.isNotEmpty) {
       values[values.length - 1] = {
-        'label': editLabelController.text,
-        'value': editValueController.text,
+        'label': updateLabelController.text,
+        'value': updateValueController.text,
       };
       addingNewValue = false;
       update();
@@ -227,13 +220,11 @@ class StoreControllerImp extends StoreController {
   }
 
   Future<void> updateProduct() async {
-    // إرسال البيانات المعدلة إلى API
     loading = true;
     update();
     Get.back();
 
     var filteredValues = values.map((item) {
-      // تصفية العناصر الفارغة
       if (item.containsKey('delete') && item['delete'] == 1) {
         return {'id': item['id'], 'delete': 1};
       } else {
@@ -252,15 +243,14 @@ class StoreControllerImp extends StoreController {
     );
 
     if (response.isSuccess) {
-      getStore(); // تحديث البيانات المحلية
+      getStore();
       customSnackBar('', response.message ?? '');
     }
     loading = false;
     update();
 
-    // إعادة تعيين الحقول
-    editLabelController.clear();
-    editValueController.clear();
+    updateLabelController.clear();
+    updateValueController.clear();
     values.clear();
   }
 

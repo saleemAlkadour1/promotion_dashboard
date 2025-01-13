@@ -40,7 +40,7 @@ class UpdateProductDialog extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = controller.values[index];
                     final isDeleted = item['delete'] == 1;
-                    final isEditing = controller.editingIndex == index;
+                    final isEditing = controller.updateIndex == index;
                     final isAdding = controller.addingNewValue &&
                         index == controller.values.length - 1;
 
@@ -56,12 +56,14 @@ class UpdateProductDialog extends StatelessWidget {
                                 children: [
                                   CustomTextField(
                                     label: 'Label',
-                                    controller: controller.editLabelController,
+                                    controller:
+                                        controller.updateLabelController,
                                   ),
                                   const SizedBox(height: 8.0),
                                   CustomTextField(
                                     label: 'Value',
-                                    controller: controller.editValueController,
+                                    controller:
+                                        controller.updateValueController,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -71,14 +73,14 @@ class UpdateProductDialog extends StatelessWidget {
                                           if (isAdding) {
                                             controller.saveNewValue();
                                           } else {
-                                            controller.saveEditedValue(index);
+                                            controller.saveUpdatedValue(index);
                                           }
                                         },
                                         child: const Text('Save'),
                                       ),
                                       const SizedBox(width: 8.0),
                                       ElevatedButton(
-                                        onPressed: controller.cancelEdit,
+                                        onPressed: controller.cancelUpdate,
                                         child: const Text('Cancel'),
                                       ),
                                     ],
