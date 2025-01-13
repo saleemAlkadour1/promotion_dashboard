@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/products_type/store/store_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
@@ -38,11 +39,15 @@ class UpdateProductDialog extends StatelessWidget {
                   itemCount: controller.values.length,
                   itemBuilder: (context, index) {
                     final item = controller.values[index];
+                    final isDeleted = item['delete'] == 1;
                     final isEditing = controller.editingIndex == index;
                     final isAdding = controller.addingNewValue &&
                         index == controller.values.length - 1;
 
                     return Card(
+                      color: isDeleted
+                          ? AppColors.red
+                          : AppColors.white.withOpacity(0.9),
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
                       child: isEditing || isAdding
                           ? Padding(
@@ -82,25 +87,56 @@ class UpdateProductDialog extends StatelessWidget {
                               ),
                             )
                           : ListTile(
-                              title: Text("Label: ${item['label']}"),
-                              subtitle: Text("Value: ${item['value']}"),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
-                                    onPressed: () =>
-                                        controller.startEdit(index),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () => controller
-                                        .deleteDeleteDynamicValue(index),
-                                  ),
-                                ],
+                              title: Text(
+                                "Label: ${item['label']}",
+                                style: TextStyle(
+                                  decorationThickness: 2,
+                                  decoration: isDeleted
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                  color:
+                                      isDeleted ? Colors.white : Colors.black,
+                                ),
                               ),
+                              subtitle: Text(
+                                "Value: ${item['value']}",
+                                style: TextStyle(
+                                  decorationThickness: 2,
+                                  decoration: isDeleted
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                  color:
+                                      isDeleted ? Colors.white : Colors.black,
+                                ),
+                              ),
+                              trailing: !isDeleted
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit,
+                                              color: Colors.blue),
+                                          onPressed: () =>
+                                              controller.startEdit(index),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete,
+                                              color: Colors.red),
+                                          onPressed: () => controller
+                                              .deleteUpdateDynamicValue(index),
+                                        ),
+                                      ],
+                                    )
+                                  : IconButton(
+                                      onPressed: () {
+                                        controller.values[index]
+                                            .remove('delete');
+                                        controller.update();
+                                      },
+                                      icon: const Icon(
+                                        FontAwesomeIcons.undo,
+                                        color: AppColors.white,
+                                      )),
                             ),
                     );
                   },
@@ -120,9 +156,9 @@ class UpdateProductDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 20),
                     CustomButton(
-                      title: 'Save Changes',
+                      title: 'Update product',
                       height: 40,
-                      onPressed: controller.saveChanges,
+                      onPressed: controller.updateProduct,
                     ),
                   ],
                 ),

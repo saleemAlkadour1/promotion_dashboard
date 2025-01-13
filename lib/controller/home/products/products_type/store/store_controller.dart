@@ -26,10 +26,10 @@ class StoreControllerImp extends StoreController {
   bool loading = false;
   List<ProductStoreModel>? products;
   ProductData productData = ProductData();
-
   List values = [];
   int? editingIndex;
   bool addingNewValue = false;
+  int? productId;
 
   @override
   void onInit() {
@@ -139,14 +139,17 @@ class StoreControllerImp extends StoreController {
 
   //Edit
   Future<void> showUpdateProductDialog(int id) async {
+    // استدعاء البيانات من API وإظهارها في واجهة التعديل
     var response = await productData.showProductStore(id);
     if (response.isSuccess) {
       values = response.data['values'];
+      productId = id;
     }
     Get.dialog(const UpdateProductDialog());
   }
 
   void startEdit(int index) {
+    // بدء التعديل على قيمة موجودة
     editingIndex = index;
     addingNewValue = false;
     editLabelController.text = values[index]['label'] ?? '';
@@ -155,9 +158,11 @@ class StoreControllerImp extends StoreController {
   }
 
   void saveEditedValue(int index) {
+    // حفظ القيمة المعدلة محليًا
     if (editLabelController.text.isNotEmpty &&
         editValueController.text.isNotEmpty) {
       values[index] = {
+        'id': values[index]['id'], // الحفاظ على الـ ID إذا كانت القيمة موجودة
         'label': editLabelController.text,
         'value': editValueController.text,
       };
@@ -166,13 +171,14 @@ class StoreControllerImp extends StoreController {
     } else {
       customSnackBar(
         '',
-        'Please fill in both fields before saving.',
+        'Fill in both fields before saving.',
         snackType: SnackBarType.error,
       );
     }
   }
 
   void cancelEdit() {
+    // إلغاء عملية التعديل
     if (addingNewValue) {
       values.removeLast();
       addingNewValue = false;
@@ -181,21 +187,28 @@ class StoreControllerImp extends StoreController {
     update();
   }
 
-  void deleteDeleteDynamicValue(int index) {
-    values.removeAt(index);
+  void deleteUpdateDynamicValue(int index) {
+    // وضع علامة حذف على العنصر بدلاً من حذفه مباشرةً
+    if (values[index]['id'] != null) {
+      values[index]['delete'] = 1;
+    } else {
+      values.removeAt(index); // إذا كانت قيمة جديدة لم تحفظ  احذفها نهائيًا
+    }
     update();
   }
 
   void startAddingNewValue() {
+    // إضافة قيمة جديدة
     addingNewValue = true;
     editingIndex = null;
     editLabelController.clear();
     editValueController.clear();
-    values.add({'label': '', 'value': ''});
+    values.add({'label': '', 'value': ''}); // إضافة عنصر جديد بقيمة فارغة
     update();
   }
 
   void saveNewValue() {
+    // حفظ القيمة الجديدة محليًا
     if (editLabelController.text.isNotEmpty &&
         editValueController.text.isNotEmpty) {
       values[values.length - 1] = {
@@ -213,10 +226,42 @@ class StoreControllerImp extends StoreController {
     }
   }
 
-  void saveChanges() {
-    // Send updated values to the API
-    print('Sending updated values: $values');
-    // Call your API function here
+  Future<void> updateProduct() async {
+    // إرسال البيانات المعدلة إلى API
+    loading = true;
+    update();
+    Get.back();
+
+    var filteredValues = values.map((item) {
+      // تصفية العناصر الفارغة
+      if (item.containsKey('delete') && item['delete'] == 1) {
+        return {'id': item['id'], 'delete': 1};
+      } else {
+        return {
+          'id': item['id'],
+          'label': item['label'],
+          'value': item['value'],
+        };
+      }
+    }).toList();
+
+    var response = await productData.updateStore(
+      productId: productId!,
+      visible: true,
+      values: filteredValues,
+    );
+
+    if (response.isSuccess) {
+      getStore(); // تحديث البيانات المحلية
+      customSnackBar('', response.message ?? '');
+    }
+    loading = false;
+    update();
+
+    // إعادة تعيين الحقول
+    editLabelController.clear();
+    editValueController.clear();
+    values.clear();
   }
 
   @override
