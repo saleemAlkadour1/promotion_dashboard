@@ -15,59 +15,57 @@ class ProductData {
     return response;
   }
 
-  Future<ApiResponse> createLive({
-    required String name,
-    required String description,
+  Future<ApiResponse> create({
+    required Map names,
+    required Map descriptions,
     required bool visible,
     required int productCategoryId,
     required String type,
     required num purchasePrice,
     required num salePrice,
-    required bool numberly,
+    bool? numberly,
     required String source,
     required List<File> images,
     num? min,
     num? max,
     required bool available,
-    required String serverName,
-    required String productName,
-    required String countryName,
-    required String operatorName,
+    String? serverName,
+    Map<String, dynamic>? serverData,
   }) async {
-    var response = await apiService.post(EndPoints.store.products, data: {
-      'name[en]': name,
-      'description[en]': description,
-      'visible': visible ? 1 : 0,
-      'product_display_method': 'GridView',
-      'product_category_id': productCategoryId,
-      'type': type,
-      'purchase_price': purchasePrice,
-      'sale_price': salePrice,
-      'numberly': numberly ? 1 : 0,
-      'source': source,
-      'min': min,
-      'max': max,
-      'available': available ? 1 : 0,
-      'server_name': serverName,
-      'data[product]': productName,
-      'data[country]': countryName,
-      'data[operator]': operatorName,
-    }, files: {
-      'images': images
-    });
-    return response;
-  }
-
-  Future<ApiResponse> getStore() async {
-    var response = await apiService.get(
-      EndPoints.store.productItems,
+    print(type);
+    var response = await apiService.post(
+      EndPoints.store.products,
+      data: {
+        'name': names,
+        'description': descriptions,
+        'visible': visible ? 1 : 0,
+        'product_display_method': 'GridView',
+        'product_category_id': productCategoryId,
+        'type': type,
+        'purchase_price': purchasePrice,
+        'sale_price': salePrice,
+        'numberly': (numberly ?? false) ? 1 : 0,
+        'source': source.toLowerCase(),
+        'min': min,
+        'max': max,
+        'available': available ? 1 : 0,
+        'server_name': serverName,
+        'data': serverData,
+      },
+      files: {'images': images},
     );
     return response;
   }
 
+  Future<ApiResponse> getStore(productId) async {
+    var response = await apiService.get(EndPoints.store.productItems, params: {
+      'product_id': productId,
+    });
+    return response;
+  }
+
   Future<ApiResponse> showProductStore(int id) async {
-    var response =
-        await apiService.get(EndPoints.store.productItem, pathVariables: {
+    var response = await apiService.get(EndPoints.store.productItem, pathVariables: {
       'id': id,
     });
     return response;
@@ -91,8 +89,7 @@ class ProductData {
     required bool visible,
     required List values,
   }) async {
-    var response =
-        await apiService.post(EndPoints.store.productItem, pathVariables: {
+    var response = await apiService.post(EndPoints.store.productItem, pathVariables: {
       'id': productId
     }, data: {
       'visible': visible ? 1 : 0,
@@ -110,8 +107,7 @@ class ProductData {
   }
 
   Future<ApiResponse> delete(int id) async {
-    var response = await apiService
-        .delete(EndPoints.store.product, pathVariables: {'id': id});
+    var response = await apiService.delete(EndPoints.store.product, pathVariables: {'id': id});
     return response;
   }
 

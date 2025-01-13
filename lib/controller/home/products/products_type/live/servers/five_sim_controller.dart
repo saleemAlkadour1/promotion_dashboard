@@ -36,12 +36,10 @@ class FiveSimControllerImp extends FiveSimController {
     update();
     var response = await fiveSimData.getProducts();
     if (response.isSuccess) {
-      products = List.generate(response.data.length,
-          (index) => FiveSimProductModel.fromJson(response.data[index]));
+      products = List.generate(response.data.length, (index) => FiveSimProductModel.fromJson(response.data[index]));
       filteredProducts = products;
 
-      customSnackBar('', response.message ?? 'Success get data',
-          snackType: SnackBarType.correct);
+      customSnackBar('', response.message ?? 'Success get data', snackType: SnackBarType.correct);
     }
     loading = false;
     update();
@@ -55,8 +53,7 @@ class FiveSimControllerImp extends FiveSimController {
     update();
     var response = await fiveSimData.getCountriesAndOperators(product);
     if (response.isSuccess) {
-      countries = List.generate(response.data.length,
-          (index) => CountryModel.fromJson(response.data[index]));
+      countries = List.generate(response.data.length, (index) => CountryModel.fromJson(response.data[index]));
       customSnackBar('', response.message ?? 'Success');
     }
     loading = false;
@@ -74,10 +71,7 @@ class FiveSimControllerImp extends FiveSimController {
     if (query.isEmpty) {
       filteredProducts = products!;
     } else {
-      filteredProducts = products!
-          .where((product) =>
-              product.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      filteredProducts = products!.where((product) => product.name.toLowerCase().contains(query.toLowerCase())).toList();
     }
     update();
   }
@@ -101,21 +95,17 @@ class FiveSimControllerImp extends FiveSimController {
 
   @override
   void backToCreateProduct() {
-    if (selectedProduct != null &&
-        selectedCountry != null &&
-        selectedOperator != null) {
-      Get.find<CreateProductControllerImp>().salePriceController.text =
-          selectedOperator!.price.amount.toString();
-      Shared.setValue('five_sim_data', {
-        'product_name': selectedProduct!.name,
-        'country_name': selectedCountry!.countryName,
-        'operator_name': selectedOperator!.name,
+    if (selectedProduct != null && selectedCountry != null && selectedOperator != null) {
+      Get.find<CreateProductControllerImp>().salePriceController.text = selectedOperator!.price.amount.toString();
+      Shared.setValue('server_data', {
+        'product': selectedProduct!.name,
+        'country': selectedCountry!.countryName,
+        'operator': selectedOperator!.name,
       });
       Get.back();
       Get.back();
     } else {
-      customSnackBar('خطأ', 'يجب أن تكمل الاختيار',
-          snackType: SnackBarType.error);
+      customSnackBar('خطأ', 'يجب أن تكمل الاختيار', snackType: SnackBarType.error);
     }
   }
 

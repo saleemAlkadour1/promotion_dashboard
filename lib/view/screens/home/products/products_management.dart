@@ -1,7 +1,3 @@
-// // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
@@ -31,23 +27,20 @@ class ProductsManagement extends StatelessWidget {
         backgroundColor: AppColors.screenColor,
         body: SafeArea(
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 4),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Products',
-                  style: MyText.appStyle.fs24.wBold.reColorText
-                      .responsiveStyle(context),
+                  style: MyText.appStyle.fs24.wBold.reColorText.responsiveStyle(context),
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: CustomTextField(
-                          controller: TextEditingController(), label: 'Search'),
+                      child: CustomTextField(controller: TextEditingController(), label: 'Search'),
                     ),
                     const SizedBox(width: 10),
                     CustomButton(
@@ -60,7 +53,7 @@ class ProductsManagement extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Expanded(
+                const Expanded(
                   child: SFDataGridProducts(),
                 ),
               ],

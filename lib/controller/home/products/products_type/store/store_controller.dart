@@ -14,22 +14,26 @@ abstract class StoreController extends GetxController {
   late TextEditingController updateLabelController;
   late TextEditingController updateValueController;
 
+  int get productId => int.parse(Get.parameters['id'] ?? "0");
+
   Future<void> createProduct();
   Future<void> deleteProduct(int id);
   void returnToCreateProduct();
   void showCreateProductDialog();
   void addDynamicValue();
   void deleteDynamicValue(int index);
+  getStoreItems();
+  showProduct();
 }
 
 class StoreControllerImp extends StoreController {
   bool loading = false;
-  List<ProductStoreModel>? products;
+  // List<ProductStoreModel>? products;
+  List products = [];
   ProductData productData = ProductData();
   List values = [];
   int? updateIndex;
   bool addingNewValue = false;
-  int? productId;
 
   @override
   void onInit() {
@@ -39,21 +43,22 @@ class StoreControllerImp extends StoreController {
     valueController = TextEditingController();
     updateLabelController = TextEditingController();
     updateValueController = TextEditingController();
-    getStore();
+    getStoreItems();
   }
 
-  Future<void> getStore() async {
+  @override
+  Future<void> getStoreItems() async {
     loading = true;
     update();
-    var response = await productData.getStore();
+    var response = await productData.getStore(productId);
     if (response.isSuccess) {
-      products = List.generate(response.data.length,
-          (index) => ProductStoreModel.fromJson(response.data[index]));
+      products = response.data;
     }
     loading = false;
     update();
   }
 
+  @override
   Future<void> showProduct() async {
     loading = true;
     update();
@@ -70,15 +75,14 @@ class StoreControllerImp extends StoreController {
   @override
   void addDynamicValue() {
     if (labelController.text.isEmpty || valueController.text.isEmpty) {
-      customSnackBar('Error', 'Please fill in all fields',
-          snackType: SnackBarType.error);
+      customSnackBar('Error', 'Please fill in all fields', snackType: SnackBarType.error);
       return;
     } else {
       values.add({
         'label': labelController.text,
         'value': valueController.text,
         'id': null,
-        'product_items_id': null,
+        // 'product_items_id': null,
       });
     }
 
@@ -89,31 +93,27 @@ class StoreControllerImp extends StoreController {
 
   @override
   void deleteDynamicValue(int index) {
-    if (index >= 0 && index < values.length) {
-      values.removeAt(index);
-      update();
-    }
+    values.removeAt(index);
+    update();
   }
 
   @override
   Future<void> createProduct() async {
     if (values.isEmpty) {
-      customSnackBar('Error', 'Please fill in all fields',
-          snackType: SnackBarType.error);
+      customSnackBar('Error', 'Please fill in all fields', snackType: SnackBarType.error);
     } else {
       loading = true;
       update();
       Get.back();
 
       var response = await productData.createStore(
-        productId: 1,
+        productId: productId,
         visible: true,
         values: values,
       );
       if (response.isSuccess) {
-        await getStore();
-        customSnackBar('', response.message ?? '',
-            snackType: SnackBarType.correct);
+        await getStoreItems();
+        customSnackBar('', response.message ?? '', snackType: SnackBarType.correct);
       }
       loading = false;
       update();
@@ -129,8 +129,7 @@ class StoreControllerImp extends StoreController {
     update();
     var response = await productData.deleteStore(id);
     if (response.isSuccess) {
-      customSnackBar('', response.message ?? '',
-          snackType: SnackBarType.correct);
+      customSnackBar('', response.message ?? '', snackType: SnackBarType.correct);
     }
     loading = false;
     update();
@@ -142,7 +141,7 @@ class StoreControllerImp extends StoreController {
     var response = await productData.showProductStore(id);
     if (response.isSuccess) {
       values = response.data['values'];
-      productId = id;
+      // productId = id;
     }
     Get.dialog(const UpdateProductDialog());
   }
@@ -156,8 +155,7 @@ class StoreControllerImp extends StoreController {
   }
 
   void saveUpdatedValue(int index) {
-    if (updateLabelController.text.isNotEmpty &&
-        updateValueController.text.isNotEmpty) {
+    if (updateLabelController.text.isNotEmpty && updateValueController.text.isNotEmpty) {
       values[index] = {
         'id': values[index]['id'],
         'label': updateLabelController.text,
@@ -167,8 +165,8 @@ class StoreControllerImp extends StoreController {
       update();
     } else {
       customSnackBar(
-        '',
         'Fill in both fields before saving.',
+        '',
         snackType: SnackBarType.error,
       );
     }
@@ -202,8 +200,7 @@ class StoreControllerImp extends StoreController {
   }
 
   void saveNewValue() {
-    if (updateLabelController.text.isNotEmpty &&
-        updateValueController.text.isNotEmpty) {
+    if (updateLabelController.text.isNotEmpty && updateValueController.text.isNotEmpty) {
       values[values.length - 1] = {
         'label': updateLabelController.text,
         'value': updateValueController.text,
@@ -212,8 +209,8 @@ class StoreControllerImp extends StoreController {
       update();
     } else {
       customSnackBar(
-        '',
         'Please fill in both fields before saving.',
+        '',
         snackType: SnackBarType.error,
       );
     }
@@ -243,7 +240,7 @@ class StoreControllerImp extends StoreController {
     );
 
     if (response.isSuccess) {
-      getStore();
+      getStoreItems();
       customSnackBar('', response.message ?? '');
     }
     loading = false;

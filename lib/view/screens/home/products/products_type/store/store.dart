@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/products_type/store/store_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
+import 'package:promotion_dashboard/data/model/home/products/products_type/store/product_store_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 
 class Store extends StatelessWidget {
@@ -13,13 +13,6 @@ class Store extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(StoreControllerImp());
     return GetBuilder<StoreControllerImp>(builder: (controller) {
-      var res = HandlingDataView(
-        loading: controller.loading,
-        dataIsEmpty: controller.products == null,
-      );
-      if (res.isValid) {
-        return res.response!;
-      }
       return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.color_F7F9FA,
@@ -47,27 +40,23 @@ class Store extends StatelessWidget {
                     Expanded(
                       flex: 8,
                       child: ListView.builder(
-                        itemCount: controller.products!.length,
+                        itemCount: controller.products.length,
                         itemBuilder: (context, index) {
-                          final product = controller.products![index];
+                          final product = ProductStoreModel.fromJson(controller.products[index]);
                           return Card(
                             elevation: 3,
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
-                              title: Text('product id:${product.id}'),
-                              subtitle: Column(
+                              title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ...List.generate(
                                       product.values.length,
                                       (index) => Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                  'label: ${product.values[index].label}'),
-                                              Text(
-                                                  'value: ${product.values[index].value}'),
+                                              Text('label: ${product.values[index].label}'),
+                                              Text('value: ${product.values[index].value}'),
                                             ],
                                           ))
                                 ],
@@ -76,20 +65,16 @@ class Store extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
+                                    icon: const Icon(Icons.edit, color: Colors.blue),
                                     onPressed: () async {
-                                      await controller
-                                          .showUpdateProductDialog(product.id);
+                                      await controller.showUpdateProductDialog(product.id);
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
+                                    icon: const Icon(Icons.delete, color: Colors.red),
                                     onPressed: () async {
-                                      await controller
-                                          .deleteProduct(product.id);
-                                      controller.getStore();
+                                      await controller.deleteProduct(product.id);
+                                      controller.getStoreItems();
                                     },
                                   ),
                                 ],
@@ -106,11 +91,12 @@ class Store extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         CustomButton(
-                            title: 'Add product',
-                            height: 40,
-                            onPressed: () {
-                              controller.showCreateProductDialog();
-                            })
+                          title: 'Add product',
+                          height: 40,
+                          onPressed: () {
+                            controller.showCreateProductDialog();
+                          },
+                        )
                       ],
                     ),
                   ],

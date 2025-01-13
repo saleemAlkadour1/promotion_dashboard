@@ -52,6 +52,11 @@ abstract class CreateProductController extends GetxController {
   Future<void> createProuct();
   void link();
   void cancel();
+
+  //
+  createProductExternalLive();
+  createProductInternalStore();
+  createProductInternalManual();
 }
 
 class CreateProductControllerImp extends CreateProductController {
@@ -74,8 +79,7 @@ class CreateProductControllerImp extends CreateProductController {
 
       // Populate categories names
       if (categories != null) {
-        categoriesName =
-            categories!.map((category) => category.name.en!).toSet().toList();
+        categoriesName = categories!.map((category) => category.name.en!).toSet().toList();
       }
 
       // Ensure the default categoryValue exists in the list
@@ -162,8 +166,7 @@ class CreateProductControllerImp extends CreateProductController {
         );
       }
     } catch (e) {
-      customSnackBar("خطأ", "حدث خطأ أثناء اختيار الصور: $e",
-          snackType: SnackBarType.error);
+      customSnackBar("خطأ", "حدث خطأ أثناء اختيار الصور: $e", snackType: SnackBarType.error);
     } finally {
       update();
     }
@@ -188,53 +191,12 @@ class CreateProductControllerImp extends CreateProductController {
 
   @override
   Future<void> createProuct() async {
-    if (typeValue == Product.live.type && serverNameValue == 'five_sim') {
-      Map fiveSimData = Shared.getMapValue('five_sim_data');
-      Map names = setValues(nameController);
-      Map descriptions = setValues(descriptionController);
-      loading = true;
-      update();
-      var response = await productData.createLive(
-        name: names['en'],
-        description: descriptions['en'],
-        visible: true,
-        productCategoryId: categoryId,
-        type: typeValue,
-        purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
-        salePrice: num.tryParse(salePriceController.text) ?? 0,
-        numberly: true,
-        source: 'internal',
-        images: selectedImages,
-        available: true,
-        serverName: 'five_sim',
-        productName: fiveSimData['product_name'],
-        countryName: fiveSimData['country_name'],
-        operatorName: fiveSimData['operator_name'],
-      );
-      if (response.isSuccess) {
-        Get.back();
-        customSnackBar('', response.message ?? '',
-            snackType: SnackBarType.correct);
-      }
-      loading = false;
-      update();
-    } else if (typeValue == Product.store.type) {
-      Map storeProducts = Shared.getMapValue(StorageKeys.storeProducts);
-      int productId = int.tryParse(storeProducts['product_id']) ?? 0;
-      List values = storeProducts['values'];
-      loading = true;
-      update();
-      var response = await productData.createStore(
-        visible: true,
-        productId: productId,
-        values: values,
-      );
-      if (response.isSuccess) {
-        Get.back();
-        customSnackBar('', response.message ?? '');
-      }
-      loading = false;
-      update();
+    if (typeValue == Product.live.type && sourceValue == 'External') {
+      createProductExternalLive();
+    } else if (typeValue == Product.store.type && sourceValue == 'Internal') {
+      createProductInternalStore();
+    } else if (typeValue == Product.manual.type && sourceValue == 'Internal') {
+      createProductInternalManual();
     }
   }
 
@@ -250,6 +212,91 @@ class CreateProductControllerImp extends CreateProductController {
     // salePriceController.dispose();
     // minController.dispose();
     // maxController.dispose();
+    update();
+  }
+
+  @override
+  createProductExternalLive() async {
+    Map<String, dynamic> serverData = Shared.getMapValue('server_data');
+    Map names = setValues(nameController);
+    Map descriptions = setValues(descriptionController);
+    loading = true;
+    update();
+    var response = await productData.create(
+      names: names,
+      descriptions: descriptions,
+      visible: true,
+      productCategoryId: categoryId,
+      type: typeValue,
+      purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
+      salePrice: num.tryParse(salePriceController.text) ?? 0,
+      numberly: true,
+      source: sourceValue,
+      images: selectedImages,
+      available: true,
+      serverName: serverNameValue,
+      serverData: serverData,
+    );
+    if (response.isSuccess) {
+      Get.back();
+      customSnackBar(response.message ?? '', '', snackType: SnackBarType.correct);
+    }
+    loading = false;
+    update();
+  }
+
+  @override
+  createProductInternalManual() async {
+    Map names = setValues(nameController);
+    Map descriptions = setValues(descriptionController);
+    loading = true;
+    update();
+    var response = await productData.create(
+      names: names,
+      descriptions: descriptions,
+      visible: true,
+      productCategoryId: categoryId,
+      type: typeValue,
+      purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
+      salePrice: num.tryParse(salePriceController.text) ?? 0,
+      numberly: false,
+      source: sourceValue,
+      images: selectedImages,
+      available: true,
+    );
+    if (response.isSuccess) {
+      Get.back();
+      customSnackBar('', response.message ?? '', snackType: SnackBarType.correct);
+    }
+    loading = false;
+    update();
+  }
+
+  @override
+  createProductInternalStore() async {
+    Map names = setValues(nameController);
+    Map descriptions = setValues(descriptionController);
+    loading = true;
+    update();
+    var response = await productData.create(
+      names: names,
+      descriptions: descriptions,
+      visible: true,
+      productCategoryId: categoryId,
+      type: typeValue,
+      purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
+      salePrice: num.tryParse(salePriceController.text) ?? 0,
+      source: sourceValue,
+      images: selectedImages,
+      available: true,
+      min: int.tryParse(minController.text),
+      max: int.tryParse(maxController.text),
+    );
+    if (response.isSuccess) {
+      Get.back();
+      customSnackBar('', response.message ?? '');
+    }
+    loading = false;
     update();
   }
 }

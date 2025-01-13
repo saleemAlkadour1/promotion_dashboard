@@ -1,5 +1,3 @@
-// ignore_for_file: use_super_parameters, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/create_product_controller.dart';
@@ -36,7 +34,7 @@ class CraeteProduct extends StatelessWidget {
                 onTap: () {
                   Get.back();
                 },
-                child: MouseRegion(
+                child: const MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: Icon(
                     Icons.arrow_back,
@@ -45,7 +43,7 @@ class CraeteProduct extends StatelessWidget {
                 ),
               )),
           body: SingleChildScrollView(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -83,7 +81,7 @@ class CraeteProduct extends StatelessWidget {
                             onChanged: controller.updateServerNameValue,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         CustomButton(
@@ -96,13 +94,13 @@ class CraeteProduct extends StatelessWidget {
                       ],
                     ),
                   ),
-                if (controller.typeValue == Product.store.type)
-                  CustomButton(
-                      height: 40,
-                      title: 'Store management',
-                      onPressed: () {
-                        Get.toNamed(AppRoutes.store);
-                      }),
+                // if (controller.typeValue == Product.store.type)
+                //   CustomButton(
+                //       height: 40,
+                //       title: 'Store management',
+                //       onPressed: () {
+                //         Get.toNamed(AppRoutes.store);
+                //       }),
                 const SizedBox(height: 16.0),
 
                 Column(
@@ -122,8 +120,7 @@ class CraeteProduct extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 16),
                           child: CustomTextField(
                             controller: controller.nameController[index],
-                            label:
-                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            label: '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
                           ),
                         );
                       },
@@ -143,8 +140,7 @@ class CraeteProduct extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 16),
                           child: CustomTextField(
                             controller: controller.descriptionController[index],
-                            label:
-                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            label: '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
                           ),
                         );
                       },
@@ -190,23 +186,19 @@ class CraeteProduct extends StatelessWidget {
                         label: 'Min',
                         inputType: TextInputType.number,
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
 
                 // Max
 
-                SizedBox(
-                    height:
-                        controller.typeValue != Product.live.type ? 16.0 : 0),
+                SizedBox(height: controller.typeValue != Product.live.type ? 16.0 : 0),
                 controller.typeValue != Product.live.type
                     ? CustomTextField(
                         controller: controller.maxController,
                         label: 'Max',
                         inputType: TextInputType.number,
                       )
-                    : SizedBox(),
-                SizedBox(
-                    height:
-                        controller.typeValue != Product.live.type ? 16.0 : 0),
+                    : const SizedBox(),
+                SizedBox(height: controller.typeValue != Product.live.type ? 16.0 : 0),
 
                 // Source Dropdown
                 CustomDropdown(
@@ -233,7 +225,7 @@ class CraeteProduct extends StatelessWidget {
                         items: const ['Yes', 'No'],
                         onChanged: controller.updateNumberlyValue,
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
                 const SizedBox(height: 16.0),
 
                 // Buttons
@@ -248,7 +240,7 @@ class CraeteProduct extends StatelessWidget {
                         onPressed: () {
                           controller.cancel();
                         }),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     CustomButton(
