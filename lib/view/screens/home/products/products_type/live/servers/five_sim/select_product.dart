@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/servers/five_sim_controller.dart';
+import 'package:promotion_dashboard/controller/home/products/products_type/live/servers/five_sim_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/data/model/servers/five_sim/five_sim_product_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/products_type/live/servers/five_sim/five_sim_product_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
 class SelectProduct extends StatelessWidget {

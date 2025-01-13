@@ -1,14 +1,17 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:promotion_dashboard/core/classes/shared_preferences.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
+import 'package:promotion_dashboard/core/constants/storage_keys.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/data/model/home/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
+import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 
 abstract class CreateProductController extends GetxController {
   // Text controllers
@@ -46,10 +49,14 @@ abstract class CreateProductController extends GetxController {
   Future<void> pickImages();
   void removeImage(File image);
   getPCategoriesData();
+  Future<void> createProuct();
+  void link();
+  void cancel();
 }
 
 class CreateProductControllerImp extends CreateProductController {
   CategoriesData categoriesData = CategoriesData();
+  ProductData productData = ProductData();
   bool loading = false;
   int categoryId = 0;
 
@@ -83,6 +90,8 @@ class CreateProductControllerImp extends CreateProductController {
 
   @override
   void onInit() {
+    super.onInit();
+
     getPCategoriesData();
     for (var i = 0; i < myLanguages.length; i++) {
       nameController.add(TextEditingController());
@@ -92,8 +101,6 @@ class CreateProductControllerImp extends CreateProductController {
     salePriceController = TextEditingController();
     minController = TextEditingController();
     maxController = TextEditingController();
-
-    super.onInit();
   }
 
   @override
@@ -161,20 +168,6 @@ class CreateProductControllerImp extends CreateProductController {
       update();
     }
   }
-  // @override
-  // Future<void> pickImages() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.image,
-  //     allowMultiple: true,
-  //   );
-
-  //   if (result != null) {
-  //     selectedImages.addAll(
-  //       result.paths.where((path) => path != null).map((path) => File(path!)),
-  //     );
-  //     update();
-  //   }
-  // }
 
   @override
   void removeImage(File image) {
@@ -187,52 +180,77 @@ class CreateProductControllerImp extends CreateProductController {
     serverNameValue = value;
   }
 
-  next() {
-    if (typeValue == 'live' && serverNameValue == 'five_sim') {
-      if (selectedImages.isNotEmpty) {
-        for (final image in selectedImages) {
-          if (image.path.contains('||unique_separator||')) {
-            customSnackBar('خطأ', 'يرجى التحقق من أسماء الملفات التي ترسلها',
-                snackType: SnackBarType.error);
-            return;
-          }
-        }
-      } else {
-        customSnackBar('error', 'لم تقم باختيار صورة ',
-            snackType: SnackBarType.error);
-        return;
-      }
+  @override
+  void link() {
+    Get.toNamed(AppRoutes.selectProduct);
+    update();
+  }
 
-      List<String> imagePaths =
-          selectedImages.map((image) => image.path).toList();
-      Get.toNamed(AppRoutes.selectProduct, parameters: {
-        'name': jsonEncode(setValues(nameController)),
-        'description': jsonEncode(setValues(descriptionController)),
-        'visible': visibleValue,
-        'product_category_id': categoryId.toString(),
-        'type': 'live',
-        'purchase_price': purchasePriceController.text,
-        'sale_price': salePriceController.text,
-        'numberly': numberlyValue,
-        'source': 'internal',
-        'images': imagePaths.join('||unique_separator||'),
-        'min': minController.text,
-        'max': maxController.text,
-        'available': availableValue,
-        'server_name': 'five_sim',
-      });
+  @override
+  Future<void> createProuct() async {
+    if (typeValue == Product.live.type && serverNameValue == 'five_sim') {
+      Map fiveSimData = Shared.getMapValue('five_sim_data');
+      Map names = setValues(nameController);
+      Map descriptions = setValues(descriptionController);
+      loading = true;
+      update();
+      var response = await productData.createLive(
+        name: names['en'],
+        description: descriptions['en'],
+        visible: true,
+        productCategoryId: categoryId,
+        type: typeValue,
+        purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
+        salePrice: num.tryParse(salePriceController.text) ?? 0,
+        numberly: true,
+        source: 'internal',
+        images: selectedImages,
+        available: true,
+        serverName: 'five_sim',
+        productName: fiveSimData['product_name'],
+        countryName: fiveSimData['country_name'],
+        operatorName: fiveSimData['operator_name'],
+      );
+      if (response.isSuccess) {
+        Get.back();
+        customSnackBar('', response.message ?? '',
+            snackType: SnackBarType.correct);
+      }
+      loading = false;
+      update();
+    } else if (typeValue == Product.store.type) {
+      Map storeProducts = Shared.getMapValue(StorageKeys.storeProducts);
+      int productId = int.tryParse(storeProducts['product_id']) ?? 0;
+      List values = storeProducts['values'];
+      loading = true;
+      update();
+      var response = await productData.createStore(
+        visible: true,
+        productId: productId,
+        values: values,
+      );
+      if (response.isSuccess) {
+        Get.back();
+        customSnackBar('', response.message ?? '');
+      }
+      loading = false;
+      update();
     }
   }
 
   @override
+  void cancel() {}
+
+  @override
   void onClose() {
-    nameController.clear();
-    descriptionController.clear();
-    purchasePriceController.dispose();
-    salePriceController.dispose();
-    minController.dispose();
-    maxController.dispose();
     super.onClose();
+    // nameController.clear();
+    // descriptionController.clear();
+    // purchasePriceController.dispose();
+    // salePriceController.dispose();
+    // minController.dispose();
+    // maxController.dispose();
+    update();
   }
 }
 
@@ -242,6 +260,5 @@ Map setValues(List<TextEditingController> controllers) {
   for (var i = 0; i < myLanguages.length; i++) {
     data[myLanguages.entries.toList()[i].key] = controllers[i].text.trim();
   }
-
   return data;
 }

@@ -10,8 +10,9 @@ import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
 import 'package:promotion_dashboard/view/screens/home/home.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 import 'package:promotion_dashboard/view/screens/home/products/products_management.dart';
-import 'package:promotion_dashboard/view/screens/servers/five_sim/select_country_and_operator.dart';
-import 'package:promotion_dashboard/view/screens/servers/five_sim/select_product.dart';
+import 'package:promotion_dashboard/view/screens/home/products/products_type/live/servers/five_sim/select_country_and_operator.dart';
+import 'package:promotion_dashboard/view/screens/home/products/products_type/live/servers/five_sim/select_product.dart';
+import 'package:promotion_dashboard/view/screens/home/products/products_type/store/store.dart';
 
 List<GetPage<dynamic>> getPages = [
   GetPage(
@@ -38,4 +39,5 @@ List<GetPage<dynamic>> getPages = [
   GetPage(
       name: AppRoutes.selectCountryAndOperator,
       page: () => const SelectCountryAndOperator()),
+  GetPage(name: AppRoutes.store, page: () => Store()),
 ];

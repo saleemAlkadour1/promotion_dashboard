@@ -1,4 +1,4 @@
-import 'package:promotion_dashboard/data/model/servers/five_sim/operator_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/products_type/live/servers/five_sim/operator_model.dart';
 
 class CountryModel {
   final String countryName;

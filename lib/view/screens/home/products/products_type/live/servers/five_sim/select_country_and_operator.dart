@@ -2,12 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/servers/five_sim_controller.dart';
+import 'package:promotion_dashboard/controller/home/products/products_type/live/servers/five_sim_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 
 class SelectCountryAndOperator extends StatelessWidget {
   const SelectCountryAndOperator({super.key});
@@ -115,26 +113,19 @@ class SelectCountryAndOperator extends StatelessWidget {
                   height: 16,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomButton(
-                      height: 40,
-                      title: controller.loading ? 'Loading...' : 'Save',
-                      onPressed: () async {
-                        await controller.createProuct();
-                      },
-                    ),
+                    TextButton(
+                        onPressed: controller.backToCreateProduct,
+                        child: Text('<<< واجهة إنشاء منتج')),
                     SizedBox(
                       width: 20,
                     ),
-                    CustomButton(
-                        title: 'Cancel',
-                        height: 40,
-                        backgroundColor: AppColors.white,
-                        textColor: Colors.blue,
+                    TextButton(
                         onPressed: () {
-                          Get.offAndToNamed(AppRoutes.home);
-                        }),
+                          Get.back();
+                        },
+                        child: Text('الواجهة السابقة >>>')),
                   ],
                 ),
               ],

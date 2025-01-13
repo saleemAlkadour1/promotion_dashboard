@@ -7,7 +7,7 @@ import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/products_data_source.dart';
-import 'package:promotion_dashboard/data/model/home/product_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
 import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';

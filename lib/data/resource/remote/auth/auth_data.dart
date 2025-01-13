@@ -9,10 +9,7 @@ class AuthData {
   Future<ApiResponse> login(String email, String password) async {
     var response = await apiService.post(
       EndPoints.auth.login,
-      data: {
-        'email': email,
-        'password': password,
-      },
+      data: {'email': email, 'password': password, 'role': 'admin'},
     );
 
     return response;

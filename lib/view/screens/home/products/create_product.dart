@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/create_product_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
@@ -17,6 +18,7 @@ class CraeteProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(CreateProductControllerImp());
+
     return GetBuilder<CreateProductControllerImp>(builder: (controller) {
       return Scaffold(
           backgroundColor: AppColors.screenColor,
@@ -53,6 +55,54 @@ class CraeteProduct extends StatelessWidget {
                   items: controller.categoriesName,
                   onChanged: controller.updateCategoryValue,
                 ),
+                const SizedBox(height: 16.0),
+                // Type Dropdown
+                CustomDropdown(
+                  label: 'Type',
+                  value: controller.typeValue,
+                  items: [
+                    Product.live.type,
+                    Product.store.type,
+                    Product.manual.type,
+                  ],
+                  onChanged: controller.updateTypeValue,
+                ),
+                const SizedBox(height: 16.0),
+                if (controller.typeValue == Product.live.type)
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          flex: 3,
+                          child: CustomDropdown(
+                            label: 'Server name',
+                            value: controller.serverNameValue,
+                            items: const ['five_sim'],
+                            onChanged: controller.updateServerNameValue,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        CustomButton(
+                          height: 50,
+                          title: 'Link',
+                          onPressed: () {
+                            controller.link();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                if (controller.typeValue == Product.store.type)
+                  CustomButton(
+                      height: 40,
+                      title: 'Store management',
+                      onPressed: () {
+                        Get.toNamed(AppRoutes.store);
+                      }),
                 const SizedBox(height: 16.0),
 
                 Column(
@@ -127,7 +177,6 @@ class CraeteProduct extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
 
-                // Sale Price
                 CustomTextField(
                   controller: controller.salePriceController,
                   label: 'Sale Price',
@@ -135,20 +184,29 @@ class CraeteProduct extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
                 // Min
-                CustomTextField(
-                  controller: controller.minController,
-                  label: 'Min',
-                  inputType: TextInputType.number,
-                ),
-                const SizedBox(height: 16.0),
+                controller.typeValue != Product.live.type
+                    ? CustomTextField(
+                        controller: controller.minController,
+                        label: 'Min',
+                        inputType: TextInputType.number,
+                      )
+                    : SizedBox(),
 
                 // Max
-                CustomTextField(
-                  controller: controller.maxController,
-                  label: 'Max',
-                  inputType: TextInputType.number,
-                ),
-                const SizedBox(height: 16.0),
+
+                SizedBox(
+                    height:
+                        controller.typeValue != Product.live.type ? 16.0 : 0),
+                controller.typeValue != Product.live.type
+                    ? CustomTextField(
+                        controller: controller.maxController,
+                        label: 'Max',
+                        inputType: TextInputType.number,
+                      )
+                    : SizedBox(),
+                SizedBox(
+                    height:
+                        controller.typeValue != Product.live.type ? 16.0 : 0),
 
                 // Source Dropdown
                 CustomDropdown(
@@ -168,55 +226,36 @@ class CraeteProduct extends StatelessWidget {
                 const SizedBox(height: 16.0),
 
                 // Numberly Dropdown
-                CustomDropdown(
-                  label: 'Numberly',
-                  value: controller.numberlyValue,
-                  items: const ['Yes', 'No'],
-                  onChanged: controller.updateNumberlyValue,
-                ),
-                const SizedBox(height: 16.0),
-                // Type Dropdown
-                CustomDropdown(
-                  label: 'Type',
-                  value: controller.typeValue,
-                  items: const ['live', 'store'],
-                  onChanged: controller.updateTypeValue,
-                ),
-                const SizedBox(height: 16.0),
-                if (controller.typeValue == 'live')
-                  CustomDropdown(
-                    label: 'Server name',
-                    value: controller.serverNameValue,
-                    items: const ['five_sim'],
-                    onChanged: controller.updateServerNameValue,
-                  ),
-                // if (controller.typeValue == 'Store')
-                //   const Text(
-                //     'Store Product Selected',
-                //     style: TextStyle(fontSize: 16.0, color: Colors.blue),
-                //   ),
+                controller.typeValue == Product.manual.type
+                    ? CustomDropdown(
+                        label: 'Numberly',
+                        value: controller.numberlyValue,
+                        items: const ['Yes', 'No'],
+                        onChanged: controller.updateNumberlyValue,
+                      )
+                    : SizedBox(),
                 const SizedBox(height: 16.0),
 
                 // Buttons
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     CustomButton(
-                      height: 40,
-                      title: 'Next',
-                      onPressed: controller.next,
-                    ),
+                        title: 'Cancel',
+                        height: 50,
+                        backgroundColor: AppColors.white,
+                        textColor: Colors.blue,
+                        onPressed: () {
+                          controller.cancel();
+                        }),
                     SizedBox(
                       width: 20,
                     ),
                     CustomButton(
-                        title: 'Cancel',
-                        height: 40,
-                        backgroundColor: AppColors.white,
-                        textColor: Colors.blue,
-                        onPressed: () {
-                          Get.back();
-                        }),
+                      height: 50,
+                      title: controller.loading == true ? 'Loading...' : 'Save',
+                      onPressed: controller.createProuct,
+                    ),
                   ],
                 ),
               ],
@@ -224,4 +263,13 @@ class CraeteProduct extends StatelessWidget {
           ));
     });
   }
+}
+
+enum Product {
+  live('live'),
+  store('store'),
+  manual('manual');
+
+  final String type;
+  const Product(this.type);
 }

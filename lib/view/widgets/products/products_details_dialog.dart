@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/model/home/product_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetailsDialog extends StatelessWidget {

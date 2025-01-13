@@ -15,7 +15,7 @@ class ProductData {
     return response;
   }
 
-  Future<ApiResponse> create({
+  Future<ApiResponse> createLive({
     required String name,
     required String description,
     required bool visible,
@@ -55,6 +55,58 @@ class ProductData {
     }, files: {
       'images': images
     });
+    return response;
+  }
+
+  Future<ApiResponse> getStore() async {
+    var response = await apiService.get(
+      EndPoints.store.productItems,
+    );
+    return response;
+  }
+
+  Future<ApiResponse> showProductStore(int id) async {
+    var response =
+        await apiService.get(EndPoints.store.productItem, pathVariables: {
+      'id': id,
+    });
+    return response;
+  }
+
+  Future<ApiResponse> createStore({
+    required int productId,
+    required bool visible,
+    required List values,
+  }) async {
+    var response = await apiService.post(EndPoints.store.productItems, data: {
+      'visible': visible ? 1 : 0,
+      'product_id': productId,
+      'values': values,
+    });
+    return response;
+  }
+
+  Future<ApiResponse> updateStore({
+    required int productId,
+    required bool visible,
+    required List values,
+  }) async {
+    var response =
+        await apiService.post(EndPoints.store.productItem, pathVariables: {
+      'id': productId
+    }, data: {
+      'visible': visible ? 1 : 0,
+      'product_id': productId,
+      'values': values,
+    });
+    return response;
+  }
+
+  Future<ApiResponse> deleteStore(int id) async {
+    var response = await apiService.delete(
+      EndPoints.store.productItem,
+      pathVariables: {'id': id},
+    );
     return response;
   }
 

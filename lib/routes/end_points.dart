@@ -39,6 +39,8 @@ final class Store {
 
   final String products = '${EndPoints.baseApi}/store/products';
   final String product = '${EndPoints.baseApi}/store/products/{id}';
+  final String productItems = '${EndPoints.baseApi}/store/product-items';
+  final String productItem = '${EndPoints.baseApi}/store/product-items/{id}';
   final String categories = '${EndPoints.baseApi}/store/product-categories';
   final String category = '${EndPoints.baseApi}/store/product-categories/{id}';
 }

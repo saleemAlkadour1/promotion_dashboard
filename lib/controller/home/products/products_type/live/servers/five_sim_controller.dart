@@ -1,15 +1,12 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
+import 'package:promotion_dashboard/controller/home/products/create_product_controller.dart';
+import 'package:promotion_dashboard/core/classes/shared_preferences.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
-import 'package:promotion_dashboard/data/model/servers/five_sim/country_model.dart';
-import 'package:promotion_dashboard/data/model/servers/five_sim/five_sim_product_model.dart';
-import 'package:promotion_dashboard/data/model/servers/five_sim/operator_model.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
+import 'package:promotion_dashboard/data/model/home/products/products_type/live/servers/five_sim/country_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/products_type/live/servers/five_sim/five_sim_product_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/products_type/live/servers/five_sim/operator_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/servers/five_sim_data.dart';
 
 abstract class FiveSimController extends GetxController {
@@ -17,47 +14,12 @@ abstract class FiveSimController extends GetxController {
   Future<void> getProducts();
   Future<void> getCountriesAndOperators(String product);
   selectProduct(FiveSimProductModel product);
-  createProuct();
-  void receiveParameters();
+  void backToCreateProduct();
+
+  // void receiveParameters();
 }
 
 class FiveSimControllerImp extends FiveSimController {
-  // المتغيرات لتخزين البيانات المستقبلة
-  String? name;
-  String? description;
-  bool? visible;
-  int? productCategoryId;
-  String? type;
-  double? purchasePrice;
-  double? salePrice;
-  String? numberly;
-  String? source;
-  List<File>? images;
-  int? min;
-  int? max;
-  bool? available;
-  String? serverName;
-  @override
-  void receiveParameters() {
-    name = jsonDecode(Get.parameters['name']!)['en'];
-    description = jsonDecode(Get.parameters['description']!)['en'];
-    visible = Get.parameters['visible'] == 'true';
-    productCategoryId =
-        int.tryParse(Get.parameters['product_category_id'] ?? '');
-    type = Get.parameters['type'];
-    purchasePrice = double.tryParse(Get.parameters['purchase_price'] ?? '');
-    salePrice = double.tryParse(Get.parameters['sale_price'] ?? '');
-    numberly = Get.parameters['numberly'];
-    source = Get.parameters['source'];
-    images = (Get.parameters['images']?.split('||unique_separator||'))!
-        .map((path) => File(path))
-        .toList();
-    min = int.tryParse(Get.parameters['min']!);
-    max = int.tryParse(Get.parameters['max']!);
-    available = Get.parameters['available'] == 'true';
-    serverName = Get.parameters['server_name'];
-  }
-
   List<FiveSimProductModel>? products;
   List<FiveSimProductModel>? filteredProducts;
   List<CountryModel>? countries;
@@ -67,7 +29,6 @@ class FiveSimControllerImp extends FiveSimController {
   OperatorModel? selectedOperator;
 
   FiveSimData fiveSimData = FiveSimData();
-  ProductData productData = ProductData();
   bool loading = false;
   @override
   Future<void> getProducts() async {
@@ -89,9 +50,7 @@ class FiveSimControllerImp extends FiveSimController {
   @override
   Future<void> getCountriesAndOperators(String product) async {
     countries = null;
-
     Get.toNamed(AppRoutes.selectCountryAndOperator);
-
     loading = true;
     update();
     var response = await fiveSimData.getCountriesAndOperators(product);
@@ -107,7 +66,6 @@ class FiveSimControllerImp extends FiveSimController {
   @override
   void onInit() {
     super.onInit();
-    receiveParameters();
     getProducts();
     searchProduct = TextEditingController();
   }
@@ -142,39 +100,21 @@ class FiveSimControllerImp extends FiveSimController {
   }
 
   @override
-  Future<void> createProuct() async {
+  void backToCreateProduct() {
     if (selectedProduct != null &&
         selectedCountry != null &&
         selectedOperator != null) {
-      loading = true;
-      update();
-      var response = await productData.create(
-        name: name!,
-        description: description!,
-        visible: true,
-        productCategoryId: productCategoryId!,
-        type: type!,
-        purchasePrice: purchasePrice!,
-        salePrice: salePrice!,
-        numberly: true,
-        source: source!,
-        images: images!,
-        available: true,
-        serverName: serverName!,
-        productName: selectedProduct!.name,
-        countryName: selectedCountry!.countryName,
-        operatorName: selectedOperator!.name,
-      );
-      if (response.isSuccess) {
-        Get.find<ProductsManagementControllerImp>().getProductsData();
-        await Get.offAllNamed(AppRoutes.home);
-        customSnackBar('Success', response.message ?? 'Success',
-            snackType: SnackBarType.correct);
-      }
-      loading = false;
-      update();
+      Get.find<CreateProductControllerImp>().salePriceController.text =
+          selectedOperator!.price.amount.toString();
+      Shared.setValue('five_sim_data', {
+        'product_name': selectedProduct!.name,
+        'country_name': selectedCountry!.countryName,
+        'operator_name': selectedOperator!.name,
+      });
+      Get.back();
+      Get.back();
     } else {
-      customSnackBar('Error', 'Please select a product, country, and operator',
+      customSnackBar('خطأ', 'يجب أن تكمل الاختيار',
           snackType: SnackBarType.error);
     }
   }

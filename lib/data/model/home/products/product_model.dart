@@ -33,8 +33,8 @@ class ProductModel {
   final int productCategoryId;
   final Name name;
   final String type;
-  final int purchasePrice;
-  final int salePrice;
+  final num purchasePrice;
+  final num salePrice;
   final Name description;
   final bool? visible;
   final bool? available;

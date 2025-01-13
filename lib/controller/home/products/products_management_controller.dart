@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/functions/show_delete_confirmation_dialog.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
-import 'package:promotion_dashboard/data/model/home/product_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_details_dialog.dart';
 

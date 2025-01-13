@@ -53,8 +53,9 @@ class ProductsManagement extends StatelessWidget {
                     CustomButton(
                         title: 'Add product',
                         height: 45,
-                        onPressed: () {
-                          Get.toNamed(AppRoutes.createProduct);
+                        onPressed: () async {
+                          await Get.toNamed(AppRoutes.createProduct);
+                          controller.getProductsData();
                         }),
                   ],
                 ),

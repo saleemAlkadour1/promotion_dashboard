@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:promotion_dashboard/data/model/home/product_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class ProductsDataSource extends DataGridSource {
