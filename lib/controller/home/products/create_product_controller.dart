@@ -5,12 +5,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/classes/shared_preferences.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
-import 'package:promotion_dashboard/core/constants/storage_keys.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/model/home/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 
 abstract class CreateProductController extends GetxController {
@@ -21,9 +20,12 @@ abstract class CreateProductController extends GetxController {
   late TextEditingController salePriceController;
   late TextEditingController minController;
   late TextEditingController maxController;
+  late TextEditingController labelController;
+  late TextEditingController valueController;
 
   // Dropdown values
   String visibleValue = 'Yes';
+  String typeManualLabelValue = 'text';
   String availableValue = 'Yes';
   String typeValue = 'live';
   String numberlyValue = 'Yes';
@@ -40,6 +42,7 @@ abstract class CreateProductController extends GetxController {
 
   // Methods (abstract)
   void updateVisibleValue(String value);
+  void updateTypeManualLabelValue(String value);
   void updateTypeValue(String value);
   void updateNumberlyValue(String value);
   void updateSourceValue(String value);
@@ -57,13 +60,34 @@ abstract class CreateProductController extends GetxController {
   createProductExternalLive();
   createProductInternalStore();
   createProductInternalManual();
+  //
+  void addDynamicValue();
+  void deleteDynamicValue(int index);
 }
 
 class CreateProductControllerImp extends CreateProductController {
   CategoriesData categoriesData = CategoriesData();
-  ProductData productData = ProductData();
+  ProductsData productData = ProductsData();
   bool loading = false;
   int categoryId = 0;
+  List inputs = [];
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    getPCategoriesData();
+    for (var i = 0; i < myLanguages.length; i++) {
+      nameController.add(TextEditingController());
+      descriptionController.add(TextEditingController());
+    }
+    purchasePriceController = TextEditingController();
+    salePriceController = TextEditingController();
+    minController = TextEditingController();
+    maxController = TextEditingController();
+    labelController = TextEditingController();
+    valueController = TextEditingController();
+  }
 
   @override
   getPCategoriesData() async {
@@ -79,7 +103,8 @@ class CreateProductControllerImp extends CreateProductController {
 
       // Populate categories names
       if (categories != null) {
-        categoriesName = categories!.map((category) => category.name.en!).toSet().toList();
+        categoriesName =
+            categories!.map((category) => category.name.en!).toSet().toList();
       }
 
       // Ensure the default categoryValue exists in the list
@@ -93,23 +118,14 @@ class CreateProductControllerImp extends CreateProductController {
   }
 
   @override
-  void onInit() {
-    super.onInit();
-
-    getPCategoriesData();
-    for (var i = 0; i < myLanguages.length; i++) {
-      nameController.add(TextEditingController());
-      descriptionController.add(TextEditingController());
-    }
-    purchasePriceController = TextEditingController();
-    salePriceController = TextEditingController();
-    minController = TextEditingController();
-    maxController = TextEditingController();
+  void updateVisibleValue(String value) {
+    visibleValue = value;
+    update();
   }
 
   @override
-  void updateVisibleValue(String value) {
-    visibleValue = value;
+  void updateTypeManualLabelValue(String value) {
+    typeManualLabelValue = value;
     update();
   }
 
@@ -166,7 +182,8 @@ class CreateProductControllerImp extends CreateProductController {
         );
       }
     } catch (e) {
-      customSnackBar("خطأ", "حدث خطأ أثناء اختيار الصور: $e", snackType: SnackBarType.error);
+      customSnackBar("خطأ", "حدث خطأ أثناء اختيار الصور: $e",
+          snackType: SnackBarType.error);
     } finally {
       update();
     }
@@ -239,7 +256,8 @@ class CreateProductControllerImp extends CreateProductController {
     );
     if (response.isSuccess) {
       Get.back();
-      customSnackBar(response.message ?? '', '', snackType: SnackBarType.correct);
+      customSnackBar(response.message ?? '', '',
+          snackType: SnackBarType.correct);
     }
     loading = false;
     update();
@@ -263,10 +281,12 @@ class CreateProductControllerImp extends CreateProductController {
       source: sourceValue,
       images: selectedImages,
       available: true,
+      inputs: inputs,
     );
     if (response.isSuccess) {
       Get.back();
-      customSnackBar('', response.message ?? '', snackType: SnackBarType.correct);
+      customSnackBar('', response.message ?? '',
+          snackType: SnackBarType.correct);
     }
     loading = false;
     update();
@@ -297,6 +317,31 @@ class CreateProductControllerImp extends CreateProductController {
       customSnackBar('', response.message ?? '');
     }
     loading = false;
+    update();
+  }
+
+  @override
+  void addDynamicValue() {
+    if (labelController.text.isEmpty || valueController.text.isEmpty) {
+      customSnackBar('Error', 'Please fill in all fields',
+          snackType: SnackBarType.error);
+      return;
+    } else {
+      inputs.add({
+        'type': typeManualLabelValue,
+        'label_english': labelController.text,
+        'label_arabic': valueController.text,
+      });
+    }
+
+    labelController.clear();
+    valueController.clear();
+    update();
+  }
+
+  @override
+  void deleteDynamicValue(int index) {
+    inputs.removeAt(index);
     update();
   }
 }

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/create_product_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
@@ -94,14 +93,83 @@ class CraeteProduct extends StatelessWidget {
                       ],
                     ),
                   ),
-                // if (controller.typeValue == Product.store.type)
-                //   CustomButton(
-                //       height: 40,
-                //       title: 'Store management',
-                //       onPressed: () {
-                //         Get.toNamed(AppRoutes.store);
-                //       }),
-                const SizedBox(height: 16.0),
+
+                // Dynamic Values Section (Manual Type)
+                if (controller.typeValue == Product.manual.type)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (controller.inputs.isNotEmpty)
+                        Column(
+                          children:
+                              List.generate(controller.inputs.length, (index) {
+                            final item = controller.inputs[index];
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ListTile(
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Type: ${item['type']}"),
+                                    Text(
+                                        "Label English: ${item['label_english']}"),
+                                    Text(
+                                        "Label Arabic: ${item['label_arabic']}"),
+                                  ],
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () =>
+                                      controller.deleteDynamicValue(index),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      if (controller.inputs.isNotEmpty) const Divider(),
+                      const SizedBox(height: 8.0),
+                      CustomDropdown(
+                        label: 'Type',
+                        value: controller.typeManualLabelValue,
+                        items: const [
+                          'text',
+                          'number',
+                          'date',
+                          'datetime',
+                          'image',
+                          'file',
+                          'boolean'
+                        ],
+                        onChanged: controller.updateTypeManualLabelValue,
+                      ),
+                      const SizedBox(height: 8.0),
+                      CustomTextField(
+                        label: 'Label English',
+                        controller: controller.labelController,
+                      ),
+                      const SizedBox(height: 8.0),
+                      CustomTextField(
+                        label: 'Label Arabic',
+                        controller: controller.valueController,
+                      ),
+                      const SizedBox(height: 16.0),
+                      ElevatedButton.icon(
+                        onPressed: controller.addDynamicValue,
+                        icon: const Icon(Icons.add, color: AppColors.white),
+                        label: Text(
+                          'Add item',
+                          style:
+                              MyText.appStyle.fs14.wMedium.reColorWhite.style,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.color_4EB7F2,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                const SizedBox(height: 16),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +188,8 @@ class CraeteProduct extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 16),
                           child: CustomTextField(
                             controller: controller.nameController[index],
-                            label: '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            label:
+                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
                           ),
                         );
                       },
@@ -140,7 +209,8 @@ class CraeteProduct extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 16),
                           child: CustomTextField(
                             controller: controller.descriptionController[index],
-                            label: '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
+                            label:
+                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
                           ),
                         );
                       },
@@ -190,7 +260,9 @@ class CraeteProduct extends StatelessWidget {
 
                 // Max
 
-                SizedBox(height: controller.typeValue != Product.live.type ? 16.0 : 0),
+                SizedBox(
+                    height:
+                        controller.typeValue != Product.live.type ? 16.0 : 0),
                 controller.typeValue != Product.live.type
                     ? CustomTextField(
                         controller: controller.maxController,
@@ -198,7 +270,9 @@ class CraeteProduct extends StatelessWidget {
                         inputType: TextInputType.number,
                       )
                     : const SizedBox(),
-                SizedBox(height: controller.typeValue != Product.live.type ? 16.0 : 0),
+                SizedBox(
+                    height:
+                        controller.typeValue != Product.live.type ? 16.0 : 0),
 
                 // Source Dropdown
                 CustomDropdown(

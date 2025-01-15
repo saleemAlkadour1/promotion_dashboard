@@ -43,7 +43,8 @@ class SFDataGridProducts extends StatelessWidget {
                           path: Assets.imagesSvgDelete,
                           size: 20,
                           onTap: () async {
-                            if (cell.columnName == 'Actions' && cell.value is ProductModel) {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is ProductModel) {
                               final category = cell.value as ProductModel;
                               await controller.deleteProduct(category.id);
                             }
@@ -56,7 +57,8 @@ class SFDataGridProducts extends StatelessWidget {
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {
-                            if (cell.columnName == 'Actions' && cell.value is ProductModel) {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is ProductModel) {
                               final product = cell.value as ProductModel;
                               controller.showProductDetailsDialog(product.id);
                             }
@@ -70,7 +72,8 @@ class SFDataGridProducts extends StatelessWidget {
                             path: Assets.imagesSvgBalance,
                             size: 16,
                             onTap: () {
-                              if (cell.columnName == 'Actions' && cell.value is ProductModel) {
+                              if (cell.columnName == 'Actions' &&
+                                  cell.value is ProductModel) {
                                 final product = cell.value as ProductModel;
                                 Get.toNamed(AppRoutes.store, parameters: {
                                   'id': product.id.toString(),
@@ -86,7 +89,8 @@ class SFDataGridProducts extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   cell.value.toString(),
-                  style: MyText.appStyle.fs16.wMedium.reColorText.responsiveStyle(context),
+                  style: MyText.appStyle.fs16.wMedium.reColorText
+                      .responsiveStyle(context),
                 ),
               );
             }).toList(),
@@ -101,7 +105,9 @@ class SFDataGridProducts extends StatelessWidget {
               gridLinesVisibility: GridLinesVisibility.none,
               headerGridLinesVisibility: GridLinesVisibility.none,
               source: productsDataSource,
-              columnWidthMode: MediaQuery.sizeOf(context).width <= 475 ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+              columnWidthMode: MediaQuery.sizeOf(context).width <= 475
+                  ? ColumnWidthMode.auto
+                  : ColumnWidthMode.fill,
               columnSizer: ColumnSizer(),
               rowsPerPage: 10,
               columns: [
@@ -112,7 +118,8 @@ class SFDataGridProducts extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         'ID',
-                        style: MyText.appStyle.fs16.wBold.reColorText.responsiveStyle(context),
+                        style: MyText.appStyle.fs16.wBold.reColorText
+                            .responsiveStyle(context),
                       )),
                 ),
                 GridColumn(
@@ -122,7 +129,8 @@ class SFDataGridProducts extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         'Name',
-                        style: MyText.appStyle.fs16.wBold.reColorText.responsiveStyle(context),
+                        style: MyText.appStyle.fs16.wBold.reColorText
+                            .responsiveStyle(context),
                       )),
                 ),
                 GridColumn(
@@ -132,7 +140,8 @@ class SFDataGridProducts extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         'Type',
-                        style: MyText.appStyle.fs16.wBold.reColorText.responsiveStyle(context),
+                        style: MyText.appStyle.fs16.wBold.reColorText
+                            .responsiveStyle(context),
                       )),
                 ),
                 GridColumn(
@@ -142,7 +151,8 @@ class SFDataGridProducts extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         'Actions',
-                        style: MyText.appStyle.fs16.wBold.reColorText.responsiveStyle(context),
+                        style: MyText.appStyle.fs16.wBold.reColorText
+                            .responsiveStyle(context),
                       )),
                 ),
               ],

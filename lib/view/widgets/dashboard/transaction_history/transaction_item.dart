@@ -8,7 +8,7 @@ class TransactionItem extends StatelessWidget {
     super.key,
     required this.transactionModel,
   });
-  final TransactionModel transactionModel;
+  final Transaction transactionModel;
   @override
   Widget build(BuildContext context) {
     return Card(

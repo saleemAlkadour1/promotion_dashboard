@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/functions/show_delete_confirmation_dialog.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_details_dialog.dart';
 
 abstract class ProductsManagementController extends GetxController {
-  getProductsData();
+  Future<void> getProductsData();
   Future<void> deleteProduct(int id);
   Future<void> showProduct(int id);
 }
@@ -20,10 +20,10 @@ class ProductsManagementControllerImp extends ProductsManagementController {
     getProductsData();
   }
 
-  ProductData productData = ProductData();
+  ProductsData productData = ProductsData();
   List<ProductModel>? products;
   @override
-  getProductsData() async {
+  Future<void> getProductsData() async {
     loading = true;
     update();
     var response = await productData.get();

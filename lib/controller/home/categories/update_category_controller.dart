@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/model/home/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
 
 abstract class UpdateCategoryController extends GetxController {

@@ -20,6 +20,8 @@ class Assets {
 
   static const String imagesSvgBalance = "assets/images/svg/balance.svg";
 
+  static const String imagesSvgCart = "assets/images/svg/cart.svg";
+
   static const String imagesSvgCategories = "assets/images/svg/categories.svg";
 
   static const String imagesSvgChats = "assets/images/svg/chats.svg";

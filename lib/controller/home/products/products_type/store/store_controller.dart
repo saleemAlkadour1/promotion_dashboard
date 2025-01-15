@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/product_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_type/store/create_product_dialog.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_type/store/update_product_dialog.dart';
 
@@ -29,7 +29,7 @@ class StoreControllerImp extends StoreController {
   bool loading = false;
   // List<ProductStoreModel>? products;
   List products = [];
-  ProductData productData = ProductData();
+  ProductsData productData = ProductsData();
   List values = [];
   int? updateIndex;
   bool addingNewValue = false;

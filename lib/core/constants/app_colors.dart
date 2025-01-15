@@ -26,6 +26,7 @@ abstract class AppColors {
   static const Color screenColor = Color(0xFFF7F9FA);
   static const Color grey = Colors.grey;
   static const Color red = Colors.red;
+  static const Color green = Colors.green;
 
   static Color customColor(Color color) => color;
 

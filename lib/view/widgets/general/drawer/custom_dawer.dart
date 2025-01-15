@@ -8,7 +8,9 @@ import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
 import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
+import 'package:promotion_dashboard/view/screens/home/orders/orders_management.dart';
 import 'package:promotion_dashboard/view/screens/home/products/products_management.dart';
+import 'package:promotion_dashboard/view/screens/home/transactions/transactions_management.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/drawer_item.dart';
 import 'package:promotion_dashboard/view/widgets/general/user_info_list_tile.dart';
 
@@ -28,14 +30,11 @@ class CustomDawer extends StatelessWidget {
                 height: 12,
               ),
             ),
-            // تحقق من صحة userModel
             SliverToBoxAdapter(
-              child: controller.user != null
-                  ? UserInfoListTile(
-                      color: AppColors.white,
-                      userModel: controller.user!,
-                    )
-                  : SizedBox(),
+              child: UserInfoListTile(
+                color: AppColors.white,
+                userModel: controller.user!,
+              ),
             ),
             SliverFillRemaining(
               hasScrollBody: false,
@@ -53,7 +52,7 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
-                    title: 'Categories management',
+                    title: 'Categories',
                     imagePath: Assets.imagesSvgCategories,
                     isActive: controller.selectedIndex ==
                             DrawerItems.categoriesManagement.value
@@ -65,7 +64,7 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
-                    title: 'Products management',
+                    title: 'Products',
                     imagePath: Assets.imagesSvgProducts,
                     isActive: controller.selectedIndex ==
                             DrawerItems.productsManagement.value
@@ -77,14 +76,25 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
-                    title: 'Transaction',
+                    title: 'Orders',
+                    imagePath: Assets.imagesSvgCart,
+                    isActive:
+                        controller.selectedIndex == DrawerItems.orders.value
+                            ? true
+                            : false,
+                    onTap: () {
+                      controller.updateIndex(DrawerItems.orders.value);
+                    },
+                  ),
+                  DrawerItem(
+                    title: 'Transactions',
                     imagePath: Assets.imagesSvgTransaction,
                     isActive: controller.selectedIndex ==
-                            DrawerItems.transaction.value
+                            DrawerItems.transactions.value
                         ? true
                         : false,
                     onTap: () {
-                      controller.updateIndex(DrawerItems.transaction.value);
+                      controller.updateIndex(DrawerItems.transactions.value);
                     },
                   ),
                   DrawerItem(
@@ -157,11 +167,12 @@ enum DrawerItems {
   dashboard(0, Dashboard()),
   categoriesManagement(1, CategoriesManagement()),
   productsManagement(2, ProductsManagement()),
-  transaction(3, SizedBox()),
-  chats(4, Chats()),
-  notifications(5, SizedBox()),
-  faq(6, SizedBox()),
-  settings(7, SizedBox());
+  orders(3, OrdersManagement()),
+  transactions(4, TransactionsManagement()),
+  chats(5, Chats()),
+  notifications(6, SizedBox()),
+  faq(7, SizedBox()),
+  settings(8, SizedBox());
 
   final int value;
   final Widget screen;

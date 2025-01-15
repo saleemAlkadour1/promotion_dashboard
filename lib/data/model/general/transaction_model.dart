@@ -1,10 +1,10 @@
-class TransactionModel {
+class Transaction {
   final String title;
   final String date;
   final String amount;
   final bool isWithdrawal;
 
-  TransactionModel(
+  Transaction(
       {required this.title,
       required this.date,
       required this.amount,

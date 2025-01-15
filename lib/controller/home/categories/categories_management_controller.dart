@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/functions/show_delete_confirmation_dialog.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
-import 'package:promotion_dashboard/data/model/home/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
 import 'package:promotion_dashboard/view/widgets/categories/categories_details_dialog.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';

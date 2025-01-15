@@ -5,7 +5,7 @@ import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/functions/error_image.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/model/home/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 
 class CategoryDetailsDialog extends StatelessWidget {
   final CategoryModel categoryModel;

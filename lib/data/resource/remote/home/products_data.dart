@@ -5,7 +5,7 @@ import 'package:promotion_dashboard/core/classes/api_response.dart';
 import 'package:promotion_dashboard/core/classes/curd.dart';
 import 'package:promotion_dashboard/routes/end_points.dart';
 
-class ProductData {
+class ProductsData {
   ApiService apiService = Get.find();
   Future<ApiResponse> get() async {
     var response = await apiService.get(
@@ -15,23 +15,23 @@ class ProductData {
     return response;
   }
 
-  Future<ApiResponse> create({
-    required Map names,
-    required Map descriptions,
-    required bool visible,
-    required int productCategoryId,
-    required String type,
-    required num purchasePrice,
-    required num salePrice,
-    bool? numberly,
-    required String source,
-    required List<File> images,
-    num? min,
-    num? max,
-    required bool available,
-    String? serverName,
-    Map<String, dynamic>? serverData,
-  }) async {
+  Future<ApiResponse> create(
+      {required Map names,
+      required Map descriptions,
+      required bool visible,
+      required int productCategoryId,
+      required String type,
+      required num purchasePrice,
+      required num salePrice,
+      bool? numberly,
+      required String source,
+      required List<File> images,
+      num? min,
+      num? max,
+      required bool available,
+      String? serverName,
+      Map<String, dynamic>? serverData,
+      List? inputs}) async {
     print(type);
     var response = await apiService.post(
       EndPoints.store.products,
@@ -51,6 +51,7 @@ class ProductData {
         'available': available ? 1 : 0,
         'server_name': serverName,
         'data': serverData,
+        'inputs': inputs,
       },
       files: {'images': images},
     );
@@ -65,7 +66,8 @@ class ProductData {
   }
 
   Future<ApiResponse> showProductStore(int id) async {
-    var response = await apiService.get(EndPoints.store.productItem, pathVariables: {
+    var response =
+        await apiService.get(EndPoints.store.productItem, pathVariables: {
       'id': id,
     });
     return response;
@@ -89,7 +91,8 @@ class ProductData {
     required bool visible,
     required List values,
   }) async {
-    var response = await apiService.post(EndPoints.store.productItem, pathVariables: {
+    var response =
+        await apiService.post(EndPoints.store.productItem, pathVariables: {
       'id': productId
     }, data: {
       'visible': visible ? 1 : 0,
@@ -107,7 +110,8 @@ class ProductData {
   }
 
   Future<ApiResponse> delete(int id) async {
-    var response = await apiService.delete(EndPoints.store.product, pathVariables: {'id': id});
+    var response = await apiService
+        .delete(EndPoints.store.product, pathVariables: {'id': id});
     return response;
   }
 

@@ -29,6 +29,8 @@ class DrawerItem extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: SvgPicture.asset(
             imagePath,
+            width: 20,
+            height: 20,
             colorFilter: isActive
                 ? ColorFilter.mode(
                     activeIconColor ?? AppColors.color_4EB7F2, BlendMode.srcIn)
