@@ -32,7 +32,6 @@ class ProductsData {
       String? serverName,
       Map<String, dynamic>? serverData,
       List? inputs}) async {
-    print(type);
     var response = await apiService.post(
       EndPoints.store.products,
       data: {
@@ -54,6 +53,54 @@ class ProductsData {
         'inputs': inputs,
       },
       files: {'images': images},
+    );
+    return response;
+  }
+
+  Future<ApiResponse> show(id) async {
+    var response = await apiService.get(
+      EndPoints.store.product,
+      params: {},
+      pathVariables: {
+        'id': id,
+      },
+    );
+    return response;
+  }
+
+  Future<ApiResponse> update({
+    required int id,
+    required Map names,
+    required Map descriptions,
+    required bool visible,
+    required int productCategoryId,
+    required num purchasePrice,
+    required num salePrice,
+    bool? numberly,
+    required String source,
+    // required List<File> images,
+    num? min,
+    num? max,
+    required bool available,
+  }) async {
+    var response = await apiService.post(
+      EndPoints.store.product,
+      pathVariables: {'id': id},
+      data: {
+        'name': names,
+        'description': descriptions,
+        'visible': visible ? 1 : 0,
+        'product_display_method': 'GridView',
+        'product_category_id': productCategoryId,
+        'purchase_price': purchasePrice,
+        'sale_price': salePrice,
+        'numberly': (numberly ?? false) ? 1 : 0,
+        'source': source.toLowerCase(),
+        'min': min,
+        'max': max,
+        'available': available ? 1 : 0,
+      },
+      // files: {'images': images},
     );
     return response;
   }
@@ -112,17 +159,6 @@ class ProductsData {
   Future<ApiResponse> delete(int id) async {
     var response = await apiService
         .delete(EndPoints.store.product, pathVariables: {'id': id});
-    return response;
-  }
-
-  Future<ApiResponse> show(productId) async {
-    var response = await apiService.get(
-      EndPoints.store.product,
-      params: {},
-      pathVariables: {
-        'id': productId,
-      },
-    );
     return response;
   }
 }

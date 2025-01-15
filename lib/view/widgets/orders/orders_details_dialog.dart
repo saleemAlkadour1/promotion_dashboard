@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/data/model/home/orders/order_model.dart';
 
 class OrderDetailsDialog extends StatelessWidget {
@@ -104,11 +105,11 @@ class OrderDetailsDialog extends StatelessWidget {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Colors.blueAccent,
+            color: AppColors.color_064061,
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.close, color: Colors.blueAccent),
+          icon: const Icon(Icons.close, color: AppColors.color_064061),
           onPressed: () {
             Get.back();
           },
@@ -143,14 +144,11 @@ class OrderDetailsDialog extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              "$title: ",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+          Text(
+            "$title: ",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
             ),
           ),
           Expanded(

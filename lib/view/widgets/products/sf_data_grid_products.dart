@@ -41,8 +41,7 @@ class SFDataGridProducts extends StatelessWidget {
                               await Get.toNamed(
                                 AppRoutes.updateProduct,
                                 parameters: {
-                                  'category_id':
-                                      cell.value.id?.toString() ?? '',
+                                  'product_id': cell.value.id?.toString() ?? '',
                                 },
                               );
                               controller.getProductsData();
@@ -95,6 +94,11 @@ class SFDataGridProducts extends StatelessWidget {
                                 });
                               }
                             },
+                          )
+                        else
+                          const SizedBox(
+                            width: 14,
+                            height: 14,
                           ),
                       ],
                     ));

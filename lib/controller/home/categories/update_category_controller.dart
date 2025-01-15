@@ -36,7 +36,6 @@ abstract class UpdateCategoryController extends GetxController {
 class UpdateCategoryControllerImp extends UpdateCategoryController {
   CategoryModel? categoryModel;
   bool isImageFind = true;
-
   CategoriesData categoriesData = CategoriesData();
 
   @override

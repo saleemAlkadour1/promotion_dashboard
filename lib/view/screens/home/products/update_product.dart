@@ -4,6 +4,7 @@ import 'package:promotion_dashboard/controller/home/products/update_product_cont
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
+import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
@@ -17,6 +18,13 @@ class UpdateProduct extends StatelessWidget {
     Get.put(UpdateProductControllerImp());
 
     return GetBuilder<UpdateProductControllerImp>(builder: (controller) {
+      var res = HandlingDataView(
+        loading: controller.loading,
+        dataIsEmpty: controller.productModel == null,
+      );
+      if (res.isValid) {
+        return res.response!;
+      }
       return Scaffold(
           backgroundColor: AppColors.screenColor,
           appBar: AppBar(
@@ -46,8 +54,9 @@ class UpdateProduct extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //Category
+                // Category
                 CustomDropdown(
+                  value: controller.categoryValue,
                   label: 'Category',
                   items: controller.categoriesName,
                   onChanged: controller.updateCategoryValue,
@@ -162,7 +171,7 @@ class UpdateProduct extends StatelessWidget {
                 CustomDropdown(
                   label: 'Source',
                   value: controller.sourceValue,
-                  items: const ['Internal', 'External'],
+                  items: const ['internal', 'external'],
                   onChanged: controller.updateSourceValue,
                 ),
                 const SizedBox(height: 16.0),

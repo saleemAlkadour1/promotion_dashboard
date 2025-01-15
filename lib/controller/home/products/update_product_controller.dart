@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
+import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
 
@@ -19,12 +20,12 @@ abstract class UpdateProductController extends GetxController {
   late TextEditingController maxController;
 
   // Dropdown values
+  String typeValue = 'live';
   String visibleValue = 'Yes';
   String availableValue = 'Yes';
-  String typeValue = 'live';
   String numberlyValue = 'Yes';
   String categoryValue = '';
-  String sourceValue = 'Internal';
+  String sourceValue = 'internal';
 
   // Categories data
   List<CategoryModel>? categories;
@@ -34,8 +35,8 @@ abstract class UpdateProductController extends GetxController {
   List<File> selectedImages = [];
 
   // Methods (abstract)
-  void updateVisibleValue(String value);
   void updateTypeValue(String value);
+  void updateVisibleValue(String value);
   void updateNumberlyValue(String value);
   void updateSourceValue(String value);
   void updateCategoryValue(String value);
@@ -43,22 +44,28 @@ abstract class UpdateProductController extends GetxController {
   Future<void> pickImages();
   void removeImage(File image);
   Future<void> getCategoriesData();
+  void showProduct();
+  void initialProduct(ProductModel product);
   Future<void> updateProuct();
   void cancel();
 }
 
 class UpdateProductControllerImp extends UpdateProductController {
   CategoriesData categoriesData = CategoriesData();
+  ProductModel? productModel;
+
   ProductsData productData = ProductsData();
   bool loading = false;
+  int productId = 0;
   int categoryId = 0;
-  List inputs = [];
 
   @override
   void onInit() {
     super.onInit();
 
-    getCategoriesData();
+    productId = int.parse(Get.parameters['product_id'] ?? '0');
+    showProduct();
+
     for (var i = 0; i < myLanguages.length; i++) {
       nameController.add(TextEditingController());
       descriptionController.add(TextEditingController());
@@ -96,14 +103,54 @@ class UpdateProductControllerImp extends UpdateProductController {
   }
 
   @override
-  void updateVisibleValue(String value) {
-    visibleValue = value;
+  Future<void> showProduct() async {
+    await getCategoriesData();
+
+    loading = true;
+    update();
+    var response = await productData.show(productId);
+    if (response.isSuccess) {
+      productModel = ProductModel.fromJson(response.data);
+      initialProduct(productModel!);
+    }
+    loading = false;
+
+    update();
+  }
+
+  @override
+  initialProduct(ProductModel product) {
+    productModel = product;
+    categoryId = product.productCategoryId;
+    getValues(nameController, product.name.toJson());
+    getValues(descriptionController, product.description.toJson());
+    purchasePriceController.text = product.purchasePrice.toString();
+    salePriceController.text = product.salePrice.toString();
+    minController.text = product.min.toString();
+    maxController.text = product.max.toString();
+    typeValue = product.type;
+    visibleValue = product.visible == true ? 'Yes' : 'No';
+    availableValue = product.available == true ? 'Yes' : 'No';
+    numberlyValue = product.numberly == true ? 'Yes' : 'No';
+    sourceValue = product.source.toLowerCase();
+    updateVisibleValue(visibleValue);
+    for (int i = 0; i < categories!.length; i++) {
+      if (categoryId == categories![i].id) {
+        categoryValue = categories![i].name.en!;
+        break;
+      }
+    }
     update();
   }
 
   @override
   void updateTypeValue(String value) {
     typeValue = value;
+  }
+
+  @override
+  void updateVisibleValue(String value) {
+    visibleValue = value;
     update();
   }
 
@@ -128,7 +175,7 @@ class UpdateProductControllerImp extends UpdateProductController {
       }
     }
 
-    log('Selected Category ID: $categoryId');
+    log('Selected Category ID: $productId');
     update();
   }
 
@@ -167,7 +214,29 @@ class UpdateProductControllerImp extends UpdateProductController {
   }
 
   @override
-  Future<void> updateProuct() async {}
+  Future<void> updateProuct() async {
+    loading = true;
+    update();
+    var response = await productData.update(
+        id: productId,
+        names: setValues(nameController),
+        descriptions: setValues(descriptionController),
+        visible: visibleValue == 'Yes' ? true : false,
+        productCategoryId: categoryId,
+        purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
+        salePrice: num.tryParse(salePriceController.text) ?? 0,
+        source: sourceValue,
+        available: availableValue == 'Yes' ? true : false,
+        numberly: numberlyValue == 'Yes' ? true : false,
+        min: num.tryParse(minController.text),
+        max: num.tryParse(maxController.text));
+    if (response.isSuccess) {
+      Get.back();
+      customSnackBar(response.message ?? '', '');
+    }
+    loading = false;
+    update();
+  }
 
   @override
   void cancel() {}
@@ -191,5 +260,16 @@ Map setValues(List<TextEditingController> controllers) {
   for (var i = 0; i < myLanguages.length; i++) {
     data[myLanguages.entries.toList()[i].key] = controllers[i].text.trim();
   }
+  return data;
+}
+
+Map getValues(List<TextEditingController> controllers, Map categoryData) {
+  Map data = {};
+
+  for (var i = 0; i < myLanguages.length; i++) {
+    controllers[i].text =
+        categoryData[myLanguages.entries.toList()[i].key] ?? '';
+  }
+
   return data;
 }

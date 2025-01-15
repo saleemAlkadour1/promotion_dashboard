@@ -115,17 +115,40 @@ class SelectCountryAndOperator extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                        onPressed: controller.backToCreateProduct,
-                        child: Text('<<< واجهة إنشاء منتج')),
-                    SizedBox(
-                      width: 20,
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: controller.backToCreateProduct,
+                        child: Text(
+                          '<<< ' + 'Create product',
+                          style: MediaQuery.sizeOf(context).width > 600
+                              ? MyText.appStyle.fs20.wBold.reColorText
+                                  .responsiveStyle(context)
+                              : MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                        ),
+                      ),
                     ),
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text('الواجهة السابقة >>>')),
+                    Flexible(
+                      child: SizedBox(
+                        width: 40,
+                      ),
+                    ),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            'Go to back' + ' >>>',
+                            style: MediaQuery.sizeOf(context).width > 600
+                                ? MyText.appStyle.fs20.wBold.reColorText
+                                    .responsiveStyle(context)
+                                : MyText.appStyle.fs16.wBold.reColorText
+                                    .responsiveStyle(context),
+                          )),
+                    ),
                   ],
                 ),
               ],
