@@ -43,7 +43,11 @@ class CategoriesManagement extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CustomTextField(
-                          controller: TextEditingController(), label: 'Search'),
+                        label: 'Search',
+                        controller: controller.searchController,
+                        onChanged: controller.filterCategories,
+                        inputType: TextInputType.text,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     CustomButton(

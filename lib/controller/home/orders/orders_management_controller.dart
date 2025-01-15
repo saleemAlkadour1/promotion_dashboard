@@ -4,8 +4,11 @@ import 'package:promotion_dashboard/data/resource/remote/home/orders_data.dart';
 import 'package:promotion_dashboard/view/widgets/orders/orders_details_dialog.dart';
 
 abstract class OrdersManagementController extends GetxController {
+  String? statusValue = 'All';
   Future<void> getOrdersData();
   Future<void> showOrder(int id);
+  void updateStatusValue(String value);
+  void filterOrders();
 }
 
 class OrdersManagementControllerImp extends OrdersManagementController {
@@ -15,10 +18,13 @@ class OrdersManagementControllerImp extends OrdersManagementController {
   void onInit() {
     super.onInit();
     getOrdersData();
+    filteredOrders = orders;
   }
 
   OrdersData ordersData = OrdersData();
   List<OrderModel>? orders;
+  List<OrderModel>? filteredOrders;
+
   @override
   Future<void> getOrdersData() async {
     loading = true;
@@ -27,6 +33,8 @@ class OrdersManagementControllerImp extends OrdersManagementController {
     if (response.isSuccess) {
       orders = List.generate(response.data.length,
           (index) => OrderModel.fromJson(response.data[index]));
+      filteredOrders = orders;
+
       update();
     }
     loading = false;
@@ -57,6 +65,24 @@ class OrdersManagementControllerImp extends OrdersManagementController {
         ),
       );
       update();
+    }
+  }
+
+  @override
+  void updateStatusValue(String value) {
+    statusValue = value;
+    filterOrders();
+    update();
+  }
+
+  @override
+  void filterOrders() {
+    if (statusValue == 'All') {
+      filteredOrders = orders;
+    } else {
+      filteredOrders = orders
+          ?.where((order) => order.status == statusValue!.toLowerCase())
+          .toList();
     }
   }
 }

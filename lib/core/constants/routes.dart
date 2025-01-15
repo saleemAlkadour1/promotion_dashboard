@@ -5,6 +5,7 @@ abstract class AppRoutes {
   static String updateCategory = '/update-category';
   static String productsManagement = '/products-management';
   static String createProduct = '/create-product';
+  static String updateProduct = '/update-product';
   static String chats = '/chats';
   static String dashboard = '/dashboard';
   static String home = '/home';

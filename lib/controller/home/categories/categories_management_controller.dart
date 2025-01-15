@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/functions/show_delete_confirmation_dialog.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
@@ -6,19 +7,25 @@ import 'package:promotion_dashboard/data/resource/remote/home/categories_data.da
 import 'package:promotion_dashboard/view/widgets/categories/categories_details_dialog.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-abstract class ProductsManagementController extends GetxController {
+abstract class CategoriesManagementController extends GetxController {
   getPCategoriesData();
   Future<void> deleteCategory(int id);
   late DataPagerController dataPagerController;
+  late TextEditingController searchController;
   showCategory(int id);
 }
 
-class CategoriesManagementControllerImp extends ProductsManagementController {
+class CategoriesManagementControllerImp extends CategoriesManagementController {
+  List<CategoryModel>? filteredCategories;
+
   bool loading = false;
   @override
   void onInit() {
     super.onInit();
+    searchController = TextEditingController();
     getPCategoriesData();
+    filteredCategories = categories;
+
     dataPagerController = DataPagerController();
   }
 
@@ -33,6 +40,7 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
     if (response.isSuccess) {
       categories = List.generate(response.data.length,
           (index) => CategoryModel.fromJson(response.data[index]));
+      filteredCategories = categories;
     }
     loading = false;
     update();
@@ -95,5 +103,18 @@ class CategoriesManagementControllerImp extends ProductsManagementController {
         update();
       },
     );
+  }
+
+  void filterCategories(String query) {
+    searchController.text = query;
+    if (query.isEmpty) {
+      filteredCategories = categories;
+    } else {
+      filteredCategories = categories
+          ?.where((category) =>
+              category.name.en!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    update();
   }
 }

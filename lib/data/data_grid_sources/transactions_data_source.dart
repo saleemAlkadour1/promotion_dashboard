@@ -9,8 +9,7 @@ class TransactionsDataSource extends DataGridSource {
     buildPaginatedData();
   }
 
-  final DataGridRowAdapter Function(DataGridRow row, bool isEvenRow)
-      custombuildRow;
+  final DataGridRowAdapter Function(DataGridRow row, int index) custombuildRow;
   late List<TransactionModel> _transactions;
   List<DataGridRow> paginatedRows = [];
   int rowsPerPage = 10;
@@ -40,8 +39,8 @@ class TransactionsDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
-    bool isEvenRow = rows.indexOf(row) % 2 == 0;
+    int index = rows.indexOf(row);
 
-    return custombuildRow(row, isEvenRow);
+    return custombuildRow(row, index);
   }
 }

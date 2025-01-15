@@ -4,8 +4,7 @@ import 'package:promotion_dashboard/controller/home/transactions/transactions_ma
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
-import 'package:promotion_dashboard/view/widgets/products/sf_data_grid_products.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/transactions/sf_data_grid_transactions.dart';
 
 class TransactionsManagement extends StatelessWidget {
@@ -42,9 +41,17 @@ class TransactionsManagement extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: CustomTextField(
-                          controller: TextEditingController(), label: 'Search'),
-                    ),
+                      child: CustomDropdown(
+                        label: 'Type',
+                        value: controller.typeValue,
+                        items: const [
+                          'All',
+                          'out',
+                          'in',
+                        ],
+                        onChanged: controller.updateTypeValue,
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(height: 16),

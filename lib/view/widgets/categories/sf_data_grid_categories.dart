@@ -22,7 +22,7 @@ class SFDataGridCategories extends StatelessWidget {
     Get.put(CategoriesManagementControllerImp());
     return GetBuilder<CategoriesManagementControllerImp>(builder: (controller) {
       CategoriesDataSource categoriesDataSource = CategoriesDataSource(
-        categories: controller.categories!,
+        categories: controller.filteredCategories!,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -34,7 +34,7 @@ class SFDataGridCategories extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgEdit,
                           size: 20,
                           onTap: () async {
@@ -54,7 +54,7 @@ class SFDataGridCategories extends StatelessWidget {
                         SizedBox(
                           width: 16,
                         ),
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgDelete,
                           size: 20,
                           onTap: () async {
@@ -68,7 +68,7 @@ class SFDataGridCategories extends StatelessWidget {
                         SizedBox(
                           width: 16,
                         ),
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {

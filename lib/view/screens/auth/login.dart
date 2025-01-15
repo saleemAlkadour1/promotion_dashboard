@@ -22,7 +22,6 @@ class Login extends StatelessWidget {
                 builder: (context, constraints) {
                   bool isDesktop = constraints.maxWidth >= 600;
 
-                  // Container decoration for desktop
                   BoxDecoration? containerDecoration = isDesktop
                       ? BoxDecoration(
                           color: Colors.white,
@@ -60,23 +59,17 @@ class Login extends StatelessWidget {
                             type: ValidatorType.email,
                             fieldName: 'the email',
                           ),
+                          isSeen: true,
                         ),
                         const SizedBox(height: 20),
 
                         // Password Field
                         LoginTextField(
-                          prefixIcon: const Icon(Icons.lock),
-                          hintText: 'Password',
+                          controller: controller.password,
                           isPassword: true,
                           isSeen: controller.isSeenPassword,
-                          onTapEye: controller.showPassword,
-                          controller: controller.password,
-                          validator: (value) => MyValidator.validate(
-                            value,
-                            type: ValidatorType.password,
-                            fieldName: 'the password',
-                            min: 8,
-                          ),
+                          hintText: 'Password',
+                          onTapEye: controller.togglePasswordVisibility,
                         ),
                         const SizedBox(height: 20),
 

@@ -6,22 +6,27 @@ import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart
 import 'package:promotion_dashboard/view/widgets/products/products_details_dialog.dart';
 
 abstract class ProductsManagementController extends GetxController {
+  String? typeValue = 'All';
   Future<void> getProductsData();
   Future<void> deleteProduct(int id);
   Future<void> showProduct(int id);
+  void updateTypeValue(String value);
+  void filterProducts();
 }
 
 class ProductsManagementControllerImp extends ProductsManagementController {
   bool loading = false;
   ProductModel? productModel;
+  ProductsData productData = ProductsData();
+  List<ProductModel>? products;
+  List<ProductModel>? filteredProducts;
   @override
   void onInit() {
     super.onInit();
     getProductsData();
+    filteredProducts = products;
   }
 
-  ProductsData productData = ProductsData();
-  List<ProductModel>? products;
   @override
   Future<void> getProductsData() async {
     loading = true;
@@ -30,6 +35,7 @@ class ProductsManagementControllerImp extends ProductsManagementController {
     if (response.isSuccess) {
       products = List.generate(response.data.length,
           (index) => ProductModel.fromJson(response.data[index]));
+      filteredProducts = products;
       update();
     }
     loading = false;
@@ -89,5 +95,22 @@ class ProductsManagementControllerImp extends ProductsManagementController {
         update();
       },
     );
+  }
+
+  @override
+  void updateTypeValue(String? value) {
+    typeValue = value;
+    filterProducts();
+    update();
+  }
+
+  @override
+  void filterProducts() {
+    if (typeValue == 'All') {
+      filteredProducts = products;
+    } else {
+      filteredProducts =
+          products?.where((product) => product.type == typeValue).toList();
+    }
   }
 }

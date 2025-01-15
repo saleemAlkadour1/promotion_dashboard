@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/categories/update_category_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/functions/error_image.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // إضافة الحزمة
 
 class UpdateCategory extends StatelessWidget {
   const UpdateCategory({super.key});
@@ -125,18 +127,70 @@ class UpdateCategory extends StatelessWidget {
                     onChanged: controller.updateVisibleValue,
                   ),
                   const SizedBox(height: 16.0),
-                  // Pick and Display Images
-                  CustomImagePicker(
-                    images: [
-                      if (controller.image != null) controller.image!,
-                    ],
-                    onAddImage: controller.pickImage,
-                    onRemoveImage: (file) {
-                      controller.image = null;
-                      controller.update();
-                    },
-                  ),
+
+                  // Check if image is already available from the internet
+                  controller.isImageFind == true
+                      ? SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                  imageUrl: controller.categoryModel!.image!,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: myErrorWidget,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.isImageFind = false;
+                                      controller.image = null;
+                                      controller.update();
+                                    },
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: AppColors.black,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : CustomImagePicker(
+                          images: [
+                            if (controller.image != null) controller.image!,
+                          ],
+                          onAddImage: controller.pickImage,
+                          onRemoveImage: (file) {
+                            controller.image = null;
+                            controller.update();
+                          },
+                        ),
+
                   const SizedBox(height: 16.0),
+
                   // Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,

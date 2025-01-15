@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
@@ -19,7 +20,7 @@ class SFDataGridProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
       ProductsDataSource productsDataSource = ProductsDataSource(
-        products: controller.products!,
+        products: controller.filteredProducts!,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -31,15 +32,27 @@ class SFDataGridProducts extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgEdit,
                           size: 20,
-                          onTap: () {},
+                          onTap: () async {
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is ProductModel) {
+                              await Get.toNamed(
+                                AppRoutes.updateProduct,
+                                parameters: {
+                                  'category_id':
+                                      cell.value.id?.toString() ?? '',
+                                },
+                              );
+                              controller.getProductsData();
+                            }
+                          },
                         ),
                         const SizedBox(
                           width: 16,
                         ),
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgDelete,
                           size: 20,
                           onTap: () async {
@@ -53,7 +66,7 @@ class SFDataGridProducts extends StatelessWidget {
                         const SizedBox(
                           width: 16,
                         ),
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {
@@ -68,9 +81,11 @@ class SFDataGridProducts extends StatelessWidget {
                           width: 16,
                         ),
                         if (cell.value.type == 'store')
-                          CustomIconSvg(
-                            path: Assets.imagesSvgBalance,
-                            size: 16,
+                          CustomIcon(
+                            isSvg: false,
+                            icon: FontAwesomeIcons.store,
+                            color: Colors.blueAccent,
+                            size: 14,
                             onTap: () {
                               if (cell.columnName == 'Actions' &&
                                   cell.value is ProductModel) {

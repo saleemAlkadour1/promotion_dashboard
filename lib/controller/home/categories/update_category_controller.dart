@@ -35,6 +35,7 @@ abstract class UpdateCategoryController extends GetxController {
 
 class UpdateCategoryControllerImp extends UpdateCategoryController {
   CategoryModel? categoryModel;
+  bool isImageFind = true;
 
   CategoriesData categoriesData = CategoriesData();
 
@@ -105,14 +106,14 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
 
   @override
   Future<void> updateCategory() async {
-    // if (image == null) {
-    //   customSnackBar(
-    //     'Please select an image',
-    //     '',
-    //     snackType: SnackBarType.error,
-    //   );
-    //   return;
-    // }
+    if (image == null) {
+      customSnackBar(
+        'Please select an image',
+        '',
+        snackType: SnackBarType.error,
+      );
+      return;
+    }
     loading = true;
     update();
 
@@ -124,6 +125,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
       'GridView',
       true,
       true,
+      image!,
     );
 
     // معالجة الاستجابة

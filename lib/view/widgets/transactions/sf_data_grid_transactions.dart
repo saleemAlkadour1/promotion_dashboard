@@ -19,19 +19,25 @@ class SFDataGridTransactions extends StatelessWidget {
     return GetBuilder<TransactionsManagementControllerImp>(
         builder: (controller) {
       TransactionsDataSource transactionsDataSource = TransactionsDataSource(
-        transactions: controller.transactions!,
-        custombuildRow: (row, isEvenRow) {
-          final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
+        transactions: controller.filteredTrnsactions!,
+        custombuildRow: (row, index) {
+          final color = index % 2 == 0 ? const Color(0xFFF9F9F9) : Colors.white;
+          String type = controller.transactions![index].type;
           return DataGridRowAdapter(
             color: color,
             cells: row.getCells().map<Widget>((cell) {
+              if (cell.columnName == 'Actions' &&
+                  cell.value is TransactionModel) {
+                final transaction = cell.value as TransactionModel;
+                type = transaction.type;
+              }
               if (cell.columnName == 'Actions') {
                 return Container(
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {
@@ -47,26 +53,14 @@ class SFDataGridTransactions extends StatelessWidget {
                       ],
                     ));
               }
-              if (cell.columnName == 'Type') {
-                return Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    cell.value.toString(),
-                    style: MyText.appStyle.fs16.wMedium
-                        .reCustomColor(cell.value == 'out'
-                            ? AppColors.green
-                            : AppColors.red)
-                        .responsiveStyle(context),
-                  ),
-                );
-              }
               return Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   cell.value.toString(),
-                  style: MyText.appStyle.fs16.wMedium.reColorText
+                  style: MyText.appStyle.fs16.wMedium
+                      .reCustomColor(
+                          type == 'out' ? AppColors.green : AppColors.red)
                       .responsiveStyle(context),
                 ),
               );

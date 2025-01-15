@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_dashboard/core/constants/app_colors.dart';
 
 class HandlingDataView {
   final bool loading;
@@ -10,11 +11,14 @@ class HandlingDataView {
     required this.loading,
     required this.dataIsEmpty,
   })  : isValid = (loading && dataIsEmpty) || dataIsEmpty,
-        response = (loading && dataIsEmpty) || dataIsEmpty ? _buildResponse(loading, dataIsEmpty) : null;
+        response = (loading && dataIsEmpty) || dataIsEmpty
+            ? _buildResponse(loading, dataIsEmpty)
+            : null;
 
   static Widget _buildResponse(bool loading, bool dataIsEmpty) {
     if (loading && dataIsEmpty) {
       return Scaffold(
+        backgroundColor: AppColors.screenColor,
         appBar: AppBar(),
         body: const Center(
           child: CircularProgressIndicator(),
@@ -22,6 +26,7 @@ class HandlingDataView {
       );
     } else if (dataIsEmpty) {
       return Scaffold(
+        backgroundColor: AppColors.screenColor,
         appBar: AppBar(),
         body: const Center(
           child: Text(

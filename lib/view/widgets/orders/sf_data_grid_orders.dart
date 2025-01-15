@@ -18,7 +18,7 @@ class SFDataGridOrders extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<OrdersManagementControllerImp>(builder: (controller) {
       OrdersDataSource ordersDataSource = OrdersDataSource(
-        orders: controller.orders!,
+        orders: controller.filteredOrders!,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -30,7 +30,7 @@ class SFDataGridOrders extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomIconSvg(
+                        CustomIcon(
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {

@@ -4,8 +4,11 @@ import 'package:promotion_dashboard/data/resource/remote/home/transactions_data.
 import 'package:promotion_dashboard/view/widgets/transactions/transactions_details_dialog.dart';
 
 abstract class TransactionsManagementController extends GetxController {
+  String? typeValue = 'All';
   Future<void> getTransactionsData();
   Future<void> showTransaction(int id);
+  void updateTypeValue(String value);
+  void filterTransactions();
 }
 
 class TransactionsManagementControllerImp
@@ -14,10 +17,13 @@ class TransactionsManagementControllerImp
   TransactionModel? transactionModel;
   TransactionsData transactionsData = TransactionsData();
   List<TransactionModel>? transactions;
+  List<TransactionModel>? filteredTrnsactions;
+
   @override
   void onInit() {
     super.onInit();
     getTransactionsData();
+    filteredTrnsactions = transactions;
   }
 
   @override
@@ -28,6 +34,8 @@ class TransactionsManagementControllerImp
     if (response.isSuccess) {
       transactions = List.generate(response.data.length,
           (index) => TransactionModel.fromJson(response.data[index]));
+      filteredTrnsactions = transactions;
+
       update();
     }
     loading = false;
@@ -58,6 +66,24 @@ class TransactionsManagementControllerImp
         ),
       );
       update();
+    }
+  }
+
+  @override
+  void updateTypeValue(String value) {
+    typeValue = value;
+    filterTransactions();
+    update();
+  }
+
+  @override
+  void filterTransactions() {
+    if (typeValue == 'All') {
+      filteredTrnsactions = transactions;
+    } else {
+      filteredTrnsactions = transactions
+          ?.where((transaction) => transaction.type == typeValue!.toLowerCase())
+          .toList();
     }
   }
 }

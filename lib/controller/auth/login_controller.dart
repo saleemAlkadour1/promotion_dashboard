@@ -9,11 +9,10 @@ import 'package:promotion_dashboard/data/resource/remote/auth/auth_data.dart';
 abstract class LoginController extends GetxController {
   void login();
   void toggleRememberMe(bool? value);
-  void showPassword();
+  void togglePasswordVisibility();
 }
 
 class LoginControllerImp extends LoginController {
-  //The fields
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
 
@@ -60,21 +59,15 @@ class LoginControllerImp extends LoginController {
   }
 
   @override
+  void togglePasswordVisibility() {
+    isSeenPassword = !isSeenPassword;
+    update();
+  }
+
+  @override
   void onClose() {
     email.dispose();
     password.dispose();
     super.onClose();
-  }
-
-  @override
-  void showPassword() {
-    if (isSeenPassword == false) {
-      isSeenPassword = true;
-      update();
-    }
-    if (isSeenPassword == true) {
-      isSeenPassword = false;
-      update();
-    }
   }
 }
