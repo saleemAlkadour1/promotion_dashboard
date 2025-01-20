@@ -6,7 +6,7 @@ class TransactionModel {
   final String type;
   final int userId;
   final String description;
-  final Map<String, dynamic> metadata;
+  final dynamic metadata;
   final DateTime createdAt;
   final DateTime updatedAt;
   final User user;

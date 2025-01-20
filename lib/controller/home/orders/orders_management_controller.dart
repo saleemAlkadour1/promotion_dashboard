@@ -22,8 +22,8 @@ class OrdersManagementControllerImp extends OrdersManagementController {
   }
 
   OrdersData ordersData = OrdersData();
-  List<OrderModel>? orders;
-  List<OrderModel>? filteredOrders;
+  List<OrderModel> orders = [];
+  List<OrderModel> filteredOrders = [];
 
   @override
   Future<void> getOrdersData() async {
@@ -81,7 +81,7 @@ class OrdersManagementControllerImp extends OrdersManagementController {
       filteredOrders = orders;
     } else {
       filteredOrders = orders
-          ?.where((order) => order.status == statusValue!.toLowerCase())
+          .where((order) => order.status == statusValue!.toLowerCase())
           .toList();
     }
   }

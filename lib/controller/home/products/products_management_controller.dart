@@ -18,8 +18,8 @@ class ProductsManagementControllerImp extends ProductsManagementController {
   bool loading = false;
   ProductModel? productModel;
   ProductsData productData = ProductsData();
-  List<ProductModel>? products;
-  List<ProductModel>? filteredProducts;
+  List<ProductModel> products = [];
+  List<ProductModel> filteredProducts = [];
   @override
   void onInit() {
     super.onInit();
@@ -110,7 +110,7 @@ class ProductsManagementControllerImp extends ProductsManagementController {
       filteredProducts = products;
     } else {
       filteredProducts =
-          products?.where((product) => product.type == typeValue).toList();
+          products.where((product) => product.type == typeValue).toList();
     }
   }
 }

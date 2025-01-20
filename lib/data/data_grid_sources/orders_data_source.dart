@@ -5,19 +5,23 @@ class OrdersDataSource extends DataGridSource {
   OrdersDataSource(
       {required this.custombuildRow, required List<OrderModel> orders}) {
     _orders = orders;
-    buildPaginatedData();
+    pagainatedOrders = _orders
+        .getRange(0, orders.length >= 9 ? 9 : orders.length)
+        .toList(growable: false);
+    buildPaginatedDataGridRows();
   }
 
   final DataGridRowAdapter Function(DataGridRow row, bool isEvenRow)
       custombuildRow;
-  late List<OrderModel> _orders;
-  List<DataGridRow> paginatedRows = [];
   int rowsPerPage = 10;
 
-  void buildPaginatedData({int startIndex = 0}) {
-    paginatedRows = _orders
-        .skip(startIndex)
-        .take(rowsPerPage)
+  List<OrderModel> _orders = [];
+  List<OrderModel> pagainatedOrders = [];
+
+  List<DataGridRow> dataGridRows = [];
+
+  void buildPaginatedDataGridRows() {
+    dataGridRows = pagainatedOrders
         .map<DataGridRow>((order) => DataGridRow(cells: [
               DataGridCell<String>(
                   columnName: 'ID', value: order.id.toString()),
@@ -31,16 +35,34 @@ class OrdersDataSource extends DataGridSource {
               DataGridCell<OrderModel>(columnName: 'Actions', value: order),
             ]))
         .toList();
-    notifyListeners();
   }
 
   @override
-  List<DataGridRow> get rows => paginatedRows;
+  List<DataGridRow> get rows => dataGridRows;
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
     bool isEvenRow = rows.indexOf(row) % 2 == 0;
 
     return custombuildRow(row, isEvenRow);
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    int startIndex = newPageIndex * rowsPerPage;
+    int endIndex = (startIndex + rowsPerPage).clamp(0, _orders.length);
+
+    if (startIndex < _orders.length) {
+      pagainatedOrders =
+          _orders.getRange(startIndex, endIndex).toList(growable: false);
+
+      buildPaginatedDataGridRows();
+
+      notifyListeners();
+    } else {
+      pagainatedOrders = [];
+    }
+
+    return true;
   }
 }

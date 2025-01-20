@@ -8,17 +8,21 @@ class DrawerItem extends StatelessWidget {
     super.key,
     this.onTap,
     required this.isActive,
-    required this.imagePath,
+    this.imagePath,
     this.activeIconColor,
     this.inActiveIconColor,
     required this.title,
+    this.isSvg = true,
+    this.icon,
   });
   final String title;
-  final String imagePath;
+  final String? imagePath;
   final Color? activeIconColor;
   final Color? inActiveIconColor;
   final Function()? onTap;
   final bool isActive;
+  final bool? isSvg;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +31,26 @@ class DrawerItem extends StatelessWidget {
       child: ListTile(
         leading: MouseRegion(
           cursor: SystemMouseCursors.click,
-          child: SvgPicture.asset(
-            imagePath,
-            width: 20,
-            height: 20,
-            colorFilter: isActive
-                ? ColorFilter.mode(
-                    activeIconColor ?? AppColors.color_4EB7F2, BlendMode.srcIn)
-                : ColorFilter.mode(inActiveIconColor ?? AppColors.color_064061,
-                    BlendMode.srcIn),
-          ),
+          child: isSvg == true
+              ? SvgPicture.asset(
+                  imagePath!,
+                  width: 20,
+                  height: 20,
+                  colorFilter: isActive
+                      ? ColorFilter.mode(
+                          activeIconColor ?? AppColors.color_4EB7F2,
+                          BlendMode.srcIn)
+                      : ColorFilter.mode(
+                          inActiveIconColor ?? AppColors.color_064061,
+                          BlendMode.srcIn),
+                )
+              : Icon(
+                  icon,
+                  size: 20,
+                  color: isActive
+                      ? (activeIconColor ?? AppColors.color_4EB7F2)
+                      : (inActiveIconColor ?? AppColors.color_064061),
+                ),
         ),
         title: FittedBox(
           fit: BoxFit.scaleDown,

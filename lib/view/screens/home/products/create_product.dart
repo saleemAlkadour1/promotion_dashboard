@@ -112,9 +112,9 @@ class CreateProduct extends StatelessWidget {
                                   children: [
                                     Text("Type: ${item['type']}"),
                                     Text(
-                                        "Label English: ${item['label_english']}"),
+                                        "Label English: ${item['label']['en']}"),
                                     Text(
-                                        "Label Arabic: ${item['label_arabic']}"),
+                                        "Label Arabic: ${item['label']['ar']}"),
                                   ],
                                 ),
                                 trailing: IconButton(

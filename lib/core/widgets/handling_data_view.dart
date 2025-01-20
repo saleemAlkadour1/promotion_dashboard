@@ -21,7 +21,9 @@ class HandlingDataView {
         backgroundColor: AppColors.screenColor,
         appBar: AppBar(),
         body: const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: AppColors.color_4EB7F2,
+          ),
         ),
       );
     } else if (dataIsEmpty) {

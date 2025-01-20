@@ -6,18 +6,22 @@ class TransactionsDataSource extends DataGridSource {
       {required this.custombuildRow,
       required List<TransactionModel> transactions}) {
     _transactions = transactions;
-    buildPaginatedData();
+    pagainatedTransactions = _transactions
+        .getRange(0, transactions.length >= 9 ? 9 : transactions.length)
+        .toList(growable: false);
+    buildPaginatedDataGridRows();
   }
 
   final DataGridRowAdapter Function(DataGridRow row, int index) custombuildRow;
-  late List<TransactionModel> _transactions;
-  List<DataGridRow> paginatedRows = [];
   int rowsPerPage = 10;
 
-  void buildPaginatedData({int startIndex = 0}) {
-    paginatedRows = _transactions
-        .skip(startIndex)
-        .take(rowsPerPage)
+  List<TransactionModel> _transactions = [];
+  List<TransactionModel> pagainatedTransactions = [];
+
+  List<DataGridRow> dataGridRows = [];
+
+  void buildPaginatedDataGridRows() {
+    dataGridRows = pagainatedTransactions
         .map<DataGridRow>((transaction) => DataGridRow(cells: [
               DataGridCell<String>(
                   columnName: 'ID', value: transaction.id.toString()),
@@ -31,16 +35,34 @@ class TransactionsDataSource extends DataGridSource {
                   columnName: 'Actions', value: transaction),
             ]))
         .toList();
-    notifyListeners();
   }
 
   @override
-  List<DataGridRow> get rows => paginatedRows;
+  List<DataGridRow> get rows => dataGridRows;
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
     int index = rows.indexOf(row);
 
     return custombuildRow(row, index);
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    int startIndex = newPageIndex * rowsPerPage;
+    int endIndex = (startIndex + rowsPerPage).clamp(0, _transactions.length);
+
+    if (startIndex < _transactions.length) {
+      pagainatedTransactions =
+          _transactions.getRange(startIndex, endIndex).toList(growable: false);
+
+      buildPaginatedDataGridRows();
+
+      notifyListeners();
+    } else {
+      pagainatedTransactions = [];
+    }
+
+    return true;
   }
 }

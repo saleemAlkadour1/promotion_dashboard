@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/orders/orders_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/orders/sf_data_grid_orders.dart';
 
@@ -14,13 +13,6 @@ class OrdersManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(OrdersManagementControllerImp());
     return GetBuilder<OrdersManagementControllerImp>(builder: (controller) {
-      var res = HandlingDataView(
-        loading: controller.loading,
-        dataIsEmpty: controller.orders == null,
-      );
-      if (res.isValid) {
-        return res.response!;
-      }
       return Scaffold(
         backgroundColor: AppColors.screenColor,
         body: SafeArea(
@@ -42,7 +34,7 @@ class OrdersManagement extends StatelessWidget {
                       child: CustomDropdown(
                         label: 'Status',
                         value: controller.statusValue,
-                        items: [
+                        items: const [
                           'All',
                           'execute',
                           'canceled',

@@ -7,6 +7,7 @@ import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
+import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/categories_data_source.dart';
 import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
@@ -21,8 +22,15 @@ class SFDataGridCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(CategoriesManagementControllerImp());
     return GetBuilder<CategoriesManagementControllerImp>(builder: (controller) {
+      var res = HandlingDataView(
+        loading: controller.loading,
+        dataIsEmpty: controller.filteredCategories.isEmpty,
+      );
+      if (res.isValid) {
+        return res.response!;
+      }
       CategoriesDataSource categoriesDataSource = CategoriesDataSource(
-        categories: controller.filteredCategories!,
+        categories: controller.filteredCategories,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -96,74 +104,89 @@ class SFDataGridCategories extends StatelessWidget {
           );
         },
       );
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Stack(
         children: [
-          Expanded(
-            child: SfDataGrid(
-              gridLinesVisibility: GridLinesVisibility.none,
-              headerGridLinesVisibility: GridLinesVisibility.none,
-              source: categoriesDataSource,
-              columnWidthMode: MediaQuery.sizeOf(context).width <= 475
-                  ? ColumnWidthMode.auto
-                  : ColumnWidthMode.fill,
-              columnSizer: ColumnSizer(),
-              rowsPerPage: 10,
-              columns: [
-                GridColumn(
-                  columnName: 'ID',
-                  label: Container(
-                      color: AppColors.white,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'ID',
-                        style: MyText.appStyle.fs16.wBold.reColorText
-                            .responsiveStyle(context),
-                      )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SfDataGrid(
+                  gridLinesVisibility: GridLinesVisibility.none,
+                  headerGridLinesVisibility: GridLinesVisibility.none,
+                  source: categoriesDataSource,
+                  columnWidthMode: MediaQuery.sizeOf(context).width <= 475
+                      ? ColumnWidthMode.auto
+                      : ColumnWidthMode.fill,
+                  columnSizer: ColumnSizer(),
+                  rowsPerPage: 10,
+                  columns: [
+                    GridColumn(
+                      columnName: 'ID',
+                      label: Container(
+                          color: AppColors.white,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'ID',
+                            style: MyText.appStyle.fs16.wBold.reColorText
+                                .responsiveStyle(context),
+                          )),
+                    ),
+                    GridColumn(
+                      columnName: 'Name',
+                      label: Container(
+                          color: AppColors.white,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Name',
+                            style: MyText.appStyle.fs16.wBold.reColorText
+                                .responsiveStyle(context),
+                          )),
+                    ),
+                    GridColumn(
+                      columnName: 'Description',
+                      label: Container(
+                          color: AppColors.white,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Description',
+                            style: MyText.appStyle.fs16.wBold.reColorText
+                                .responsiveStyle(context),
+                          )),
+                    ),
+                    GridColumn(
+                      columnName: 'Actions',
+                      label: Container(
+                          color: AppColors.white,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Actions',
+                            style: MyText.appStyle.fs16.wBold.reColorText
+                                .responsiveStyle(context),
+                          )),
+                    ),
+                  ],
                 ),
-                GridColumn(
-                  columnName: 'Name',
-                  label: Container(
-                      color: AppColors.white,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Name',
-                        style: MyText.appStyle.fs16.wBold.reColorText
-                            .responsiveStyle(context),
-                      )),
-                ),
-                GridColumn(
-                  columnName: 'Description',
-                  label: Container(
-                      color: AppColors.white,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Description',
-                        style: MyText.appStyle.fs16.wBold.reColorText
-                            .responsiveStyle(context),
-                      )),
-                ),
-                GridColumn(
-                  columnName: 'Actions',
-                  label: Container(
-                      color: AppColors.white,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Actions',
-                        style: MyText.appStyle.fs16.wBold.reColorText
-                            .responsiveStyle(context),
-                      )),
-                ),
-              ],
-            ),
+              ),
+              ResponsiveSfDataPager(
+                  dataSource: categoriesDataSource,
+                  onPageNavigationStart: (pageIndex) {
+                    controller.loading = true;
+                    controller.update();
+                  },
+                  onPageNavigationEnd: (pageIndex) {
+                    controller.loading = false;
+                    controller.update();
+                  },
+                  rowsPerPage: 10,
+                  length: controller.filteredCategories.length),
+            ],
           ),
-          ResponsiveSfDataPager(
-              dataSource: categoriesDataSource,
-              buildPaginatedData: (startIndex) {
-                categoriesDataSource.buildPaginatedData(startIndex: startIndex);
-              },
-              rowsPerPage: 10,
-              length: controller.categories!.length),
+          if (controller.loading)
+            const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.color_4EB7F2,
+              ),
+            )
         ],
       );
     });

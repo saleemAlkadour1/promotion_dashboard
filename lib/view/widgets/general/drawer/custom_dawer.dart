@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/general/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
 import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
+import 'package:promotion_dashboard/view/screens/home/notifications/notifications_management.dart';
 import 'package:promotion_dashboard/view/screens/home/orders/orders_management.dart';
 import 'package:promotion_dashboard/view/screens/home/products/products_management.dart';
 import 'package:promotion_dashboard/view/screens/home/transactions/transactions_management.dart';
@@ -98,6 +100,18 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
+                    title: 'Users',
+                    isSvg: false,
+                    icon: FontAwesomeIcons.user,
+                    isActive:
+                        controller.selectedIndex == DrawerItems.users.value
+                            ? true
+                            : false,
+                    onTap: () {
+                      controller.updateIndex(DrawerItems.users.value);
+                    },
+                  ),
+                  DrawerItem(
                     title: 'Notifications',
                     imagePath: Assets.imagesSvgNotifications,
                     isActive: controller.selectedIndex ==
@@ -117,16 +131,6 @@ class CustomDawer extends StatelessWidget {
                             : false,
                     onTap: () {
                       controller.updateIndex(DrawerItems.chats.value);
-                    },
-                  ),
-                  DrawerItem(
-                    title: 'FQA',
-                    imagePath: Assets.imagesSvgFqa,
-                    isActive: controller.selectedIndex == DrawerItems.faq.value
-                        ? true
-                        : false,
-                    onTap: () {
-                      controller.updateIndex(DrawerItems.faq.value);
                     },
                   ),
                   DrawerItem(
@@ -169,9 +173,9 @@ enum DrawerItems {
   productsManagement(2, ProductsManagement()),
   orders(3, OrdersManagement()),
   transactions(4, TransactionsManagement()),
-  chats(5, Chats()),
-  notifications(6, SizedBox()),
-  faq(7, SizedBox()),
+  users(5, SizedBox()),
+  notifications(6, NotificationsManagement()),
+  chats(7, Chats()),
   settings(8, SizedBox());
 
   final int value;

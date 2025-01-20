@@ -11,6 +11,8 @@ abstract class DrawerController extends GetxController {
 }
 
 class DrawerControllerImp extends DrawerController {
+  int previousIndex = 0;
+
   int selectedIndex = 0;
   UserModel? user;
 
@@ -22,6 +24,7 @@ class DrawerControllerImp extends DrawerController {
 
   final HomeControllerImp homeController = Get.find<HomeControllerImp>();
   AuthData authData = AuthData();
+
   void updateIndex(int index) {
     if (selectedIndex != index) {
       selectedIndex = index;

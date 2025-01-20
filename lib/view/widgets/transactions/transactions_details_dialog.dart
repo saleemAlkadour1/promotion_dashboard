@@ -63,24 +63,6 @@ class TransactionDetailsDialog extends StatelessWidget {
                         'Description', transactionModel.description, context),
                     const SizedBox(height: 12),
 
-                    // Metadata
-                    const Text(
-                      'Metadata:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...transactionModel.metadata.entries.map(
-                      (entry) => _buildLabelValueRow(
-                        entry.key,
-                        entry.value.toString(),
-                        context,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
                     // Dates
                     _buildLabelValueRow(
                       'Created At',

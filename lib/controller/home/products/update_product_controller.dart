@@ -89,8 +89,12 @@ class UpdateProductControllerImp extends UpdateProductController {
       );
 
       if (categories != null) {
-        categoriesName =
-            categories!.map((category) => category.name.en!).toSet().toList();
+        categoriesName = categories!
+            .map((category) => category.name.en!.isNotEmpty
+                ? category.name.en!
+                : category.name.ar!)
+            .toSet()
+            .toList();
       }
 
       if (!categoriesName.contains(categoryValue)) {
@@ -169,7 +173,7 @@ class UpdateProductControllerImp extends UpdateProductController {
   void updateCategoryValue(String value) {
     categoryValue = value;
     for (final category in categories ?? []) {
-      if (category.name.en == value) {
+      if (category.name.en == value || category.name.ar == value) {
         categoryId = category.id;
         break;
       }
@@ -268,7 +272,7 @@ Map getValues(List<TextEditingController> controllers, Map categoryData) {
 
   for (var i = 0; i < myLanguages.length; i++) {
     controllers[i].text =
-        categoryData[myLanguages.entries.toList()[i].key] ?? '';
+        (categoryData[myLanguages.entries.toList()[i].key] ?? '').toString();
   }
 
   return data;

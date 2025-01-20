@@ -4,7 +4,6 @@ import 'package:promotion_dashboard/controller/home/products/products_management
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
-import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
@@ -17,13 +16,6 @@ class ProductsManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(ProductsManagementControllerImp());
     return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
-      var res = HandlingDataView(
-        loading: controller.loading,
-        dataIsEmpty: controller.products == null,
-      );
-      if (res.isValid) {
-        return res.response!;
-      }
       return Scaffold(
         backgroundColor: AppColors.screenColor,
         body: SafeArea(

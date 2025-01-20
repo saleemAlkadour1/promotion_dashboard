@@ -8,7 +8,7 @@ import 'package:promotion_dashboard/view/widgets/categories/categories_details_d
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 abstract class CategoriesManagementController extends GetxController {
-  getPCategoriesData();
+  Future<void> getPCategoriesData();
   Future<void> deleteCategory(int id);
   late DataPagerController dataPagerController;
   late TextEditingController searchController;
@@ -16,7 +16,7 @@ abstract class CategoriesManagementController extends GetxController {
 }
 
 class CategoriesManagementControllerImp extends CategoriesManagementController {
-  List<CategoryModel>? filteredCategories;
+  List<CategoryModel> filteredCategories = [];
 
   bool loading = false;
   @override
@@ -30,10 +30,10 @@ class CategoriesManagementControllerImp extends CategoriesManagementController {
   }
 
   CategoriesData categoriesData = CategoriesData();
-  List<CategoryModel>? categories;
+  List<CategoryModel> categories = [];
   CategoryModel? categoryModel;
   @override
-  getPCategoriesData() async {
+  Future<void> getPCategoriesData() async {
     loading = true;
     update();
     var response = await categoriesData.get();
@@ -111,7 +111,7 @@ class CategoriesManagementControllerImp extends CategoriesManagementController {
       filteredCategories = categories;
     } else {
       filteredCategories = categories
-          ?.where((category) =>
+          .where((category) =>
               category.name.en!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }

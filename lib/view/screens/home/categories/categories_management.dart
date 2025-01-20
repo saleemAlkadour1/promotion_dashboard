@@ -4,7 +4,6 @@ import 'package:promotion_dashboard/controller/home/categories/categories_manage
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
-import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/categories/sf_data_grid_categories.dart'; // Ensure this import is correct and the file exists
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
@@ -16,13 +15,6 @@ class CategoriesManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(CategoriesManagementControllerImp());
     return GetBuilder<CategoriesManagementControllerImp>(builder: (controller) {
-      var res = HandlingDataView(
-        loading: controller.loading,
-        dataIsEmpty: controller.categories == null,
-      );
-      if (res.isValid) {
-        return res.response!;
-      }
       return Scaffold(
         backgroundColor: AppColors.screenColor,
         body: SafeArea(

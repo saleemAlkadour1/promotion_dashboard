@@ -328,9 +328,12 @@ class CreateProductControllerImp extends CreateProductController {
       return;
     } else {
       inputs.add({
+        'label': {
+          'en': labelController.text,
+          'ar': valueController.text,
+        },
         'type': typeManualLabelValue,
-        'label_english': labelController.text,
-        'label_arabic': valueController.text,
+        'required': 1,
       });
     }
 

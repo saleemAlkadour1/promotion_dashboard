@@ -17,80 +17,87 @@ class OrderDetailsDialog extends StatelessWidget {
       child: Container(
         width: isMobile ? double.infinity : 600,
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with close button
-              _buildHeader(context),
-              const SizedBox(height: 8),
-              const Divider(),
-              const SizedBox(height: 8),
+        child: Column(
+          children: [
+            // Header with close button
+            _buildHeader(context),
+            const SizedBox(height: 8),
+            const Divider(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
 
-              // Order Details
-              _buildSectionTitle("Order Info", Icons.shopping_cart),
-              _buildDetailRow("Order ID", orderModel.id.toString()),
-              _buildDetailRow("Description", orderModel.description),
-              _buildDetailRow("Purchase Price", orderModel.purchasePrice),
-              _buildDetailRow("Sale Price", orderModel.salePrice),
-              _buildDetailRow("Status", orderModel.status),
-              _buildDetailRow("Created At", orderModel.createdAt),
-              const SizedBox(height: 16),
+                    // Order Details
+                    _buildSectionTitle("Order Info", Icons.shopping_cart),
+                    _buildDetailRow("Order ID", orderModel.id.toString()),
+                    _buildDetailRow("Description", orderModel.description),
+                    _buildDetailRow("Purchase Price", orderModel.purchasePrice),
+                    _buildDetailRow("Sale Price", orderModel.salePrice),
+                    _buildDetailRow("Status", orderModel.status),
+                    _buildDetailRow("Created At", orderModel.createdAt),
+                    const SizedBox(height: 16),
 
-              // Product Details
-              _buildSectionTitle(
-                  "Product Info", Icons.production_quantity_limits),
-              _buildDetailRow("Product Name", orderModel.product.type),
-              _buildDetailRow(
-                  "Product Purchase Price", orderModel.product.purchasePrice),
-              _buildDetailRow("Category", orderModel.product.category.nameEn),
-              const SizedBox(height: 16),
+                    // Product Details
+                    _buildSectionTitle(
+                        "Product Info", Icons.production_quantity_limits),
+                    _buildDetailRow("Product Name", orderModel.product.type),
+                    _buildDetailRow("Product Purchase Price",
+                        orderModel.product.purchasePrice),
+                    _buildDetailRow(
+                        "Category", orderModel.product.category.nameEn),
+                    const SizedBox(height: 16),
 
-              // User Details
-              _buildSectionTitle("User Info", Icons.person),
-              _buildDetailRow("User Name", orderModel.user.firstName),
-              _buildDetailRow("Email", orderModel.user.email),
-              _buildDetailRow("Phone", orderModel.user.phone),
-              _buildDetailRow(
-                  "Wallet Balance", orderModel.user.walletBalance.toString()),
-              const SizedBox(height: 16),
+                    // User Details
+                    _buildSectionTitle("User Info", Icons.person),
+                    _buildDetailRow("User Name", orderModel.user.firstName),
+                    _buildDetailRow("Email", orderModel.user.email),
+                    _buildDetailRow("Phone", orderModel.user.phone),
+                    _buildDetailRow("Wallet Balance",
+                        orderModel.user.walletBalance.toString()),
+                    const SizedBox(height: 16),
 
-              // Metadata Details
-              if (orderModel.metadata != null &&
-                  orderModel.metadata is Map) ...[
-                _buildSectionTitle("Additional Info", Icons.info),
-                _buildDetailRow(
-                  "Server Name",
-                  orderModel.metadata['server_name'] is String
-                      ? orderModel.metadata['server_name']
-                      : 'N/A',
+                    // Metadata Details
+                    if (orderModel.metadata != null &&
+                        orderModel.metadata is Map) ...[
+                      _buildSectionTitle("Additional Info", Icons.info),
+                      _buildDetailRow(
+                        "Server Name",
+                        orderModel.metadata['server_name'] is String
+                            ? orderModel.metadata['server_name']
+                            : 'N/A',
+                      ),
+                      if (orderModel.metadata['data'] != null &&
+                          orderModel.metadata['data'] is Map) ...[
+                        _buildDetailRow(
+                          "Country",
+                          orderModel.metadata['data']['country'] is String
+                              ? orderModel.metadata['data']['country']
+                              : 'N/A',
+                        ),
+                        _buildDetailRow(
+                          "Product",
+                          orderModel.metadata['data']['product'] is String
+                              ? orderModel.metadata['data']['product']
+                              : 'N/A',
+                        ),
+                        _buildDetailRow(
+                          "Operator",
+                          orderModel.metadata['data']['operator'] is String
+                              ? orderModel.metadata['data']['operator']
+                              : 'N/A',
+                        ),
+                      ] else
+                        const SizedBox(),
+                    ] else
+                      const SizedBox()
+                  ],
                 ),
-                if (orderModel.metadata['data'] != null &&
-                    orderModel.metadata['data'] is Map) ...[
-                  _buildDetailRow(
-                    "Country",
-                    orderModel.metadata['data']['country'] is String
-                        ? orderModel.metadata['data']['country']
-                        : 'N/A',
-                  ),
-                  _buildDetailRow(
-                    "Product",
-                    orderModel.metadata['data']['product'] is String
-                        ? orderModel.metadata['data']['product']
-                        : 'N/A',
-                  ),
-                  _buildDetailRow(
-                    "Operator",
-                    orderModel.metadata['data']['operator'] is String
-                        ? orderModel.metadata['data']['operator']
-                        : 'N/A',
-                  ),
-                ] else
-                  const SizedBox(),
-              ] else
-                const SizedBox()
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );

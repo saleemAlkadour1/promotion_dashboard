@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/transactions/transactions_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/transactions/sf_data_grid_transactions.dart';
 
@@ -15,13 +14,6 @@ class TransactionsManagement extends StatelessWidget {
     Get.put(TransactionsManagementControllerImp());
     return GetBuilder<TransactionsManagementControllerImp>(
         builder: (controller) {
-      var res = HandlingDataView(
-        loading: controller.loading,
-        dataIsEmpty: controller.transactions == null,
-      );
-      if (res.isValid) {
-        return res.response!;
-      }
       return Scaffold(
         backgroundColor: AppColors.screenColor,
         body: SafeArea(

@@ -16,8 +16,8 @@ class TransactionsManagementControllerImp
   bool loading = false;
   TransactionModel? transactionModel;
   TransactionsData transactionsData = TransactionsData();
-  List<TransactionModel>? transactions;
-  List<TransactionModel>? filteredTrnsactions;
+  List<TransactionModel> transactions = [];
+  List<TransactionModel> filteredTrnsactions = [];
 
   @override
   void onInit() {
@@ -28,6 +28,7 @@ class TransactionsManagementControllerImp
 
   @override
   Future<void> getTransactionsData() async {
+    filteredTrnsactions = [];
     loading = true;
     update();
     var response = await transactionsData.get();
@@ -77,13 +78,18 @@ class TransactionsManagementControllerImp
   }
 
   @override
-  void filterTransactions() {
+  void filterTransactions() async {
+    loading = true;
+    update();
+    await getTransactionsData();
     if (typeValue == 'All') {
       filteredTrnsactions = transactions;
     } else {
       filteredTrnsactions = transactions
-          ?.where((transaction) => transaction.type == typeValue!.toLowerCase())
+          .where((transaction) => transaction.type == typeValue!.toLowerCase())
           .toList();
     }
+    loading = false;
+    update();
   }
 }

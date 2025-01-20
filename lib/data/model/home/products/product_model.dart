@@ -192,8 +192,8 @@ class Meta {
 }
 
 class Name {
-  final String? en;
-  final String? ar;
+  final dynamic en;
+  final dynamic ar;
 
   Name({this.en, this.ar});
 

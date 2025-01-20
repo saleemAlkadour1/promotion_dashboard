@@ -7,13 +7,15 @@ class ResponsiveSfDataPager extends StatelessWidget {
     required this.dataSource,
     required this.length,
     required this.rowsPerPage,
-    required this.buildPaginatedData,
+    required this.onPageNavigationStart,
+    required this.onPageNavigationEnd,
   });
 
   final DataGridSource dataSource;
   final int length;
   final int rowsPerPage;
-  final void Function(int startIndex) buildPaginatedData;
+  final void Function(int pageIndex) onPageNavigationStart;
+  final void Function(int pageIndex) onPageNavigationEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,6 @@ class ResponsiveSfDataPager extends StatelessWidget {
         final screenWidth = MediaQuery.sizeOf(context).width;
 
         if (screenWidth < 600) {
-          // إعدادات الشاشات الصغيرة
           return SfDataPager(
             itemPadding: EdgeInsets.zero,
             itemHeight: 40,
@@ -31,12 +32,11 @@ class ResponsiveSfDataPager extends StatelessWidget {
             navigationItemWidth: 40,
             visibleItemsCount: 1,
             delegate: dataSource,
-            initialPageIndex: 1,
-            pageCount: _calculatePageCount(),
-            onPageNavigationStart: buildPaginatedData,
+            pageCount: calculatePageCount(),
+            onPageNavigationStart: onPageNavigationStart,
+            onPageNavigationEnd: onPageNavigationEnd,
           );
         } else if (screenWidth < 1000) {
-          // إعدادات الشاشات المتوسطة
           return SfDataPager(
             itemPadding: EdgeInsets.zero,
             itemHeight: 50,
@@ -45,9 +45,9 @@ class ResponsiveSfDataPager extends StatelessWidget {
             navigationItemWidth: 50,
             visibleItemsCount: 5,
             delegate: dataSource,
-            initialPageIndex: 1,
-            pageCount: _calculatePageCount(),
-            onPageNavigationStart: buildPaginatedData,
+            pageCount: calculatePageCount(),
+            onPageNavigationStart: onPageNavigationStart,
+            onPageNavigationEnd: onPageNavigationEnd,
           );
         } else {
           // إعدادات الشاشات الكبيرة
@@ -62,9 +62,9 @@ class ResponsiveSfDataPager extends StatelessWidget {
                 navigationItemWidth: 50,
                 visibleItemsCount: 5,
                 delegate: dataSource,
-                initialPageIndex: 1,
-                pageCount: _calculatePageCount(),
-                onPageNavigationStart: buildPaginatedData,
+                pageCount: calculatePageCount(),
+                onPageNavigationStart: onPageNavigationStart,
+                onPageNavigationEnd: onPageNavigationEnd,
               ),
             ],
           );
@@ -73,8 +73,10 @@ class ResponsiveSfDataPager extends StatelessWidget {
     );
   }
 
-  // حساب عدد الصفحات
-  double _calculatePageCount() {
-    return length < rowsPerPage ? 1 : (length / rowsPerPage).ceilToDouble();
+  double calculatePageCount() {
+    return (length / rowsPerPage).ceilToDouble();
   }
 }
+
+
+// length < rowsPerPage ? 1 : 

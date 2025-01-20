@@ -10,6 +10,7 @@ final class EndPoints {
   static const Store store = Store();
   static const Order order = Order();
   static const Transaction transaction = Transaction();
+  static const Notification notification = Notification();
   static const Server server = Server();
 
   static const String baseApi = 'https://backend.promotion22.com/api';
@@ -61,6 +62,16 @@ final class Transaction {
 
   final String transactions = '${EndPoints.baseApi}/transactions';
   final String transaction = '${EndPoints.baseApi}/transactions/{id}';
+}
+
+@immutable
+final class Notification {
+  const Notification();
+
+  final String notifications = '${EndPoints.baseApi}/users/notifications';
+  final String notification = '${EndPoints.baseApi}/users/notifications/{id}';
+  final String markAsRead =
+      '${EndPoints.baseApi}/users/notifications/{id}/mark_read';
 }
 
 @immutable
