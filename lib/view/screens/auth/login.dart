@@ -66,6 +66,11 @@ class Login extends StatelessWidget {
                         // Password Field
                         LoginTextField(
                           controller: controller.password,
+                          validator: (value) => MyValidator.validate(
+                            value,
+                            type: ValidatorType.password,
+                            fieldName: 'the password',
+                          ),
                           isPassword: true,
                           isSeen: controller.isSeenPassword,
                           hintText: 'Password',

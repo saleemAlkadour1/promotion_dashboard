@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -21,14 +23,15 @@ class SFDataGridProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
       var res = HandlingDataView(
-        loading: controller.loading,
-        dataIsEmpty: controller.filteredProducts.isEmpty,
+        loading: controller.firstLoading,
+        dataIsEmpty: controller.products.isEmpty,
       );
       if (res.isValid) {
         return res.response!;
       }
       ProductsDataSource productsDataSource = ProductsDataSource(
         products: controller.filteredProducts,
+        rowsPerPage: controller.paganationDataModel.perPage,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -52,7 +55,9 @@ class SFDataGridProducts extends StatelessWidget {
                                   'product_id': cell.value.id?.toString() ?? '',
                                 },
                               );
-                              controller.getProductsData();
+                              await controller.getProductsData(
+                                  pageIndex: controller
+                                      .paganationDataModel.currentPage);
                             }
                           },
                         ),
@@ -130,75 +135,82 @@ class SFDataGridProducts extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: SfDataGrid(
-                  gridLinesVisibility: GridLinesVisibility.none,
-                  headerGridLinesVisibility: GridLinesVisibility.none,
-                  source: productsDataSource,
-                  columnWidthMode: MediaQuery.sizeOf(context).width <= 475
-                      ? ColumnWidthMode.auto
-                      : ColumnWidthMode.fill,
-                  columnSizer: ColumnSizer(),
-                  rowsPerPage: 10,
-                  columns: [
-                    GridColumn(
-                      columnName: 'ID',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'ID',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'Name',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Name',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'Visible',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Type',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'Actions',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Actions',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                  ],
-                ),
+                child: Builder(builder: (context) {
+                  var res = HandlingDataView(
+                    loading: controller.loading,
+                    dataIsEmpty: controller.filteredProducts.isEmpty,
+                  );
+                  if (res.isValid) {
+                    return res.response!;
+                  }
+                  return SfDataGrid(
+                    gridLinesVisibility: GridLinesVisibility.none,
+                    headerGridLinesVisibility: GridLinesVisibility.none,
+                    source: productsDataSource,
+                    columnWidthMode: MediaQuery.sizeOf(context).width <= 475
+                        ? ColumnWidthMode.auto
+                        : ColumnWidthMode.fill,
+                    columnSizer: ColumnSizer(),
+                    rowsPerPage: controller.paganationDataModel.perPage,
+                    columns: [
+                      GridColumn(
+                        columnName: 'ID',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ID',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Name',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Name',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Visible',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Type',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Actions',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Actions',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                    ],
+                  );
+                }),
               ),
               ResponsiveSfDataPager(
                   dataSource: productsDataSource,
-                  onPageNavigationStart: (pageIndex) {
-                    controller.loading = true;
+                  onPageNavigationStart: (pageIndex) {},
+                  onPageNavigationEnd: (pageIndex) async {
+                    log((pageIndex + 1).toString());
+                    await controller.getProductsData(pageIndex: pageIndex + 1);
                     controller.update();
                   },
-                  onPageNavigationEnd: (pageIndex) {
-                    controller.loading = false;
-                    controller.update();
-                  },
-                  rowsPerPage: 10,
-                  length: controller.products.length),
+                  rowsPerPage: controller.paganationDataModel.perPage,
+                  total: controller.paganationDataModel.total),
             ],
           ),
           if (controller.loading)

@@ -178,7 +178,7 @@ class SFDataGridCategories extends StatelessWidget {
                     controller.update();
                   },
                   rowsPerPage: 10,
-                  length: controller.filteredCategories.length),
+                  total: controller.filteredCategories.length),
             ],
           ),
           if (controller.loading)

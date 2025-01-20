@@ -53,7 +53,9 @@ class ProductsManagement extends StatelessWidget {
                         height: 45,
                         onPressed: () async {
                           await Get.toNamed(AppRoutes.createProduct);
-                          controller.getProductsData();
+                          await controller.getProductsData(
+                              pageIndex:
+                                  controller.paganationDataModel.currentPage);
                         }),
                   ],
                 ),

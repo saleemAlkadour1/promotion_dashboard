@@ -28,6 +28,7 @@ abstract class CreateCategoryController extends GetxController {
 
 class CreateCategoryControllerImp extends CreateCategoryController {
   CategoriesData categoriesData = CategoriesData();
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -69,6 +70,7 @@ class CreateCategoryControllerImp extends CreateCategoryController {
 
   @override
   Future<void> addCategory() async {
+    if (!formState.currentState!.validate()) return;
     if (image == null) {
       customSnackBar(
         'Please select an image',

@@ -172,7 +172,7 @@ class SFDataGridTransactions extends StatelessWidget {
                     controller.update();
                   },
                   rowsPerPage: 10,
-                  length: controller.transactions.length),
+                  total: controller.transactions.length),
             ],
           ),
           if (controller.loading)

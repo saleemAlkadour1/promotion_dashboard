@@ -1,13 +1,14 @@
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/functions/show_delete_confirmation_dialog.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
+import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
 import 'package:promotion_dashboard/view/widgets/products/products_details_dialog.dart';
 
 abstract class ProductsManagementController extends GetxController {
   String? typeValue = 'All';
-  Future<void> getProductsData();
+  Future<void> getProductsData({required int pageIndex});
   Future<void> deleteProduct(int id);
   Future<void> showProduct(int id);
   void updateTypeValue(String value);
@@ -16,28 +17,35 @@ abstract class ProductsManagementController extends GetxController {
 
 class ProductsManagementControllerImp extends ProductsManagementController {
   bool loading = false;
+  bool firstLoading = true;
   ProductModel? productModel;
   ProductsData productData = ProductsData();
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
+
+  PaganationDataModel paganationDataModel =
+      PaganationDataModel(currentPage: 1, lastPage: 4, perPage: 20, total: 20);
   @override
   void onInit() {
     super.onInit();
-    getProductsData();
-    filteredProducts = products;
+    getProductsData(pageIndex: 1);
+    filterProducts();
   }
 
   @override
-  Future<void> getProductsData() async {
+  Future<void> getProductsData({required int pageIndex}) async {
     loading = true;
+    firstLoading = true;
     update();
-    var response = await productData.get();
+    var response = await productData.get(pageIndex: pageIndex);
     if (response.isSuccess) {
       products = List.generate(response.data.length,
           (index) => ProductModel.fromJson(response.data[index]));
-      filteredProducts = products;
+      paganationDataModel = PaganationDataModel.fromJson(response.body['meta']);
+      filterProducts();
       update();
     }
+    firstLoading = false;
     loading = false;
 
     update();
@@ -82,7 +90,7 @@ class ProductsManagementControllerImp extends ProductsManagementController {
         update();
         var response = await productData.delete(id);
         if (response.isSuccess) {
-          getProductsData();
+          await getProductsData(pageIndex: paganationDataModel.currentPage);
           customSnackBar(
             '',
             response.message!,

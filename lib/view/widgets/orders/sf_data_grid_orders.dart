@@ -164,7 +164,7 @@ class SFDataGridOrders extends StatelessWidget {
                     controller.update();
                   },
                   rowsPerPage: 10,
-                  length: controller.orders.length),
+                  total: controller.orders.length),
             ],
           ),
           if (controller.loading)

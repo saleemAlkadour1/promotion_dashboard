@@ -7,10 +7,13 @@ import 'package:promotion_dashboard/routes/end_points.dart';
 
 class ProductsData {
   ApiService apiService = Get.find();
-  Future<ApiResponse> get() async {
+  Future<ApiResponse> get({required int pageIndex}) async {
     var response = await apiService.get(
       EndPoints.store.products,
-      params: {},
+      pathVariables: {},
+      params: {
+        'page': pageIndex,
+      },
     );
     return response;
   }

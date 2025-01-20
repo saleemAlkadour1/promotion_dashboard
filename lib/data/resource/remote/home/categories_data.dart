@@ -56,7 +56,7 @@ class CategoriesData {
     String productDisplayMethod,
     bool visible,
     bool available,
-    File image,
+    File? image,
   ) async {
     var response = await apiService.post(
       EndPoints.store.category,
@@ -70,9 +70,11 @@ class CategoriesData {
         'visible': visible ? 1 : 0,
         'available': available ? 1 : 0,
       },
-      files: {
-        'image': image,
-      },
+      files: image != null
+          ? {
+              'image': image,
+            }
+          : null,
     );
     return response;
   }

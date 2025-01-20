@@ -37,6 +37,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
   CategoryModel? categoryModel;
   bool isImageFind = true;
   CategoriesData categoriesData = CategoriesData();
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -105,7 +106,9 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
 
   @override
   Future<void> updateCategory() async {
-    if (image == null) {
+    if (!formState.currentState!.validate()) return;
+
+    if (image == null && isImageFind == false) {
       customSnackBar(
         'Please select an image',
         '',
@@ -124,7 +127,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
       'GridView',
       true,
       true,
-      image!,
+      isImageFind ? null : image!,
     );
 
     // معالجة الاستجابة
