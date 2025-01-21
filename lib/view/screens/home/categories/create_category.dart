@@ -118,6 +118,13 @@ class CreateCategory extends StatelessWidget {
 
                     const SizedBox(height: 16.0),
 
+                    CustomDropdown(
+                      label: 'Display method ',
+                      value: controller.displayMethodValue,
+                      items: const ['GridView', 'ListTile'],
+                      onChanged: controller.updateDisplayMethodValue,
+                    ),
+                    const SizedBox(height: 16.0),
                     // Visible Dropdown
                     CustomDropdown(
                       label: 'Visible',

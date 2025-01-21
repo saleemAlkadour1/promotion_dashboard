@@ -30,7 +30,7 @@ class CategoriesData {
   Future<ApiResponse> create(
     Map name,
     Map description,
-    String productDisplayMethod,
+    String displayMethod,
     bool visible,
     bool available,
     File image,
@@ -40,7 +40,7 @@ class CategoriesData {
       data: {
         'name': name,
         'description': description,
-        'product_display_method': productDisplayMethod,
+        'product_display_method': displayMethod,
         'visible': visible ? 1 : 0,
         'available': available ? 1 : 0,
       },

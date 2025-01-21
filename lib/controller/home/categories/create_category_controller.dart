@@ -12,6 +12,8 @@ abstract class CreateCategoryController extends GetxController {
   List<TextEditingController> descriptionController = [];
 
   // Dropdown values
+  String displayMethodValue = 'GridView';
+
   String visibleValue = 'Yes';
   String avilableValue = 'Yes';
 
@@ -20,6 +22,7 @@ abstract class CreateCategoryController extends GetxController {
   bool loading = false;
 
   // Methods (abstract)
+  void updateDisplayMethodValue(String value);
   void updateVisibleValue(String value);
   void updateAvilableValue(String value);
   Future<void> pickImage();
@@ -37,6 +40,12 @@ class CreateCategoryControllerImp extends CreateCategoryController {
       descriptionController.add(TextEditingController());
     }
     super.onInit();
+  }
+
+  @override
+  void updateDisplayMethodValue(String value) {
+    displayMethodValue = value;
+    update();
   }
 
   @override
@@ -85,9 +94,9 @@ class CreateCategoryControllerImp extends CreateCategoryController {
     var response = await categoriesData.create(
       setValues(nameController),
       setValues(descriptionController),
-      'GridView',
-      true,
-      true,
+      displayMethodValue,
+      visibleValue == 'Yes' ? true : false,
+      avilableValue == 'Yes' ? true : false,
       image!,
     );
 

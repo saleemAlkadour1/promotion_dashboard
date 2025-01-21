@@ -130,13 +130,11 @@ class UpdateCategory extends StatelessWidget {
                     // Description
 
                     const SizedBox(height: 16.0),
-
-                    // Avilable Dropdown
                     CustomDropdown(
-                      label: 'Avilable',
-                      value: controller.avilableValue,
-                      items: const ['Yes', 'No'],
-                      onChanged: controller.updateAvilableValue,
+                      label: 'Display method ',
+                      value: controller.displayMethodValue,
+                      items: const ['GridView', 'ListTile'],
+                      onChanged: controller.updateDisplayMethodValue,
                     ),
                     const SizedBox(height: 16.0),
 
@@ -146,6 +144,14 @@ class UpdateCategory extends StatelessWidget {
                       value: controller.visibleValue,
                       items: const ['Yes', 'No'],
                       onChanged: controller.updateVisibleValue,
+                    ),
+                    const SizedBox(height: 16.0),
+                    // Avilable Dropdown
+                    CustomDropdown(
+                      label: 'Avilable',
+                      value: controller.avilableValue,
+                      items: const ['Yes', 'No'],
+                      onChanged: controller.updateAvilableValue,
                     ),
                     const SizedBox(height: 16.0),
 

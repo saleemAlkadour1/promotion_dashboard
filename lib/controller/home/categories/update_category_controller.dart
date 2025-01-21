@@ -13,6 +13,8 @@ abstract class UpdateCategoryController extends GetxController {
   List<TextEditingController> descriptionController = [];
 
   // Dropdown values
+  String displayMethodValue = 'GridView';
+
   String visibleValue = 'Yes';
   String avilableValue = 'Yes';
 
@@ -24,6 +26,8 @@ abstract class UpdateCategoryController extends GetxController {
   int categoryId = 0;
 
   // Methods (abstract)
+  void updateDisplayMethodValue(String value);
+
   void updateVisibleValue(String value);
   void updateAvilableValue(String value);
 
@@ -76,6 +80,12 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
   }
 
   @override
+  void updateDisplayMethodValue(String value) {
+    displayMethodValue = value;
+    update();
+  }
+
+  @override
   void updateVisibleValue(String value) {
     visibleValue = value;
     update();
@@ -99,9 +109,12 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
     categoryModel = category;
     getValues(nameController, category.name.toJson());
     getValues(descriptionController, category.description.toJson());
+    displayMethodValue = category.productDisplayMethod ?? 'GridView';
     visibleValue = category.visible == true ? 'Yes' : 'No';
+    avilableValue = category.available == true ? 'Yes' : 'No';
     updateVisibleValue(visibleValue);
     updateAvilableValue(avilableValue);
+    updateDisplayMethodValue(displayMethodValue);
     update();
   }
 
@@ -126,9 +139,9 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
       categoryId,
       setValues(nameController),
       setValues(descriptionController),
-      'GridView',
-      true,
-      true,
+      displayMethodValue,
+      visibleValue == 'Yes' ? true : false,
+      avilableValue == 'Yes' ? true : false,
       imageToSend,
     );
 

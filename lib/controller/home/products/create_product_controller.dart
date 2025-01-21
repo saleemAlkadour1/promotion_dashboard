@@ -29,6 +29,7 @@ abstract class CreateProductController extends GetxController {
 
   // Dropdown values
   String visibleValue = 'Yes';
+  String displayMethodValue = 'GridView';
   String typeManualLabelValue = 'text';
   String availableValue = 'Yes';
   String typeValue = 'live';
@@ -46,6 +47,7 @@ abstract class CreateProductController extends GetxController {
 
   // Methods (abstract)
   void updateVisibleValue(String value);
+  void updateDisplayMethodValue(String value);
   void updateTypeManualLabelValue(String value);
   void updateTypeValue(String value);
   void updateNumberlyValue(String value);
@@ -135,6 +137,12 @@ class CreateProductControllerImp extends CreateProductController {
   @override
   void updateVisibleValue(String value) {
     visibleValue = value;
+    update();
+  }
+
+  @override
+  void updateDisplayMethodValue(String value) {
+    displayMethodValue = value;
     update();
   }
 
@@ -277,6 +285,7 @@ class CreateProductControllerImp extends CreateProductController {
       names: names,
       descriptions: descriptions,
       visible: visibleValue == 'Yes' ? true : false,
+      displayMethod: displayMethodValue,
       productCategoryId: categoryId,
       type: typeValue,
       purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
@@ -306,6 +315,7 @@ class CreateProductControllerImp extends CreateProductController {
       names: names,
       descriptions: descriptions,
       visible: visibleValue == 'Yes' ? true : false,
+      displayMethod: displayMethodValue,
       productCategoryId: categoryId,
       type: typeValue,
       purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
@@ -338,6 +348,7 @@ class CreateProductControllerImp extends CreateProductController {
         names: names,
         descriptions: descriptions,
         visible: visibleValue == 'Yes' ? true : false,
+        displayMethod: displayMethodValue,
         productCategoryId: categoryId,
         type: typeValue,
         purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,

@@ -257,6 +257,15 @@ class CreateProduct extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
 
+                  // Display method Dropdown
+                  CustomDropdown(
+                    label: 'Display method ',
+                    value: controller.displayMethodValue,
+                    items: const ['GridView', 'ListTile'],
+                    onChanged: controller.updateDisplayMethodValue,
+                  ),
+                  const SizedBox(height: 16.0),
+
                   // Visible Dropdown
                   CustomDropdown(
                     label: 'Visible',
