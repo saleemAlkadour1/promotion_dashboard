@@ -38,6 +38,28 @@ class SFDataGridUsers extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomIcon(
+                          path: Assets.imagesSvgEdit,
+                          size: 16,
+                          onTap: () async {
+                            // if (cell.columnName == 'Actions' &&
+                            //     cell.value is CategoryModel) {
+                            //   await Get.toNamed(
+                            //     AppRoutes.updateCategory,
+                            //     parameters: {
+                            //       'category_id':
+                            //           cell.value.id?.toString() ?? '',
+                            //     },
+                            //   );
+                            //   controller.getCategoriesData(
+                            //       pageIndex: controller
+                            //           .paganationDataModel.currentPage);
+                            // }
+                          },
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        CustomIcon(
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {
