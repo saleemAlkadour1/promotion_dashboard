@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
-import 'package:promotion_dashboard/view/widgets/products/products_type/store/create_product_dialog.dart';
-import 'package:promotion_dashboard/view/widgets/products/products_type/store/update_product_dialog.dart';
+import 'package:promotion_dashboard/view/widgets/products/products_type/store/create_store_item_dialog.dart';
+import 'package:promotion_dashboard/view/widgets/products/products_type/store/update_store_item_dialog.dart';
 
 abstract class StoreController extends GetxController {
   late TextEditingController poductIdController;
@@ -69,7 +69,7 @@ class StoreControllerImp extends StoreController {
 
   @override
   void showCreateProductDialog() {
-    Get.dialog(const CreateProductDialog());
+    Get.dialog(const CreateStoreItemDialog());
   }
 
   @override
@@ -146,7 +146,7 @@ class StoreControllerImp extends StoreController {
       values = response.data['values'];
       porductStoreId = id;
     }
-    Get.dialog(const UpdateProductDialog());
+    Get.dialog(const UpdateStoreItemDialog());
   }
 
   void startEdit(int index) {

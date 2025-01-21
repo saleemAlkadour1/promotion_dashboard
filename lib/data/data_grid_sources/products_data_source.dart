@@ -5,7 +5,6 @@ class ProductsDataSource extends DataGridSource {
   ProductsDataSource({
     required List<ProductModel> products,
     this.custombuildRow,
-    required this.rowsPerPage,
   }) {
     _products = products;
     buildPaginatedDataGridRows();
@@ -13,7 +12,6 @@ class ProductsDataSource extends DataGridSource {
 
   final DataGridRowAdapter Function(DataGridRow row, bool isEvenRow)?
       custombuildRow;
-  final int rowsPerPage;
   List<ProductModel> _products = [];
   List<DataGridRow> dataGridRows = [];
 

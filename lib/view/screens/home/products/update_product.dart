@@ -56,9 +56,13 @@ class UpdateProduct extends StatelessWidget {
               children: [
                 // Category
                 CustomDropdown(
-                  value: controller.categoryValue,
+                  value: controller.categoryValue.isNotEmpty &&
+                          controller.categoriesName
+                              .contains(controller.categoryValue)
+                      ? controller.categoryValue
+                      : null,
                   label: 'Category',
-                  items: controller.categoriesName,
+                  items: controller.categoriesName.toSet().toList(),
                   onChanged: controller.updateCategoryValue,
                 ),
 

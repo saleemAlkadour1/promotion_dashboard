@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/orders/order_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/orders_data.dart';
 import 'package:promotion_dashboard/view/widgets/orders/orders_details_dialog.dart';
 
 abstract class OrdersManagementController extends GetxController {
   String? statusValue = 'All';
-  Future<void> getOrdersData();
+  Future<void> getOrdersData({required int pageIndex});
   Future<void> showOrder(int id);
   void updateStatusValue(String value);
   void filterOrders();
@@ -14,11 +15,12 @@ abstract class OrdersManagementController extends GetxController {
 class OrdersManagementControllerImp extends OrdersManagementController {
   bool loading = false;
   OrderModel? orderModel;
+  late PaganationDataModel paganationDataModel;
   @override
   void onInit() {
     super.onInit();
-    getOrdersData();
-    filteredOrders = orders;
+    getOrdersData(pageIndex: 1);
+    filterOrders();
   }
 
   OrdersData ordersData = OrdersData();
@@ -26,14 +28,15 @@ class OrdersManagementControllerImp extends OrdersManagementController {
   List<OrderModel> filteredOrders = [];
 
   @override
-  Future<void> getOrdersData() async {
+  Future<void> getOrdersData({required int pageIndex}) async {
     loading = true;
     update();
-    var response = await ordersData.get();
+    var response = await ordersData.get(pageIndex: pageIndex);
     if (response.isSuccess) {
       orders = List.generate(response.data.length,
           (index) => OrderModel.fromJson(response.data[index]));
-      filteredOrders = orders;
+      paganationDataModel = PaganationDataModel.fromJson(response.body['meta']);
+      filterOrders();
 
       update();
     }

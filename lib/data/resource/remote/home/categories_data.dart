@@ -6,10 +6,12 @@ import 'package:promotion_dashboard/routes/end_points.dart';
 
 class CategoriesData {
   ApiService apiService = Get.find();
-  Future<ApiResponse> get() async {
+  Future<ApiResponse> get({required indexPage}) async {
     var response = await apiService.get(
       EndPoints.store.categories,
-      params: {},
+      params: {
+        'page': indexPage,
+      },
     );
     return response;
   }

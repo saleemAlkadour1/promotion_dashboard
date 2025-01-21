@@ -47,7 +47,9 @@ class CategoriesManagement extends StatelessWidget {
                       height: 45,
                       onPressed: () async {
                         await Get.toNamed(AppRoutes.createCategory);
-                        controller.getPCategoriesData();
+                        controller.getCategoriesData(
+                            pageIndex:
+                                controller.paganationDataModel.currentPage);
                       },
                     ),
                   ],

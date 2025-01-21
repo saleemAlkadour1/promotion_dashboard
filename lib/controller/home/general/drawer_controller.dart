@@ -37,9 +37,9 @@ class DrawerControllerImp extends DrawerController {
 
   @override
   Future<void> logout() async {
+    Get.offAndToNamed(AppRoutes.login);
     await authData.logout();
     Shared.clear();
     Shared.setValue(StorageKeys.step, 1);
-    Get.offAndToNamed(AppRoutes.login);
   }
 }

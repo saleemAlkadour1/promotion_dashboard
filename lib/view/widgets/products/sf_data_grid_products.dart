@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -23,7 +21,7 @@ class SFDataGridProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
       var res = HandlingDataView(
-        loading: controller.firstLoading,
+        loading: controller.loading,
         dataIsEmpty: controller.products.isEmpty,
       );
       if (res.isValid) {
@@ -31,7 +29,6 @@ class SFDataGridProducts extends StatelessWidget {
       }
       ProductsDataSource productsDataSource = ProductsDataSource(
         products: controller.filteredProducts,
-        rowsPerPage: controller.paganationDataModel.perPage,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -205,7 +202,6 @@ class SFDataGridProducts extends StatelessWidget {
                   dataSource: productsDataSource,
                   onPageNavigationStart: (pageIndex) {},
                   onPageNavigationEnd: (pageIndex) async {
-                    log((pageIndex + 1).toString());
                     await controller.getProductsData(pageIndex: pageIndex + 1);
                     controller.update();
                   },
@@ -213,7 +209,7 @@ class SFDataGridProducts extends StatelessWidget {
                   total: controller.paganationDataModel.total),
             ],
           ),
-          if (controller.loading)
+          if (controller.loading == true)
             const Center(
               child: CircularProgressIndicator(
                 color: AppColors.color_4EB7F2,

@@ -35,7 +35,7 @@ abstract class UpdateCategoryController extends GetxController {
 
 class UpdateCategoryControllerImp extends UpdateCategoryController {
   CategoryModel? categoryModel;
-  bool isImageFind = true;
+  bool isImageFind = false;
   CategoriesData categoriesData = CategoriesData();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
@@ -54,6 +54,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
   @override
   void showCategory() async {
     loading = true;
+    isImageFind = true;
     update();
     var response = await categoriesData.show(categoryId);
     if (response.isSuccess) {
@@ -118,6 +119,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
     }
     loading = true;
     update();
+    File? imageToSend = isImageFind ? null : image;
 
     // إرسال الطلب
     var response = await categoriesData.update(
@@ -127,7 +129,7 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
       'GridView',
       true,
       true,
-      isImageFind ? null : image!,
+      imageToSend,
     );
 
     // معالجة الاستجابة

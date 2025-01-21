@@ -33,9 +33,13 @@ class TransactionDetailsDialog extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: const Icon(Icons.close, size: 24, color: Colors.black),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () => Get.back(),
+                    child:
+                        const Icon(Icons.close, size: 24, color: Colors.black),
+                  ),
                 ),
               ],
             ),

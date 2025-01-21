@@ -115,6 +115,8 @@ class ProductDetailsDialog extends StatelessWidget {
                       productModel.visible == true ? 'Yes' : 'No',
                       context,
                     ),
+                    const SizedBox(height: 12),
+
                     _buildLabelValueRow('Category id',
                         productModel.productCategoryId.toString(), context),
                     const SizedBox(height: 12),

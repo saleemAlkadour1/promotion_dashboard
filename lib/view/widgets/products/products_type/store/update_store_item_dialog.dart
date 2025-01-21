@@ -7,8 +7,8 @@ import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
-class UpdateProductDialog extends StatelessWidget {
-  const UpdateProductDialog({super.key});
+class UpdateStoreItemDialog extends StatelessWidget {
+  const UpdateStoreItemDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +26,6 @@ class UpdateProductDialog extends StatelessWidget {
                   style: MyText.appStyle.fs16.wBold
                       .reCustomColor(Colors.black)
                       .style,
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton.icon(
-                  onPressed: controller.startAddingNewValue,
-                  icon: const Icon(Icons.add),
-                  label: const Text("Add New Value"),
                 ),
                 const SizedBox(height: 16.0),
                 ListView.builder(
@@ -65,25 +59,37 @@ class UpdateProductDialog extends StatelessWidget {
                                     controller:
                                         controller.updateValueController,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          if (isAdding) {
-                                            controller.saveNewValue();
-                                          } else {
-                                            controller.saveUpdatedValue(index);
-                                          }
-                                        },
-                                        child: const Text('Save'),
-                                      ),
-                                      const SizedBox(width: 8.0),
-                                      ElevatedButton(
-                                        onPressed: controller.cancelUpdate,
-                                        child: const Text('Cancel'),
-                                      ),
-                                    ],
+                                  const SizedBox(height: 8.0),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                          onPressed: controller.cancelUpdate,
+                                          icon: const Icon(
+                                            Icons.cancel,
+                                            color: AppColors.red,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8.0),
+                                        IconButton(
+                                          onPressed: () {
+                                            if (isAdding) {
+                                              controller.saveNewValue();
+                                            } else {
+                                              controller
+                                                  .saveUpdatedValue(index);
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.done_outline,
+                                            color: AppColors.color_4EB7F2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -144,6 +150,20 @@ class UpdateProductDialog extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16.0),
+                ElevatedButton.icon(
+                  onPressed: controller.startAddingNewValue,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.color_4EB7F2, elevation: 0),
+                  icon: const Icon(
+                    Icons.add,
+                    color: AppColors.white,
+                  ),
+                  label: const Text(
+                    "Add new item",
+                    style: TextStyle(color: AppColors.white),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -158,7 +178,7 @@ class UpdateProductDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 20),
                     CustomButton(
-                      title: 'Update product',
+                      title: 'Update item',
                       height: 40,
                       onPressed: controller.updateProduct,
                     ),

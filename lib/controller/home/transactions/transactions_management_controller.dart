@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/transactions/transaction_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/transactions_data.dart';
 import 'package:promotion_dashboard/view/widgets/transactions/transactions_details_dialog.dart';
 
 abstract class TransactionsManagementController extends GetxController {
   String? typeValue = 'All';
-  Future<void> getTransactionsData();
+  Future<void> getTransactionsData({required int pageIndex});
   Future<void> showTransaction(int id);
   void updateTypeValue(String value);
   void filterTransactions();
@@ -18,24 +19,25 @@ class TransactionsManagementControllerImp
   TransactionsData transactionsData = TransactionsData();
   List<TransactionModel> transactions = [];
   List<TransactionModel> filteredTrnsactions = [];
+  late PaganationDataModel paganationDataModel;
 
   @override
   void onInit() {
     super.onInit();
-    getTransactionsData();
-    filteredTrnsactions = transactions;
+    getTransactionsData(pageIndex: 1);
+    filterTransactions();
   }
 
   @override
-  Future<void> getTransactionsData() async {
-    filteredTrnsactions = [];
+  Future<void> getTransactionsData({required int pageIndex}) async {
     loading = true;
     update();
-    var response = await transactionsData.get();
+    var response = await transactionsData.get(pageIndex: pageIndex);
     if (response.isSuccess) {
       transactions = List.generate(response.data.length,
           (index) => TransactionModel.fromJson(response.data[index]));
-      filteredTrnsactions = transactions;
+      paganationDataModel = PaganationDataModel.fromJson(response.body['meta']);
+      filterTransactions();
 
       update();
     }
@@ -78,10 +80,7 @@ class TransactionsManagementControllerImp
   }
 
   @override
-  void filterTransactions() async {
-    loading = true;
-    update();
-    await getTransactionsData();
+  void filterTransactions() {
     if (typeValue == 'All') {
       filteredTrnsactions = transactions;
     } else {
@@ -89,7 +88,5 @@ class TransactionsManagementControllerImp
           .where((transaction) => transaction.type == typeValue!.toLowerCase())
           .toList();
     }
-    loading = false;
-    update();
   }
 }

@@ -17,14 +17,12 @@ abstract class ProductsManagementController extends GetxController {
 
 class ProductsManagementControllerImp extends ProductsManagementController {
   bool loading = false;
-  bool firstLoading = true;
   ProductModel? productModel;
   ProductsData productData = ProductsData();
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
 
-  PaganationDataModel paganationDataModel =
-      PaganationDataModel(currentPage: 1, lastPage: 4, perPage: 20, total: 20);
+  late PaganationDataModel paganationDataModel;
   @override
   void onInit() {
     super.onInit();
@@ -35,7 +33,6 @@ class ProductsManagementControllerImp extends ProductsManagementController {
   @override
   Future<void> getProductsData({required int pageIndex}) async {
     loading = true;
-    firstLoading = true;
     update();
     var response = await productData.get(pageIndex: pageIndex);
     if (response.isSuccess) {
@@ -45,7 +42,6 @@ class ProductsManagementControllerImp extends ProductsManagementController {
       filterProducts();
       update();
     }
-    firstLoading = false;
     loading = false;
 
     update();

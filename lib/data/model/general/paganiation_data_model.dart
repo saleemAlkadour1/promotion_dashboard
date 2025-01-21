@@ -13,7 +13,7 @@ class PaganationDataModel {
       PaganationDataModel(
         currentPage: json['current_page'],
         lastPage: json['last_page'],
-        perPage: json['per_page'],
+        perPage: json['per_page'] ?? 20,
         total: json['total'],
       );
 }

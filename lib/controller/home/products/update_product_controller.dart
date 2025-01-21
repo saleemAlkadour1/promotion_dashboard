@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
+import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
@@ -24,11 +25,11 @@ abstract class UpdateProductController extends GetxController {
   String visibleValue = 'Yes';
   String availableValue = 'Yes';
   String numberlyValue = 'Yes';
-  String categoryValue = '';
+  late String categoryValue;
   String sourceValue = 'internal';
 
   // Categories data
-  List<CategoryModel>? categories;
+  List<CategoryModel> categories = [];
   List<String> categoriesName = [];
 
   // Images list
@@ -62,7 +63,7 @@ class UpdateProductControllerImp extends UpdateProductController {
   @override
   void onInit() {
     super.onInit();
-
+    categoryValue = '';
     productId = int.parse(Get.parameters['product_id'] ?? '0');
     showProduct();
 
@@ -80,25 +81,26 @@ class UpdateProductControllerImp extends UpdateProductController {
   Future<void> getCategoriesData() async {
     loading = true;
     update();
+    var responsePaganation = await categoriesData.get(indexPage: 1);
+    PaganationDataModel paganationDataModelCategories =
+        PaganationDataModel.fromJson(responsePaganation.body['meta']);
+    for (int i = 1; i <= paganationDataModelCategories.lastPage; i++) {
+      var response = await categoriesData.get(indexPage: i);
+      if (response.isSuccess) {
+        categories.addAll(List.generate(
+          response.data.length,
+          (index) => CategoryModel.fromJson(response.data[index]),
+        ));
 
-    var response = await categoriesData.get();
-    if (response.isSuccess) {
-      categories = List.generate(
-        response.data.length,
-        (index) => CategoryModel.fromJson(response.data[index]),
-      );
-
-      if (categories != null) {
-        categoriesName = categories!
-            .map((category) => category.name.en!.isNotEmpty
-                ? category.name.en!
-                : category.name.ar!)
-            .toSet()
-            .toList();
-      }
-
-      if (!categoriesName.contains(categoryValue)) {
-        categoriesName.add(categoryValue);
+        // Populate categories names
+        if (categories.isNotEmpty) {
+          categoriesName.addAll(
+              categories.map((category) => category.name.en!).toSet().toList());
+        }
+        // Ensure the default categoryValue exists in the list
+        if (!categoriesName.contains(categoryValue)) {
+          categoriesName.add(categoryValue);
+        }
       }
     }
 
@@ -109,7 +111,6 @@ class UpdateProductControllerImp extends UpdateProductController {
   @override
   Future<void> showProduct() async {
     await getCategoriesData();
-
     loading = true;
     update();
     var response = await productData.show(productId);
@@ -138,12 +139,24 @@ class UpdateProductControllerImp extends UpdateProductController {
     numberlyValue = product.numberly == true ? 'Yes' : 'No';
     sourceValue = product.source.toLowerCase();
     updateVisibleValue(visibleValue);
-    for (int i = 0; i < categories!.length; i++) {
-      if (categoryId == categories![i].id) {
-        categoryValue = categories![i].name.en!;
+
+    // تحديد قيمة الفئة
+    for (int i = 0; i < categories.length; i++) {
+      if (categoryId == categories[i].id) {
+        categoryValue = categories[i].name.en!;
         break;
       }
     }
+
+    // تحقق من أن القيمة الافتراضية موجودة في القائمة
+    if (!categoriesName.contains(categoryValue)) {
+      if (categoriesName.isNotEmpty) {
+        categoryValue = categoriesName.first; // تعيين أول قيمة كافتراضية
+      } else {
+        categoryValue = ''; // تعيين قيمة فارغة إذا لم تكن هناك خيارات
+      }
+    }
+
     update();
   }
 
@@ -172,7 +185,7 @@ class UpdateProductControllerImp extends UpdateProductController {
   @override
   void updateCategoryValue(String value) {
     categoryValue = value;
-    for (final category in categories ?? []) {
+    for (final category in categories) {
       if (category.name.en == value || category.name.ar == value) {
         categoryId = category.id;
         break;

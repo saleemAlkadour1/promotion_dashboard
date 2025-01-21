@@ -21,7 +21,7 @@ class SFDataGridTransactions extends StatelessWidget {
         builder: (controller) {
       var res = HandlingDataView(
         loading: controller.loading,
-        dataIsEmpty: controller.filteredTrnsactions.isEmpty,
+        dataIsEmpty: controller.transactions.isEmpty,
       );
       if (res.isValid) {
         return res.response!;
@@ -30,7 +30,7 @@ class SFDataGridTransactions extends StatelessWidget {
         transactions: controller.filteredTrnsactions,
         custombuildRow: (row, index) {
           final color = index % 2 == 0 ? const Color(0xFFF9F9F9) : Colors.white;
-          String type = controller.transactions[index].type;
+          String type = controller.filteredTrnsactions[index].type;
           return DataGridRowAdapter(
             color: color,
             cells: row.getCells().map<Widget>((cell) {
@@ -93,86 +93,93 @@ class SFDataGridTransactions extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: SfDataGrid(
-                  gridLinesVisibility: GridLinesVisibility.none,
-                  headerGridLinesVisibility: GridLinesVisibility.none,
-                  source: transactionsDataSource,
-                  columnWidthMode: MediaQuery.sizeOf(context).width <= 475
-                      ? ColumnWidthMode.auto
-                      : ColumnWidthMode.fill,
-                  columnSizer: ColumnSizer(),
-                  rowsPerPage: 10,
-                  columns: [
-                    GridColumn(
-                      columnName: 'ID',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'ID',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'User Name',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'User Name',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'Amount',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Amount',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'Type',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Type',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                    GridColumn(
-                      columnName: 'Actions',
-                      label: Container(
-                          color: AppColors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Actions',
-                            style: MyText.appStyle.fs16.wBold.reColorText
-                                .responsiveStyle(context),
-                          )),
-                    ),
-                  ],
-                ),
+                child: Builder(builder: (context) {
+                  var res = HandlingDataView(
+                    loading: controller.loading,
+                    dataIsEmpty: controller.filteredTrnsactions.isEmpty,
+                  );
+                  if (res.isValid) {
+                    return res.response!;
+                  }
+                  return SfDataGrid(
+                    gridLinesVisibility: GridLinesVisibility.none,
+                    headerGridLinesVisibility: GridLinesVisibility.none,
+                    source: transactionsDataSource,
+                    columnWidthMode: MediaQuery.sizeOf(context).width <= 475
+                        ? ColumnWidthMode.auto
+                        : ColumnWidthMode.fill,
+                    columnSizer: ColumnSizer(),
+                    rowsPerPage: controller.paganationDataModel.perPage,
+                    columns: [
+                      GridColumn(
+                        columnName: 'ID',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ID',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'User Name',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'User Name',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Amount',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Amount',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Type',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Type',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Actions',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Actions',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                    ],
+                  );
+                }),
               ),
               ResponsiveSfDataPager(
                   dataSource: transactionsDataSource,
-                  onPageNavigationStart: (startIndex) {
-                    controller.loading = true;
+                  onPageNavigationStart: (pageIndex) {},
+                  onPageNavigationEnd: (pageIndex) async {
+                    await controller.getTransactionsData(
+                        pageIndex: pageIndex + 1);
                     controller.update();
                   },
-                  onPageNavigationEnd: (startIndex) {
-                    controller.loading = false;
-                    controller.update();
-                  },
-                  rowsPerPage: 10,
-                  total: controller.transactions.length),
+                  rowsPerPage: controller.paganationDataModel.perPage,
+                  total: controller.paganationDataModel.total),
             ],
           ),
           if (controller.loading)

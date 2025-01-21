@@ -6,22 +6,18 @@ class TransactionsDataSource extends DataGridSource {
       {required this.custombuildRow,
       required List<TransactionModel> transactions}) {
     _transactions = transactions;
-    pagainatedTransactions = _transactions
-        .getRange(0, transactions.length >= 9 ? 9 : transactions.length)
-        .toList(growable: false);
+
     buildPaginatedDataGridRows();
   }
 
   final DataGridRowAdapter Function(DataGridRow row, int index) custombuildRow;
-  int rowsPerPage = 10;
 
   List<TransactionModel> _transactions = [];
-  List<TransactionModel> pagainatedTransactions = [];
 
   List<DataGridRow> dataGridRows = [];
 
   void buildPaginatedDataGridRows() {
-    dataGridRows = pagainatedTransactions
+    dataGridRows = _transactions
         .map<DataGridRow>((transaction) => DataGridRow(cells: [
               DataGridCell<String>(
                   columnName: 'ID', value: transaction.id.toString()),
@@ -45,24 +41,5 @@ class TransactionsDataSource extends DataGridSource {
     int index = rows.indexOf(row);
 
     return custombuildRow(row, index);
-  }
-
-  @override
-  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    int startIndex = newPageIndex * rowsPerPage;
-    int endIndex = (startIndex + rowsPerPage).clamp(0, _transactions.length);
-
-    if (startIndex < _transactions.length) {
-      pagainatedTransactions =
-          _transactions.getRange(startIndex, endIndex).toList(growable: false);
-
-      buildPaginatedDataGridRows();
-
-      notifyListeners();
-    } else {
-      pagainatedTransactions = [];
-    }
-
-    return true;
   }
 }

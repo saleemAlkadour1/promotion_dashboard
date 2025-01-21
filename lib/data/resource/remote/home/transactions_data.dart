@@ -5,10 +5,10 @@ import 'package:promotion_dashboard/routes/end_points.dart';
 
 class TransactionsData {
   ApiService apiService = Get.find();
-  Future<ApiResponse> get() async {
+  Future<ApiResponse> get({required int pageIndex}) async {
     var response = await apiService.get(
       EndPoints.transaction.transactions,
-      params: {},
+      params: {'page': pageIndex},
     );
     return response;
   }

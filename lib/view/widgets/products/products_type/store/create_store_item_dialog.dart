@@ -6,8 +6,8 @@ import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
-class CreateProductDialog extends StatelessWidget {
-  const CreateProductDialog({super.key});
+class CreateStoreItemDialog extends StatelessWidget {
+  const CreateStoreItemDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class CreateProductDialog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Create prouct',
+                  'Create item',
                   style: MyText.appStyle.fs16.wBold
                       .reCustomColor(Colors.black)
                       .style,
@@ -88,7 +88,7 @@ class CreateProductDialog extends StatelessWidget {
                       width: 20,
                     ),
                     CustomButton(
-                      title: 'Create prouct',
+                      title: 'Create item',
                       height: 40,
                       onPressed: controller.createProduct,
                     ),

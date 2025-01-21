@@ -7,12 +7,16 @@ import 'package:promotion_dashboard/core/classes/shared_preferences.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
+import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/products_data.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 
 abstract class CreateProductController extends GetxController {
+  bool requiredValue = false;
+  void toggleRequired(bool? value);
+
   // Text controllers
   List<TextEditingController> nameController = [];
   List<TextEditingController> descriptionController = [];
@@ -51,7 +55,7 @@ abstract class CreateProductController extends GetxController {
   void updateServerNameValue(String value);
   Future<void> pickImages();
   void removeImage(File image);
-  getPCategoriesData();
+  Future<void> getCategoriesData();
   Future<void> createProuct();
   void link();
   void cancel();
@@ -71,12 +75,12 @@ class CreateProductControllerImp extends CreateProductController {
   bool loading = false;
   int categoryId = 0;
   List inputs = [];
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   @override
   void onInit() {
     super.onInit();
-
-    getPCategoriesData();
+    getCategoriesData();
     for (var i = 0; i < myLanguages.length; i++) {
       nameController.add(TextEditingController());
       descriptionController.add(TextEditingController());
@@ -90,30 +94,41 @@ class CreateProductControllerImp extends CreateProductController {
   }
 
   @override
-  getPCategoriesData() async {
+  Future<void> getCategoriesData() async {
     loading = true;
     update();
+    var responsePaganation = await categoriesData.get(indexPage: 1);
+    PaganationDataModel paganationDataModelCategories =
+        PaganationDataModel.fromJson(responsePaganation.body['meta']);
+    for (int i = 1; i <= paganationDataModelCategories.lastPage; i++) {
+      var response = await categoriesData.get(indexPage: i);
+      if (response.isSuccess) {
+        categories = List.generate(
+          response.data.length,
+          (index) => CategoryModel.fromJson(response.data[index]),
+        );
 
-    var response = await categoriesData.get();
-    if (response.isSuccess) {
-      categories = List.generate(
-        response.data.length,
-        (index) => CategoryModel.fromJson(response.data[index]),
-      );
-
-      // Populate categories names
-      if (categories != null) {
-        categoriesName =
-            categories!.map((category) => category.name.en!).toSet().toList();
-      }
-
-      // Ensure the default categoryValue exists in the list
-      if (!categoriesName.contains(categoryValue)) {
-        categoriesName.add(categoryValue);
+        // Populate categories names
+        if (categories != null) {
+          categoriesName.addAll(categories!
+              .map((category) => category.name.en!)
+              .toSet()
+              .toList());
+        }
+        // Ensure the default categoryValue exists in the list
+        if (!categoriesName.contains(categoryValue)) {
+          categoriesName.add(categoryValue);
+        }
       }
     }
 
     loading = false;
+    update();
+  }
+
+  @override
+  void toggleRequired(bool? value) {
+    requiredValue = value ?? false;
     update();
   }
 
@@ -208,12 +223,31 @@ class CreateProductControllerImp extends CreateProductController {
 
   @override
   Future<void> createProuct() async {
-    if (typeValue == Product.live.type && sourceValue == 'External') {
-      createProductExternalLive();
-    } else if (typeValue == Product.store.type && sourceValue == 'Internal') {
-      createProductInternalStore();
-    } else if (typeValue == Product.manual.type && sourceValue == 'Internal') {
-      createProductInternalManual();
+    if (!formState.currentState!.validate()) return;
+    if (typeValue == Product.live.type) {
+      if (sourceValue == 'External') {
+        createProductExternalLive();
+      } else {
+        customSnackBar(
+            'Error', 'In state of live, the source must be external.',
+            snackType: SnackBarType.error);
+      }
+    } else if (typeValue == Product.store.type) {
+      if (sourceValue == 'Internal') {
+        createProductInternalStore();
+      } else {
+        customSnackBar(
+            'Error', 'In state of store, the source must be internal.',
+            snackType: SnackBarType.error);
+      }
+    } else if (typeValue == Product.manual.type) {
+      if (sourceValue == 'Internal') {
+        createProductInternalManual();
+      } else {
+        customSnackBar(
+            'Error', 'In state of manual, the source must be internal.',
+            snackType: SnackBarType.error);
+      }
     }
   }
 
@@ -242,50 +276,20 @@ class CreateProductControllerImp extends CreateProductController {
     var response = await productData.create(
       names: names,
       descriptions: descriptions,
-      visible: true,
+      visible: visibleValue == 'Yes' ? true : false,
       productCategoryId: categoryId,
       type: typeValue,
       purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
       salePrice: num.tryParse(salePriceController.text) ?? 0,
-      numberly: true,
       source: sourceValue,
       images: selectedImages,
-      available: true,
+      available: availableValue == 'Yes' ? true : false,
       serverName: serverNameValue,
       serverData: serverData,
     );
     if (response.isSuccess) {
       Get.back();
       customSnackBar(response.message ?? '', '',
-          snackType: SnackBarType.correct);
-    }
-    loading = false;
-    update();
-  }
-
-  @override
-  createProductInternalManual() async {
-    Map names = setValues(nameController);
-    Map descriptions = setValues(descriptionController);
-    loading = true;
-    update();
-    var response = await productData.create(
-      names: names,
-      descriptions: descriptions,
-      visible: true,
-      productCategoryId: categoryId,
-      type: typeValue,
-      purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
-      salePrice: num.tryParse(salePriceController.text) ?? 0,
-      numberly: false,
-      source: sourceValue,
-      images: selectedImages,
-      available: true,
-      inputs: inputs,
-    );
-    if (response.isSuccess) {
-      Get.back();
-      customSnackBar('', response.message ?? '',
           snackType: SnackBarType.correct);
     }
     loading = false;
@@ -301,14 +305,14 @@ class CreateProductControllerImp extends CreateProductController {
     var response = await productData.create(
       names: names,
       descriptions: descriptions,
-      visible: true,
+      visible: visibleValue == 'Yes' ? true : false,
       productCategoryId: categoryId,
       type: typeValue,
       purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
       salePrice: num.tryParse(salePriceController.text) ?? 0,
       source: sourceValue,
       images: selectedImages,
-      available: true,
+      available: availableValue == 'Yes' ? true : false,
       min: int.tryParse(minController.text),
       max: int.tryParse(maxController.text),
     );
@@ -318,6 +322,42 @@ class CreateProductControllerImp extends CreateProductController {
     }
     loading = false;
     update();
+  }
+
+  @override
+  createProductInternalManual() async {
+    if (inputs.isEmpty) {
+      customSnackBar('Error', 'You must to fill inputs',
+          snackType: SnackBarType.error);
+    } else {
+      Map names = setValues(nameController);
+      Map descriptions = setValues(descriptionController);
+      loading = true;
+      update();
+      var response = await productData.create(
+        names: names,
+        descriptions: descriptions,
+        visible: visibleValue == 'Yes' ? true : false,
+        productCategoryId: categoryId,
+        type: typeValue,
+        purchasePrice: num.tryParse(purchasePriceController.text) ?? 0,
+        salePrice: num.tryParse(salePriceController.text) ?? 0,
+        available: numberlyValue == 'Yes' ? true : false,
+        source: sourceValue,
+        images: selectedImages,
+        numberly: availableValue == 'Yes' ? true : false,
+        min: int.tryParse(minController.text),
+        max: int.tryParse(maxController.text),
+        inputs: inputs,
+      );
+      if (response.isSuccess) {
+        Get.back();
+        customSnackBar('', response.message ?? '',
+            snackType: SnackBarType.correct);
+      }
+      loading = false;
+      update();
+    }
   }
 
   @override
@@ -333,8 +373,9 @@ class CreateProductControllerImp extends CreateProductController {
           'ar': valueController.text,
         },
         'type': typeManualLabelValue,
-        'required': 1,
+        'required': requiredValue ? 1 : 0,
       });
+      toggleRequired(false);
     }
 
     labelController.clear();
