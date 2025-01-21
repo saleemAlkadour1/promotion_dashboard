@@ -7,7 +7,7 @@ import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/orders_data_source.dart';
 import 'package:promotion_dashboard/data/model/home/orders/order_model.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_icon.dart';
 import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 

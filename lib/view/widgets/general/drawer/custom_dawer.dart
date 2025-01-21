@@ -13,6 +13,7 @@ import 'package:promotion_dashboard/view/screens/home/notifications/notification
 import 'package:promotion_dashboard/view/screens/home/orders/orders_management.dart';
 import 'package:promotion_dashboard/view/screens/home/products/products_management.dart';
 import 'package:promotion_dashboard/view/screens/home/transactions/transactions_management.dart';
+import 'package:promotion_dashboard/view/screens/home/users/users_management.dart';
 import 'package:promotion_dashboard/view/widgets/general/drawer/drawer_item.dart';
 import 'package:promotion_dashboard/view/widgets/general/user_info_list_tile.dart';
 
@@ -35,7 +36,7 @@ class CustomDawer extends StatelessWidget {
             SliverToBoxAdapter(
               child: UserInfoListTile(
                 color: AppColors.white,
-                userModel: controller.user!,
+                userModel: controller.myProfile!,
               ),
             ),
             SliverFillRemaining(
@@ -173,7 +174,7 @@ enum DrawerItems {
   productsManagement(2, ProductsManagement()),
   orders(3, OrdersManagement()),
   transactions(4, TransactionsManagement()),
-  users(5, SizedBox()),
+  users(5, UsersManagement()),
   notifications(6, NotificationsManagement()),
   chats(7, Chats()),
   settings(8, SizedBox());

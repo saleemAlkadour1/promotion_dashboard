@@ -28,70 +28,82 @@ class NotificationsManagement extends StatelessWidget {
               children: [
                 Text(
                   "Notifications",
-                  style: MyText.appStyle.fs24.wBold.reColorText
+                  style: MyText.appStyle.fs24.wBold
+                      .reCustomColor(AppColors.black)
                       .responsiveStyle(context),
                 ),
               ],
             ),
             centerTitle: true,
           ),
-          body: ListView.builder(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            itemCount: controller.notifications!.length,
-            itemBuilder: (context, index) {
-              final notification = controller.notifications![index];
-              return Dismissible(
-                key: ValueKey(notification),
-                direction: DismissDirection.startToEnd,
-                onDismissed: (direction) async {
-                  await controller.deleteNotification(notification.id);
-                },
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: const Text(
-                    "Delete",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    controller.markAsRead(notification.id);
+          body: (controller.notifications != null &&
+                  controller.notifications!.isNotEmpty)
+              ? ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  itemCount: controller.notifications!.length,
+                  itemBuilder: (context, index) {
+                    final notification = controller.notifications![index];
+                    return Dismissible(
+                      key: ValueKey(notification),
+                      direction: DismissDirection.startToEnd,
+                      onDismissed: (direction) async {
+                        await controller.deleteNotification(notification.id);
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.markAsRead(notification.id);
+                        },
+                        child: Card(
+                          elevation: 2,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor:
+                                  controller.isNotificationRead(notification.id)
+                                      ? Colors.grey
+                                      : Colors.green,
+                              child: Icon(
+                                controller.isNotificationRead(notification.id)
+                                    ? Icons.done
+                                    : Icons.new_releases,
+                                color: Colors.white,
+                              ),
+                            ),
+                            title: Text(
+                              notification.user.firstName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: notification.isRead
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
+                            subtitle: Text(notification.details.message),
+                          ),
+                        ),
+                      ),
+                    );
                   },
-                  child: Card(
-                    elevation: 2,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            controller.isNotificationRead(notification.id)
-                                ? Colors.grey
-                                : Colors.green,
-                        child: Icon(
-                          controller.isNotificationRead(notification.id)
-                              ? Icons.done
-                              : Icons.new_releases,
-                          color: Colors.white,
-                        ),
-                      ),
-                      title: Text(
-                        notification.user.firstName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color:
-                              notification.isRead ? Colors.grey : Colors.black,
-                        ),
-                      ),
-                      subtitle: Text(notification.details.message),
-                    ),
+                )
+              : Center(
+                  child: Text(
+                    'No notifications',
+                    style: MyText.appStyle.fs20.wBold
+                        .reCustomColor(AppColors.black)
+                        .style,
                   ),
-                ),
-              );
-            },
-          ));
+                ));
     });
   }
 }

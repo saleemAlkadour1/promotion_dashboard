@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
-import 'package:promotion_dashboard/data/model/profile/user_model.dart';
+import 'package:promotion_dashboard/data/model/home/users/user_model.dart';
 
 class UserInfoListTile extends StatelessWidget {
   final UserModel userModel;

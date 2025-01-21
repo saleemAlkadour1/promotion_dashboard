@@ -15,6 +15,9 @@ abstract class OrdersManagementController extends GetxController {
 class OrdersManagementControllerImp extends OrdersManagementController {
   bool loading = false;
   OrderModel? orderModel;
+  OrdersData ordersData = OrdersData();
+  List<OrderModel> orders = [];
+  List<OrderModel> filteredOrders = [];
   late PaganationDataModel paganationDataModel;
   @override
   void onInit() {
@@ -22,10 +25,6 @@ class OrdersManagementControllerImp extends OrdersManagementController {
     getOrdersData(pageIndex: 1);
     filterOrders();
   }
-
-  OrdersData ordersData = OrdersData();
-  List<OrderModel> orders = [];
-  List<OrderModel> filteredOrders = [];
 
   @override
   Future<void> getOrdersData({required int pageIndex}) async {

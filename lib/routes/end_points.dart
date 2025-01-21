@@ -5,11 +5,12 @@ final class EndPoints {
   const EndPoints();
 
   static const Auth auth = Auth();
-  static const User user = User();
   static const General general = General();
   static const Store store = Store();
   static const Order order = Order();
   static const Transaction transaction = Transaction();
+  static const User user = User();
+
   static const Notification notification = Notification();
   static const Server server = Server();
 
@@ -23,12 +24,6 @@ final class Auth {
 
   final String login = '${EndPoints.baseApi}/auth/login';
   final String logout = '${EndPoints.baseApi}/auth/logout';
-}
-
-@immutable
-final class User {
-  const User();
-  final String myData = '${EndPoints.baseApi}/clients/me';
 }
 
 @immutable
@@ -62,6 +57,16 @@ final class Transaction {
 
   final String transactions = '${EndPoints.baseApi}/transactions';
   final String transaction = '${EndPoints.baseApi}/transactions/{id}';
+}
+
+@immutable
+final class User {
+  const User();
+  final String user = '${EndPoints.baseApi}/users/{id}';
+  final String users = '${EndPoints.baseApi}/users';
+  final String myProfile = '${EndPoints.baseApi}/users/me';
+  final String updateMyProfile = '${EndPoints.baseApi}/users/me';
+  final String myData = '${EndPoints.baseApi}/clients/me';
 }
 
 @immutable

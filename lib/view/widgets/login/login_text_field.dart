@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_icon.dart';
 
 class LoginTextField extends StatelessWidget {
   final Widget? prefixIcon;

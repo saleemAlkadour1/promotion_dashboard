@@ -27,7 +27,8 @@ class ProductsManagement extends StatelessWidget {
               children: [
                 Text(
                   'Products',
-                  style: MyText.appStyle.fs24.wBold.reColorText
+                  style: MyText.appStyle.fs24.wBold
+                      .reCustomColor(AppColors.black)
                       .responsiveStyle(context),
                 ),
                 const SizedBox(height: 16),

@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home/products/products_management_controller.dart';
+import 'package:promotion_dashboard/controller/home/users/users_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
-import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/data/data_grid_sources/products_data_source.dart';
-import 'package:promotion_dashboard/data/model/home/products/product_model.dart';
+import 'package:promotion_dashboard/data/data_grid_sources/users_data_source.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon.dart';
 import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class SFDataGridProducts extends StatelessWidget {
-  const SFDataGridProducts({
+class SFDataGridUsers extends StatelessWidget {
+  const SFDataGridUsers({
     super.key,
   });
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ProductsManagementControllerImp>(builder: (controller) {
+    return GetBuilder<UsersManagementControllerImp>(builder: (controller) {
       var res = HandlingDataView(
         loading: controller.loading,
-        dataIsEmpty: controller.products.isEmpty,
+        dataIsEmpty: controller.users.isEmpty,
       );
       if (res.isValid) {
         return res.response!;
       }
-      ProductsDataSource productsDataSource = ProductsDataSource(
-        products: controller.filteredProducts,
+      UsersDataSource usersDataSource = UsersDataSource(
+        users: controller.filteredUsers,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -41,75 +38,19 @@ class SFDataGridProducts extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomIcon(
-                          path: Assets.imagesSvgEdit,
-                          size: 16,
-                          onTap: () async {
-                            if (cell.columnName == 'Actions' &&
-                                cell.value is ProductModel) {
-                              await Get.toNamed(
-                                AppRoutes.updateProduct,
-                                parameters: {
-                                  'product_id': cell.value.id?.toString() ?? '',
-                                },
-                              );
-                              await controller.getProductsData(
-                                  pageIndex: controller
-                                      .paganationDataModel.currentPage);
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        CustomIcon(
-                          path: Assets.imagesSvgDelete,
-                          size: 16,
-                          onTap: () async {
-                            if (cell.columnName == 'Actions' &&
-                                cell.value is ProductModel) {
-                              final category = cell.value as ProductModel;
-                              await controller.deleteProduct(category.id);
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        CustomIcon(
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {
-                            if (cell.columnName == 'Actions' &&
-                                cell.value is ProductModel) {
-                              final product = cell.value as ProductModel;
-                              controller.showProductDetailsDialog(product.id);
-                            }
+                            // if (cell.columnName == 'Actions' &&
+                            //     cell.value is OrderModel) {
+                            //   final order = cell.value as OrderModel;
+                            //   controller.showOrderDetailsDialog(order.id);
+                            // }
                           },
                         ),
                         const SizedBox(
                           width: 16,
                         ),
-                        if (cell.value.type == 'store')
-                          CustomIcon(
-                            isSvg: false,
-                            icon: FontAwesomeIcons.store,
-                            color: Colors.blueAccent,
-                            size: 16,
-                            onTap: () {
-                              if (cell.columnName == 'Actions' &&
-                                  cell.value is ProductModel) {
-                                final product = cell.value as ProductModel;
-                                Get.toNamed(AppRoutes.store, parameters: {
-                                  'id': product.id.toString(),
-                                });
-                              }
-                            },
-                          )
-                        else
-                          const SizedBox(
-                            width: 14,
-                            height: 14,
-                          ),
                       ],
                     ));
               }
@@ -135,7 +76,7 @@ class SFDataGridProducts extends StatelessWidget {
                 child: Builder(builder: (context) {
                   var res = HandlingDataView(
                     loading: controller.loading,
-                    dataIsEmpty: controller.filteredProducts.isEmpty,
+                    dataIsEmpty: controller.filteredUsers.isEmpty,
                   );
                   if (res.isValid) {
                     return res.response!;
@@ -143,7 +84,7 @@ class SFDataGridProducts extends StatelessWidget {
                   return SfDataGrid(
                     gridLinesVisibility: GridLinesVisibility.none,
                     headerGridLinesVisibility: GridLinesVisibility.none,
-                    source: productsDataSource,
+                    source: usersDataSource,
                     columnWidthMode: MediaQuery.sizeOf(context).width <= 475
                         ? ColumnWidthMode.auto
                         : ColumnWidthMode.fill,
@@ -173,12 +114,34 @@ class SFDataGridProducts extends StatelessWidget {
                             )),
                       ),
                       GridColumn(
-                        columnName: 'Visible',
+                        columnName: 'Role',
                         label: Container(
                             color: AppColors.white,
                             alignment: Alignment.center,
                             child: Text(
-                              'Type',
+                              'Role',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Email',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Email',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Phone',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Phone',
                               style: MyText.appStyle.fs16.wBold.reColorText
                                   .responsiveStyle(context),
                             )),
@@ -199,17 +162,17 @@ class SFDataGridProducts extends StatelessWidget {
                 }),
               ),
               ResponsiveSfDataPager(
-                  dataSource: productsDataSource,
+                  dataSource: usersDataSource,
                   onPageNavigationStart: (pageIndex) {},
                   onPageNavigationEnd: (pageIndex) async {
-                    await controller.getProductsData(pageIndex: pageIndex + 1);
+                    await controller.getUsersData(pageIndex: pageIndex + 1);
                     controller.update();
                   },
                   rowsPerPage: controller.paganationDataModel.perPage,
                   total: controller.paganationDataModel.total),
             ],
           ),
-          if (controller.loading == true)
+          if (controller.loading)
             const Center(
               child: CircularProgressIndicator(
                 color: AppColors.color_4EB7F2,

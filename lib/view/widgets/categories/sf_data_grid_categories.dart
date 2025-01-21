@@ -10,7 +10,7 @@ import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/categories_data_source.dart';
 import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_icon_svg.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_icon.dart';
 import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -44,7 +44,7 @@ class SFDataGridCategories extends StatelessWidget {
                       children: [
                         CustomIcon(
                           path: Assets.imagesSvgEdit,
-                          size: 20,
+                          size: 16,
                           onTap: () async {
                             if (cell.columnName == 'Actions' &&
                                 cell.value is CategoryModel) {
@@ -66,7 +66,7 @@ class SFDataGridCategories extends StatelessWidget {
                         ),
                         CustomIcon(
                           path: Assets.imagesSvgDelete,
-                          size: 20,
+                          size: 16,
                           onTap: () async {
                             if (cell.columnName == 'Actions' &&
                                 cell.value is CategoryModel) {

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:promotion_dashboard/core/functions/size.dart';
 
 class CustomIcon extends StatelessWidget {
   final String? path;
@@ -35,8 +34,8 @@ class CustomIcon extends StatelessWidget {
           child: isSvg == true
               ? SvgPicture.asset(
                   path!,
-                  width: width(size),
-                  height: height(size),
+                  width: size,
+                  height: size,
                   // ignore: deprecated_member_use
                   color: color,
                 )

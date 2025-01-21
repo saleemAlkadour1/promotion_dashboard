@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/controller/home/orders/orders_management_controller.dart';
+import 'package:promotion_dashboard/controller/home/users/users_management_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
-import 'package:promotion_dashboard/view/widgets/orders/sf_data_grid_orders.dart';
+import 'package:promotion_dashboard/view/widgets/users/sf_data_grid_users.dart';
 
-class OrdersManagement extends StatelessWidget {
-  const OrdersManagement({super.key});
+class UsersManagement extends StatelessWidget {
+  const UsersManagement({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OrdersManagementControllerImp());
-    return GetBuilder<OrdersManagementControllerImp>(builder: (controller) {
+    Get.put(UsersManagementControllerImp());
+    return GetBuilder<UsersManagementControllerImp>(builder: (controller) {
       return Scaffold(
         backgroundColor: AppColors.screenColor,
         body: SafeArea(
@@ -23,7 +23,7 @@ class OrdersManagement extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Orders',
+                  'Users',
                   style: MyText.appStyle.fs24.wBold
                       .reCustomColor(AppColors.black)
                       .responsiveStyle(context),
@@ -33,22 +33,17 @@ class OrdersManagement extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CustomDropdown(
-                        label: 'Status',
-                        value: controller.statusValue,
-                        items: const [
-                          'All',
-                          'execute',
-                          'canceled',
-                          'pending',
-                        ],
-                        onChanged: controller.updateStatusValue,
+                        label: 'Roles',
+                        value: controller.rolesValue,
+                        items: const ['All', 'user', 'admin'],
+                        onChanged: controller.updateRolesValue,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
                 const Expanded(
-                  child: SFDataGridOrders(),
+                  child: SFDataGridUsers(),
                 ),
               ],
             ),
