@@ -14,6 +14,8 @@ class HomeControllerImp extends HomeController {
     DrawerItems.productsManagement.screen,
     DrawerItems.orders.screen,
     DrawerItems.transactions.screen,
+    DrawerItems.contacts.screen,
+    DrawerItems.ads.screen,
     DrawerItems.users.screen,
     DrawerItems.notifications.screen,
     DrawerItems.chats.screen,

@@ -4,11 +4,11 @@ import 'package:promotion_dashboard/core/classes/api_response.dart';
 import 'package:promotion_dashboard/core/classes/curd.dart';
 import 'package:promotion_dashboard/routes/end_points.dart';
 
-class CategoriesData {
+class ContactsData {
   ApiService apiService = Get.find();
   Future<ApiResponse> get({required int indexPage}) async {
     var response = await apiService.get(
-      EndPoints.store.categories,
+      EndPoints.contact.contacts,
       params: {
         'page': indexPage,
       },
@@ -16,36 +16,32 @@ class CategoriesData {
     return response;
   }
 
-  Future<ApiResponse> show(categoryId) async {
+  Future<ApiResponse> show(int id) async {
     var response = await apiService.get(
-      EndPoints.store.category,
-      params: {},
+      EndPoints.contact.contact,
       pathVariables: {
-        'id': categoryId,
+        'id': id,
       },
+      params: {},
     );
     return response;
   }
 
   Future<ApiResponse> create(
     Map name,
-    Map description,
-    String displayMethod,
-    bool visible,
-    bool available,
-    File image,
+    String url,
+    File icon,
+    String color,
   ) async {
     var response = await apiService.post(
-      EndPoints.store.categories,
+      EndPoints.contact.contacts,
       data: {
         'name': name,
-        'description': description,
-        'product_display_method': displayMethod,
-        'visible': visible ? 1 : 0,
-        'available': available ? 1 : 0,
+        'url': url,
+        'color': color,
       },
       files: {
-        'image': image,
+        'icon': icon,
       },
     );
     return response;
@@ -53,28 +49,24 @@ class CategoriesData {
 
   Future<ApiResponse> update(
     int id,
-    Map name,
-    Map description,
-    String productDisplayMethod,
-    bool visible,
-    bool available,
-    File? image,
+    Map? name,
+    String? url,
+    File? icon,
+    String? color,
   ) async {
     var response = await apiService.post(
-      EndPoints.store.category,
+      EndPoints.contact.contact,
       pathVariables: {
         'id': id,
       },
       data: {
         'name': name,
-        'description': description,
-        'product_display_method': productDisplayMethod,
-        'visible': visible ? 1 : 0,
-        'available': available ? 1 : 0,
+        'url': url,
+        'color': color,
       },
-      files: image != null
+      files: icon != null
           ? {
-              'image': image,
+              'icon': icon,
             }
           : null,
     );
@@ -83,10 +75,8 @@ class CategoriesData {
 
   Future<ApiResponse> delete(int id) async {
     var response = await apiService.delete(
-      EndPoints.store.category,
-      pathVariables: {
-        'id': id,
-      },
+      EndPoints.contact.contact,
+      pathVariables: {'id': id},
     );
     return response;
   }

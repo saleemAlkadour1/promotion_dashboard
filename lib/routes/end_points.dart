@@ -9,6 +9,7 @@ final class EndPoints {
   static const Store store = Store();
   static const Order order = Order();
   static const Transaction transaction = Transaction();
+  static const Contact contact = Contact();
   static const User user = User();
 
   static const Notification notification = Notification();
@@ -57,6 +58,14 @@ final class Transaction {
 
   final String transactions = '${EndPoints.baseApi}/transactions';
   final String transaction = '${EndPoints.baseApi}/transactions/{id}';
+}
+
+@immutable
+final class Contact {
+  const Contact();
+
+  final String contacts = '${EndPoints.baseApi}/general/contacts';
+  final String contact = '${EndPoints.baseApi}/general/contacts/{id}';
 }
 
 @immutable

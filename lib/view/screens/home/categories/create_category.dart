@@ -26,7 +26,7 @@ class CreateCategory extends StatelessWidget {
                 scrolledUnderElevation: 0,
                 shadowColor: AppColors.transparent,
                 title: Text(
-                  'Category',
+                  'Create category',
                   style: MyText.appStyle.fs16.wBold.reColorText.style,
                 ),
                 automaticallyImplyLeading: false,
@@ -166,7 +166,7 @@ class CreateCategory extends StatelessWidget {
                               ? 'Loading...'
                               : 'Save',
                           onPressed: () async {
-                            await controller.addCategory();
+                            await controller.createCategory();
                           },
                         ),
                         const SizedBox(

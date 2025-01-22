@@ -8,6 +8,7 @@ import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
+import 'package:promotion_dashboard/view/screens/home/contacts/contacts_management.dart';
 import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
 import 'package:promotion_dashboard/view/screens/home/notifications/notifications_management.dart';
 import 'package:promotion_dashboard/view/screens/home/orders/orders_management.dart';
@@ -101,6 +102,28 @@ class CustomDawer extends StatelessWidget {
                     },
                   ),
                   DrawerItem(
+                    title: 'Contacts',
+                    isSvg: false,
+                    icon: Icons.headset_mic_outlined,
+                    isActive:
+                        controller.selectedIndex == DrawerItems.contacts.value
+                            ? true
+                            : false,
+                    onTap: () {
+                      controller.updateIndex(DrawerItems.contacts.value);
+                    },
+                  ),
+                  DrawerItem(
+                    title: 'Ads',
+                    imagePath: Assets.imagesSvgAd,
+                    isActive: controller.selectedIndex == DrawerItems.ads.value
+                        ? true
+                        : false,
+                    onTap: () {
+                      controller.updateIndex(DrawerItems.ads.value);
+                    },
+                  ),
+                  DrawerItem(
                     title: 'Users',
                     isSvg: false,
                     icon: FontAwesomeIcons.user,
@@ -174,10 +197,12 @@ enum DrawerItems {
   productsManagement(2, ProductsManagement()),
   orders(3, OrdersManagement()),
   transactions(4, TransactionsManagement()),
-  users(5, UsersManagement()),
-  notifications(6, NotificationsManagement()),
-  chats(7, Chats()),
-  settings(8, SizedBox());
+  contacts(5, ContactsManagement()),
+  ads(6, SizedBox()),
+  users(7, UsersManagement()),
+  notifications(8, NotificationsManagement()),
+  chats(9, Chats()),
+  settings(10, SizedBox());
 
   final int value;
   final Widget screen;

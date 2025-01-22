@@ -97,8 +97,6 @@ class CreateProductControllerImp extends CreateProductController {
 
   @override
   Future<void> getCategoriesData() async {
-    loading = true;
-    update();
     var responsePaganation = await categoriesData.get(indexPage: 1);
     PaganationDataModel paganationDataModelCategories =
         PaganationDataModel.fromJson(responsePaganation.body['meta']);

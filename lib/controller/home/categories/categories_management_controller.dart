@@ -90,8 +90,8 @@ class CategoriesManagementControllerImp extends CategoriesManagementController {
         if (response.isSuccess) {
           getCategoriesData(pageIndex: paganationDataModel.currentPage);
           customSnackBar(
-            '',
             response.message!,
+            '',
             snackType: SnackBarType.correct,
             snackPosition: SnackBarPosition.topEnd,
           );

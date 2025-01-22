@@ -124,8 +124,8 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
 
     if (image == null && isImageFind == false) {
       customSnackBar(
+        'Error',
         'Please select an image',
-        '',
         snackType: SnackBarType.error,
       );
       return;
@@ -148,9 +148,12 @@ class UpdateCategoryControllerImp extends UpdateCategoryController {
     // معالجة الاستجابة
     if (response.isSuccess) {
       Get.back();
-      customSnackBar('Success', response.message!,
-          snackType: SnackBarType.correct,
-          snackPosition: SnackBarPosition.topEnd);
+      customSnackBar(
+        response.message!,
+        '',
+        snackType: SnackBarType.correct,
+        snackPosition: SnackBarPosition.topEnd,
+      );
     }
     loading = false;
     update();

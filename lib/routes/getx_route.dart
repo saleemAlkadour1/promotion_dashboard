@@ -6,6 +6,8 @@ import 'package:promotion_dashboard/view/screens/home/categories/categories_mana
 import 'package:promotion_dashboard/view/screens/home/categories/create_category.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/update_category.dart';
 import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
+import 'package:promotion_dashboard/view/screens/home/contacts/create_contact.dart';
+import 'package:promotion_dashboard/view/screens/home/contacts/update_contact.dart';
 import 'package:promotion_dashboard/view/screens/home/dashboard/dashboard.dart';
 import 'package:promotion_dashboard/view/screens/home/home.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
@@ -41,5 +43,7 @@ List<GetPage<dynamic>> getPages = [
   GetPage(
       name: AppRoutes.selectCountryAndOperator,
       page: () => const SelectCountryAndOperator()),
-  GetPage(name: AppRoutes.store, page: () => Store()),
+  GetPage(name: AppRoutes.store, page: () => const Store()),
+  GetPage(name: AppRoutes.createContact, page: () => const CreateContact()),
+  GetPage(name: AppRoutes.updateContact, page: () => const UpdateContact()),
 ];

@@ -4,60 +4,32 @@ import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/contacts_data.dart';
 
-abstract class CreateCategoryController extends GetxController {
+abstract class CreateContactController extends GetxController {
   // Text controllers
   List<TextEditingController> nameController = [];
-  List<TextEditingController> descriptionController = [];
-
-  // Dropdown values
-  String displayMethodValue = 'GridView';
-
-  String visibleValue = 'Yes';
-  String avilableValue = 'Yes';
-
-  // Images list
+  late TextEditingController urlController;
   File? image;
-  bool loading = false;
-
   // Methods (abstract)
-  void updateDisplayMethodValue(String value);
-  void updateVisibleValue(String value);
-  void updateAvilableValue(String value);
+
   Future<void> pickImage();
-  Future<void> createCategory();
+  Future<void> createContact();
 }
 
-class CreateCategoryControllerImp extends CreateCategoryController {
-  CategoriesData categoriesData = CategoriesData();
+class CreateContactControllerImp extends CreateContactController {
+  bool loading = false;
+  ContactsData contactsData = ContactsData();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
+  Color selectedColor = Colors.blue;
 
   @override
   void onInit() {
+    urlController = TextEditingController();
     for (var i = 0; i < myLanguages.length; i++) {
       nameController.add(TextEditingController());
-      descriptionController.add(TextEditingController());
     }
     super.onInit();
-  }
-
-  @override
-  void updateDisplayMethodValue(String value) {
-    displayMethodValue = value;
-    update();
-  }
-
-  @override
-  void updateVisibleValue(String value) {
-    visibleValue = value;
-    update();
-  }
-
-  @override
-  void updateAvilableValue(String value) {
-    avilableValue = value;
-    update();
   }
 
   @override
@@ -73,17 +45,18 @@ class CreateCategoryControllerImp extends CreateCategoryController {
   @override
   void onClose() {
     nameController.clear();
-    descriptionController.clear();
+    urlController.clear();
     super.onClose();
   }
 
   @override
-  Future<void> createCategory() async {
+  Future<void> createContact() async {
+    String color = '0x${selectedColor.value.toRadixString(16).toUpperCase()}';
     if (!formState.currentState!.validate()) return;
     if (image == null) {
       customSnackBar(
+        'Error',
         'Please select an image',
-        '',
         snackType: SnackBarType.error,
       );
       return;
@@ -91,13 +64,11 @@ class CreateCategoryControllerImp extends CreateCategoryController {
     loading = true;
     update();
 
-    var response = await categoriesData.create(
+    var response = await contactsData.create(
       setValues(nameController),
-      setValues(descriptionController),
-      displayMethodValue,
-      visibleValue == 'Yes' ? true : false,
-      avilableValue == 'Yes' ? true : false,
+      urlController.text,
       image!,
+      color,
     );
 
     if (response.isSuccess) {
