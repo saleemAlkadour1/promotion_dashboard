@@ -1,13 +1,17 @@
+//Old design
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:promotion_dashboard/data/model/home/transactions/transaction_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:promotion_dashboard/core/constants/app_colors.dart';
+import 'package:promotion_dashboard/core/functions/error_image.dart';
+import 'package:promotion_dashboard/data/model/home/users/user_model.dart';
 
 class UserDetailsDialog extends StatelessWidget {
   const UserDetailsDialog({
     super.key,
-    required this.transactionModel,
+    required this.userModel,
   });
-  final TransactionModel transactionModel;
+  final UserModel userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class UserDetailsDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Transaction Details',
+                  'User Details',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -44,70 +48,76 @@ class UserDetailsDialog extends StatelessWidget {
               ],
             ),
             const Divider(color: Colors.grey),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
 
-            // Details
+            // User Info
             Flexible(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildLabelValueRow('Transaction ID',
-                        transactionModel.id.toString(), context),
-                    _buildLabelValueRow(
-                        'Amount',
-                        '${transactionModel.amount} ${transactionModel.currency}',
+                    // Profile Photo
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                          border:
+                              Border.all(color: Colors.blueAccent, width: 3),
+                        ),
+                        child: ClipOval(
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                            imageUrl: userModel.profilePhoto ??
+                                'https://i.ibb.co/1ZDRN67/profile.jpg',
+                            progressIndicatorBuilder:
+                                (context, url, progress) => const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.color_4EB7F2,
+                              ),
+                            ),
+                            errorWidget: myErrorWidget,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    buildLabelValueRow('Name', userModel.firstName, context),
+                    buildLabelValueRow('Email', userModel.email, context),
+                    buildLabelValueRow('Phone', userModel.phone, context),
+                    buildLabelValueRow('Wallet Balance',
+                        userModel.walletBalance.toString(), context),
+                    buildLabelValueRow('Role', userModel.role, context),
+                    buildLabelValueRow('Description',
+                        userModel.description ?? 'No Description', context),
+                    buildLabelValueRow(
+                        'Approval Status',
+                        userModel.approve ? 'Approved' : 'Not Approved',
                         context),
-                    _buildLabelValueRow('Type', transactionModel.type, context),
-                    _buildLabelValueRow('Category ID',
-                        transactionModel.categoryId.toString(), context),
-                    _buildLabelValueRow(
-                        'User ID', transactionModel.userId.toString(), context),
-                    _buildLabelValueRow(
-                        'Description', transactionModel.description, context),
                     const SizedBox(height: 12),
 
                     // Dates
-                    _buildLabelValueRow(
+                    buildLabelValueRow(
+                      'Code Expiry Date',
+                      userModel.codeExpiryDate.toIso8601String(),
+                      context,
+                    ),
+                    buildLabelValueRow(
                       'Created At',
-                      transactionModel.createdAt.toIso8601String(),
+                      userModel.createdAt.toIso8601String(),
                       context,
                     ),
-                    _buildLabelValueRow(
+                    buildLabelValueRow(
                       'Updated At',
-                      transactionModel.updatedAt.toIso8601String(),
-                      context,
-                    ),
-                    const SizedBox(height: 12),
-
-                    // User Info
-                    const Text(
-                      'User Info:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _buildLabelValueRow(
-                      'Name',
-                      transactionModel.user.firstName,
-                      context,
-                    ),
-                    _buildLabelValueRow(
-                        'Email', transactionModel.user.email, context),
-                    _buildLabelValueRow(
-                        'Wallet Balance',
-                        transactionModel.user.walletBalance.toString(),
-                        context),
-                    _buildLabelValueRow(
-                      'Role',
-                      transactionModel.user.role,
-                      context,
-                    ),
-                    _buildLabelValueRow(
-                      'Phone',
-                      transactionModel.user.phone,
+                      userModel.updatedAt.toIso8601String(),
                       context,
                     ),
                   ],
@@ -121,25 +131,29 @@ class UserDetailsDialog extends StatelessWidget {
   }
 
   // Helper Method for Label-Value Rows
-  Widget _buildLabelValueRow(
+  Widget buildLabelValueRow(
     String label,
     String value,
     BuildContext context,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '$label: ',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey,
+          Expanded(
+            flex: 2,
+            child: Text(
+              '$label: ',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
             ),
           ),
           Expanded(
+            flex: 3,
             child: Text(
               value,
               style: const TextStyle(

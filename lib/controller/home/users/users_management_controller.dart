@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/users/user_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/users_data.dart';
+import 'package:promotion_dashboard/view/widgets/users/users_details_dialog.dart';
 
 abstract class UsersManagementController extends GetxController {
   String? rolesValue = 'All';
@@ -57,17 +58,17 @@ class UsersManagementControllerImp extends UsersManagementController {
     update();
   }
 
-  // void showOrderDetailsDialog(int id) async {
-  //   await showUser(id);
-  //   if (userModel != null) {
-  //     Get.dialog(
-  //       OrderDetailsDialog(
-  //         orderModel: orderModel!,
-  //       ),
-  //     );
-  //     update();
-  //   }
-  // }
+  void showUserDetailsDialog(int id) async {
+    await showUser(id);
+    if (userModel != null) {
+      Get.dialog(
+        UserDetailsDialog(
+          userModel: userModel!,
+        ),
+      );
+      update();
+    }
+  }
 
   @override
   void updateRolesValue(String value) {

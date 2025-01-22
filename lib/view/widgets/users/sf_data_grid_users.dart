@@ -6,6 +6,7 @@ import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart
 import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/data/data_grid_sources/users_data_source.dart';
+import 'package:promotion_dashboard/data/model/home/users/user_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon.dart';
 import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -63,11 +64,11 @@ class SFDataGridUsers extends StatelessWidget {
                           path: Assets.imagesSvgEye,
                           size: 16,
                           onTap: () {
-                            // if (cell.columnName == 'Actions' &&
-                            //     cell.value is OrderModel) {
-                            //   final order = cell.value as OrderModel;
-                            //   controller.showOrderDetailsDialog(order.id);
-                            // }
+                            if (cell.columnName == 'Actions' &&
+                                cell.value is UserModel) {
+                              final order = cell.value as UserModel;
+                              controller.showUserDetailsDialog(order.id);
+                            }
                           },
                         ),
                         const SizedBox(
