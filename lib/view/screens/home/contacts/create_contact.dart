@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/contacts/create_contact_controller.dart';
 import 'package:promotion_dashboard/core/classes/validator.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
+import 'package:promotion_dashboard/view/widgets/general/color_picker_dialog.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
@@ -95,7 +95,10 @@ class CreateContact extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
 
-                    Row(
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -128,7 +131,6 @@ class CreateContact extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 16),
                         Text(
                           'Selected Color: ${controller.selectedColor.value.toRadixString(16).toUpperCase()}',
                           style: MyText.appStyle.fs14.wRegular.style,
@@ -183,73 +185,6 @@ class CreateContact extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class ColorPickerDialog extends StatelessWidget {
-  final Color initialColor;
-  final Function(Color) onColorSelected;
-
-  const ColorPickerDialog({
-    super.key,
-    required this.initialColor,
-    required this.onColorSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    Color selectedColor = initialColor;
-    TextEditingController colorController = TextEditingController(
-      text: '0x${selectedColor.value.toRadixString(16).toUpperCase()}',
-    );
-    return AlertDialog(
-      title: const Text(
-        'Pick a Color',
-      ),
-      titleTextStyle:
-          MyText.appStyle.fs16.wBold.reCustomColor(AppColors.black).style,
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            ColorPicker(
-              pickerColor: selectedColor,
-              onColorChanged: (color) {
-                selectedColor = color;
-                colorController.text =
-                    '0x${color.value.toRadixString(16).toUpperCase()}';
-              },
-              colorPickerWidth: 200,
-              pickerAreaBorderRadius: BorderRadius.circular(16),
-              hexInputBar: true,
-              hexInputController: colorController,
-              enableAlpha: false,
-              displayThumbColor: true,
-              portraitOnly: true,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        CustomButton(
-          title: 'Cancel',
-          height: 30,
-          backgroundColor: AppColors.transparent,
-          textColor: AppColors.color_4EB7F2,
-          shadowColor: AppColors.transparent,
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        CustomButton(
-          title: 'Select',
-          height: 30,
-          onPressed: () {
-            onColorSelected(selectedColor);
-            Get.back();
-          },
-        )
-      ],
     );
   }
 }

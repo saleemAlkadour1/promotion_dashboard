@@ -8,7 +8,7 @@ import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart
 import 'package:promotion_dashboard/core/functions/error_image.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/view/screens/home/contacts/create_contact.dart';
+import 'package:promotion_dashboard/view/widgets/general/color_picker_dialog.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
@@ -184,7 +184,7 @@ class UpdateContact extends StatelessWidget {
                                           color: AppColors.white,
                                           shape: BoxShape.circle,
                                         ),
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.edit,
                                           color: AppColors.black,
                                           size: 15,
