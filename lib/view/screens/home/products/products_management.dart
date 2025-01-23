@@ -7,7 +7,7 @@ import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/view/screens/home/products/create_product.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
-import 'package:promotion_dashboard/view/widgets/products/sf_data_grid_products.dart';
+import 'package:promotion_dashboard/view/widgets/home/products/sf_data_grid_products.dart';
 
 class ProductsManagement extends StatelessWidget {
   const ProductsManagement({super.key});

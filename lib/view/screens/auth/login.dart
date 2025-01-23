@@ -4,7 +4,7 @@ import 'package:promotion_dashboard/controller/auth/login_controller.dart';
 import 'package:promotion_dashboard/core/classes/validator.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
-import 'package:promotion_dashboard/view/widgets/login/login_text_field.dart';
+import 'package:promotion_dashboard/view/widgets/auth/login/login_text_field.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});

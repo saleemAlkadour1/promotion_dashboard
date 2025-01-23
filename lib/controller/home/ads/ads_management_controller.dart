@@ -7,7 +7,7 @@ import 'package:promotion_dashboard/data/model/home/contacts/contact_model.dart'
 import 'package:promotion_dashboard/data/resource/remote/home/contacts_data.dart';
 import 'package:promotion_dashboard/view/widgets/home/contacts/contacts_details_dialog.dart';
 
-abstract class ContactsManagementController extends GetxController {
+abstract class AdsManagementController extends GetxController {
   Future<void> getContactsData({required int pageIndex});
   Future<void> deleteContact(int id);
   late TextEditingController searchController;
@@ -16,7 +16,7 @@ abstract class ContactsManagementController extends GetxController {
   Future<void> showCategoryDetailsDialog(int id);
 }
 
-class ContactsManagementControllerImp extends ContactsManagementController {
+class AdsManagementControllerImp extends AdsManagementController {
   ContactsData contactsData = ContactsData();
 
   List<ContactModel> contacts = [];

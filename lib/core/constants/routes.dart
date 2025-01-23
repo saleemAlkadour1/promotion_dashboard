@@ -17,4 +17,6 @@ abstract class AppRoutes {
 
   static String createContact = '/create-contact';
   static String updateContact = '/update-contact';
+  static String createAd = '/create-ad';
+  static String updateAd = '/update-ad';
 }

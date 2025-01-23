@@ -5,7 +5,7 @@ import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/categories/category_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/categories_data.dart';
-import 'package:promotion_dashboard/view/widgets/categories/categories_details_dialog.dart';
+import 'package:promotion_dashboard/view/widgets/home/categories/categories_details_dialog.dart';
 
 abstract class CategoriesManagementController extends GetxController {
   Future<void> getCategoriesData({required int pageIndex});

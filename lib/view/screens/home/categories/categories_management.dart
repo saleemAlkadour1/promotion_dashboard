@@ -4,7 +4,7 @@ import 'package:promotion_dashboard/controller/home/categories/categories_manage
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
-import 'package:promotion_dashboard/view/widgets/categories/sf_data_grid_categories.dart'; // Ensure this import is correct and the file exists
+import 'package:promotion_dashboard/view/widgets/home/categories/sf_data_grid_categories.dart'; // Ensure this import is correct and the file exists
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 

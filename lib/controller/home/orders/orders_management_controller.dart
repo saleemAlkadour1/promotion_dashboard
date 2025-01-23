@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/orders/order_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/orders_data.dart';
-import 'package:promotion_dashboard/view/widgets/orders/orders_details_dialog.dart';
+import 'package:promotion_dashboard/view/widgets/home/orders/orders_details_dialog.dart';
 
 abstract class OrdersManagementController extends GetxController {
   String? statusValue = 'All';

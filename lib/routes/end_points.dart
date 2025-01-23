@@ -10,8 +10,8 @@ final class EndPoints {
   static const Order order = Order();
   static const Transaction transaction = Transaction();
   static const Contact contact = Contact();
+  static const Ad ad = Ad();
   static const User user = User();
-
   static const Notification notification = Notification();
   static const Server server = Server();
 
@@ -66,6 +66,14 @@ final class Contact {
 
   final String contacts = '${EndPoints.baseApi}/general/contacts';
   final String contact = '${EndPoints.baseApi}/general/contacts/{id}';
+}
+
+@immutable
+final class Ad {
+  const Ad();
+
+  final String ads = '${EndPoints.baseApi}/general/ads';
+  final String ad = '${EndPoints.baseApi}/general/ads/{id}';
 }
 
 @immutable

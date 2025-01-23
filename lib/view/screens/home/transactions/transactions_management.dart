@@ -4,7 +4,7 @@ import 'package:promotion_dashboard/controller/home/transactions/transactions_ma
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
-import 'package:promotion_dashboard/view/widgets/transactions/sf_data_grid_transactions.dart';
+import 'package:promotion_dashboard/view/widgets/home/transactions/sf_data_grid_transactions.dart';
 
 class TransactionsManagement extends StatelessWidget {
   const TransactionsManagement({super.key});

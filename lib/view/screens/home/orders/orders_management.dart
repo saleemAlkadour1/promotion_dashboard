@@ -4,7 +4,7 @@ import 'package:promotion_dashboard/controller/home/orders/orders_management_con
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
-import 'package:promotion_dashboard/view/widgets/orders/sf_data_grid_orders.dart';
+import 'package:promotion_dashboard/view/widgets/home/orders/sf_data_grid_orders.dart';
 
 class OrdersManagement extends StatelessWidget {
   const OrdersManagement({super.key});

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
 import 'package:promotion_dashboard/data/model/home/transactions/transaction_model.dart';
 import 'package:promotion_dashboard/data/resource/remote/home/transactions_data.dart';
-import 'package:promotion_dashboard/view/widgets/transactions/transactions_details_dialog.dart';
+import 'package:promotion_dashboard/view/widgets/home/transactions/transactions_details_dialog.dart';
 
 abstract class TransactionsManagementController extends GetxController {
   String? typeValue = 'All';
