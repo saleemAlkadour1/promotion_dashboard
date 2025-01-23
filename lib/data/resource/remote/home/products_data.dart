@@ -82,14 +82,16 @@ class ProductsData {
     required num salePrice,
     bool? numberly,
     required String source,
-    // required List<File> images,
+    List<File>? images,
     num? min,
     num? max,
     required bool available,
   }) async {
     var response = await apiService.post(
       EndPoints.store.product,
-      pathVariables: {'id': id},
+      pathVariables: {
+        'id': id,
+      },
       data: {
         'name': names,
         'description': descriptions,
@@ -104,7 +106,11 @@ class ProductsData {
         'max': max,
         'available': available ? 1 : 0,
       },
-      // files: {'images': images},
+      files: images != null
+          ? {
+              'images': images,
+            }
+          : null,
     );
     return response;
   }
@@ -117,10 +123,12 @@ class ProductsData {
   }
 
   Future<ApiResponse> showProductStore(int id) async {
-    var response =
-        await apiService.get(EndPoints.store.productItem, pathVariables: {
-      'id': id,
-    });
+    var response = await apiService.get(
+      EndPoints.store.productItem,
+      pathVariables: {
+        'id': id,
+      },
+    );
     return response;
   }
 

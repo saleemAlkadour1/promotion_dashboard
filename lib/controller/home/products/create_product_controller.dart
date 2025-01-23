@@ -15,7 +15,6 @@ import 'package:promotion_dashboard/view/screens/home/products/create_product.da
 
 abstract class CreateProductController extends GetxController {
   bool requiredValue = false;
-  void toggleRequired(bool? value);
 
   // Text controllers
   List<TextEditingController> nameController = [];
@@ -46,6 +45,7 @@ abstract class CreateProductController extends GetxController {
   List<File> selectedImages = [];
 
   // Methods (abstract)
+  void toggleRequired(bool? value);
   void updateVisibleValue(String value);
   void updateDisplayMethodValue(String value);
   void updateTypeManualLabelValue(String value);

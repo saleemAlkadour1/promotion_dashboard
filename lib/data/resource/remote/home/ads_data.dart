@@ -8,7 +8,7 @@ class AdsData {
   ApiService apiService = Get.find();
   Future<ApiResponse> get({required int indexPage}) async {
     var response = await apiService.get(
-      EndPoints.contact.contacts,
+      EndPoints.ad.ads,
       params: {
         'page': indexPage,
       },
@@ -18,7 +18,7 @@ class AdsData {
 
   Future<ApiResponse> show(int id) async {
     var response = await apiService.get(
-      EndPoints.contact.contact,
+      EndPoints.ad.ad,
       pathVariables: {
         'id': id,
       },
@@ -28,20 +28,22 @@ class AdsData {
   }
 
   Future<ApiResponse> create(
-    Map name,
-    String url,
-    File icon,
-    String color,
+    File image,
+    String startDate,
+    String endDate,
+    bool isActive,
+    String? linkUrl,
   ) async {
     var response = await apiService.post(
-      EndPoints.contact.contacts,
+      EndPoints.ad.ads,
       data: {
-        'name': name,
-        'url': url,
-        'color': color,
+        'start_date': startDate,
+        'end_date': startDate,
+        'is_active': isActive ? 1 : 0,
+        'link_url': linkUrl
       },
       files: {
-        'icon': icon,
+        'image': image,
       },
     );
     return response;
@@ -49,24 +51,26 @@ class AdsData {
 
   Future<ApiResponse> update(
     int id,
-    Map? name,
-    String? url,
-    File? icon,
-    String? color,
+    File? image,
+    String startDate,
+    String endDate,
+    bool isActive,
+    String? linkUrl,
   ) async {
     var response = await apiService.post(
-      EndPoints.contact.contact,
+      EndPoints.ad.ad,
       pathVariables: {
         'id': id,
       },
       data: {
-        'name': name,
-        'url': url,
-        'color': color,
+        'start_date': startDate,
+        'end_date': startDate,
+        'is_active': isActive ? 1 : 0,
+        'link_url': linkUrl
       },
-      files: icon != null
+      files: image != null
           ? {
-              'icon': icon,
+              'image': image,
             }
           : null,
     );
@@ -75,8 +79,10 @@ class AdsData {
 
   Future<ApiResponse> delete(int id) async {
     var response = await apiService.delete(
-      EndPoints.contact.contact,
-      pathVariables: {'id': id},
+      EndPoints.ad.ad,
+      pathVariables: {
+        'id': id,
+      },
     );
     return response;
   }

@@ -2,56 +2,53 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:promotion_dashboard/core/functions/format_date.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/model/home/contacts/contact_model.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/contacts_data.dart';
+import 'package:promotion_dashboard/data/model/home/ads/ad_model.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/ads_data.dart';
 
 abstract class UpdateAdController extends GetxController {
-  // Text controllers
-  List<TextEditingController> nameController = [];
-  late TextEditingController urlController;
+  bool activeValue = false;
+
+  late TextEditingController linkUrlController;
+  late TextEditingController startDateController;
+  late TextEditingController endDateController;
 
   File? image;
+  showAd();
+  initialAd(AdModel ad);
+  Future<void> updateAd();
+  void toggleActive(bool? value);
 
   Future<void> pickImage();
-  initialContact(ContactModel contact);
-  Future<void> updateContact();
-  showContact();
 }
 
 class UpdateAdControllerImp extends UpdateAdController {
   bool loading = false;
-  int contactId = 0;
+  int adId = 0;
 
-  ContactModel? contactModel;
+  AdModel? adModel;
   bool isImageFind = true;
-  ContactsData contactsData = ContactsData();
+  AdsData adsData = AdsData();
+  DateTime? startDate;
+  DateTime? endDate;
   GlobalKey<FormState> formState = GlobalKey<FormState>();
-  late Color selectedColor;
 
   @override
   void onInit() {
-    urlController = TextEditingController();
-
-    for (var i = 0; i < myLanguages.length; i++) {
-      nameController.add(TextEditingController());
-    }
-    contactId = int.parse(Get.parameters['contact_id'] ?? '0');
-    showContact();
+    linkUrlController = TextEditingController();
+    startDateController = TextEditingController();
+    endDateController = TextEditingController();
+    adId = int.parse(Get.parameters['ad_id'] ?? '0');
+    showAd();
     super.onInit();
   }
 
   @override
-  void showContact() async {
-    loading = true;
-    update();
-    var response = await contactsData.show(contactId);
-    if (response.isSuccess) {
-      contactModel = ContactModel.fromJson(response.data);
-      initialContact(contactModel!);
-    }
-    loading = false;
+  void toggleActive(bool? value) {
+    activeValue = value ?? false;
     update();
   }
 
@@ -66,27 +63,44 @@ class UpdateAdControllerImp extends UpdateAdController {
   }
 
   @override
-  void onClose() {
-    nameController.clear();
-    urlController.clear();
-    super.onClose();
-  }
-
-  @override
-  initialContact(ContactModel contact) {
-    contactModel = contact;
-    getValues(nameController, contact.name.toJson());
-    urlController.text = contact.url;
-    selectedColor = Color(int.tryParse(contact.color)!);
+  void showAd() async {
+    loading = true;
+    update();
+    var response = await adsData.show(adId);
+    if (response.isSuccess) {
+      adModel = AdModel.fromJson(response.data);
+      initialAd(adModel!);
+    }
+    loading = false;
     update();
   }
 
   @override
-  Future<void> updateContact() async {
-    String color = '0x${selectedColor.value.toRadixString(16).toUpperCase()}';
+  initialAd(AdModel ad) {
+    adModel = ad;
+    startDateController.text = formatDate(ad.startDate.toString());
+    endDateController.text = formatDate(ad.endDate.toString());
+    toggleActive(ad.isActive);
+    linkUrlController.text = ad.linkUrl ?? 'No link url';
+    update();
+  }
 
+  @override
+  Future<void> updateAd() async {
     if (!formState.currentState!.validate()) return;
-
+    startDate = DateFormat('dd-MM-yyyy').parse(startDateController.text);
+    endDate = DateFormat('dd-MM-yyyy').parse(endDateController.text);
+    if (!formState.currentState!.validate()) return;
+    if (startDate != null && endDate != null) {
+      if (endDate!.isBefore(startDate!)) {
+        customSnackBar(
+          'Invalid Dates',
+          'The end date must be after the start date.',
+          snackType: SnackBarType.error,
+        );
+        return;
+      }
+    }
     if (image == null && isImageFind == false) {
       customSnackBar(
         'Please select an image',
@@ -95,16 +109,16 @@ class UpdateAdControllerImp extends UpdateAdController {
       );
       return;
     }
+    File? imageToSend = isImageFind ? null : image;
     loading = true;
     update();
-    File? imageToSend = isImageFind ? null : image;
-
-    var response = await contactsData.update(
-      contactId,
-      setValues(nameController),
-      urlController.text,
+    var response = await adsData.update(
+      adId,
       imageToSend,
-      color,
+      startDateController.text,
+      endDateController.text,
+      activeValue,
+      linkUrlController.text,
     );
 
     if (response.isSuccess) {
@@ -117,6 +131,14 @@ class UpdateAdControllerImp extends UpdateAdController {
     }
     loading = false;
     update();
+  }
+
+  @override
+  void onClose() {
+    startDateController.clear();
+    endDateController.clear();
+    linkUrlController.clear();
+    super.onClose();
   }
 }
 

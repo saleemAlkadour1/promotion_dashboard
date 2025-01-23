@@ -1,35 +1,46 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' hide MultipartFile, FormData;
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/contacts_data.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/ads_data.dart';
 
 abstract class CreateAdController extends GetxController {
-  // Text controllers
-  List<TextEditingController> nameController = [];
-  late TextEditingController urlController;
-  File? image;
-  // Methods (abstract)
+  bool activeValue = false;
 
+  // Text controllers
+  late TextEditingController linkUrlController;
+  late TextEditingController startDateController;
+  late TextEditingController endDateController;
+  File? image;
+  // Methods
+  void toggleActive(bool? value);
   Future<void> pickImage();
-  Future<void> createContact();
+  Future<void> createAd();
 }
 
 class CreateAdControllerImp extends CreateAdController {
   bool loading = false;
-  ContactsData contactsData = ContactsData();
+
+  AdsData adsData = AdsData();
+  DateTime? startDate;
+  DateTime? endDate;
   GlobalKey<FormState> formState = GlobalKey<FormState>();
-  Color selectedColor = Colors.blue;
 
   @override
   void onInit() {
-    urlController = TextEditingController();
-    for (var i = 0; i < myLanguages.length; i++) {
-      nameController.add(TextEditingController());
-    }
+    linkUrlController = TextEditingController();
+    startDateController = TextEditingController();
+    endDateController = TextEditingController();
+
     super.onInit();
+  }
+
+  @override
+  void toggleActive(bool? value) {
+    activeValue = value ?? false;
+    update();
   }
 
   @override
@@ -43,16 +54,20 @@ class CreateAdControllerImp extends CreateAdController {
   }
 
   @override
-  void onClose() {
-    nameController.clear();
-    urlController.clear();
-    super.onClose();
-  }
-
-  @override
-  Future<void> createContact() async {
-    String color = '0x${selectedColor.value.toRadixString(16).toUpperCase()}';
+  Future<void> createAd() async {
+    startDate = DateTime.parse(startDateController.text);
+    endDate = DateTime.parse(endDateController.text);
     if (!formState.currentState!.validate()) return;
+    if (startDate != null && endDate != null) {
+      if (endDate!.isBefore(startDate!)) {
+        customSnackBar(
+          'Invalid Dates',
+          'The end date must be after the start date.',
+          snackType: SnackBarType.error,
+        );
+        return;
+      }
+    }
     if (image == null) {
       customSnackBar(
         'Error',
@@ -64,11 +79,12 @@ class CreateAdControllerImp extends CreateAdController {
     loading = true;
     update();
 
-    var response = await contactsData.create(
-      setValues(nameController),
-      urlController.text,
+    var response = await adsData.create(
       image!,
-      color,
+      startDateController.text,
+      endDateController.text,
+      activeValue,
+      linkUrlController.text,
     );
 
     if (response.isSuccess) {
@@ -82,6 +98,14 @@ class CreateAdControllerImp extends CreateAdController {
 
     loading = false;
     update();
+  }
+
+  @override
+  void onClose() {
+    startDateController.clear();
+    endDateController.clear();
+    linkUrlController.clear();
+    super.onClose();
   }
 }
 

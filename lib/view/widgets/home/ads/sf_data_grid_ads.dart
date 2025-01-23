@@ -7,8 +7,8 @@ import 'package:promotion_dashboard/core/constants/assets.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/data/data_grid_sources/contacts_data_source.dart';
-import 'package:promotion_dashboard/data/model/home/contacts/contact_model.dart';
+import 'package:promotion_dashboard/data/data_grid_sources/ads_data_source.dart';
+import 'package:promotion_dashboard/data/model/home/ads/ad_model.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_icon.dart';
 import 'package:promotion_dashboard/view/widgets/general/responsive_sf_data_pager.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -24,13 +24,13 @@ class SfDataGridAds extends StatelessWidget {
     return GetBuilder<AdsManagementControllerImp>(builder: (controller) {
       var res = HandlingDataView(
         loading: controller.loading,
-        dataIsEmpty: controller.contacts.isEmpty,
+        dataIsEmpty: controller.ads.isEmpty,
       );
       if (res.isValid) {
         return res.response!;
       }
-      ContactsDataSource contactsDataSource = ContactsDataSource(
-        contacts: controller.filteredContacts,
+      AdsDataSource adsDataSource = AdsDataSource(
+        ads: controller.filteredAds,
         custombuildRow: (row, isEvenRow) {
           final color = isEvenRow ? const Color(0xFFF9F9F9) : Colors.white;
           return DataGridRowAdapter(
@@ -47,14 +47,14 @@ class SfDataGridAds extends StatelessWidget {
                           size: 16,
                           onTap: () async {
                             if (cell.columnName == 'Actions' &&
-                                cell.value is ContactModel) {
+                                cell.value is AdModel) {
                               await Get.toNamed(
-                                AppRoutes.updateContact,
+                                AppRoutes.updateAd,
                                 parameters: {
-                                  'contact_id': cell.value.id?.toString() ?? '',
+                                  'ad_id': cell.value.id?.toString() ?? '',
                                 },
                               );
-                              controller.getContactsData(
+                              controller.getAdsData(
                                   pageIndex: controller
                                       .paganationDataModel.currentPage);
                             }
@@ -68,9 +68,9 @@ class SfDataGridAds extends StatelessWidget {
                           size: 16,
                           onTap: () async {
                             if (cell.columnName == 'Actions' &&
-                                cell.value is ContactModel) {
-                              final contact = cell.value as ContactModel;
-                              await controller.deleteContact(contact.id);
+                                cell.value is AdModel) {
+                              final ad = cell.value as AdModel;
+                              await controller.deleteAd(ad.id);
                             }
                           },
                         ),
@@ -82,9 +82,9 @@ class SfDataGridAds extends StatelessWidget {
                           size: 16,
                           onTap: () {
                             if (cell.columnName == 'Actions' &&
-                                cell.value is ContactModel) {
-                              final category = cell.value as ContactModel;
-                              controller.showCategoryDetailsDialog(category.id);
+                                cell.value is AdModel) {
+                              final ad = cell.value as AdModel;
+                              controller.showAdDetailsDialog(ad.id);
                             }
                           },
                         ),
@@ -119,7 +119,7 @@ class SfDataGridAds extends StatelessWidget {
                 child: Builder(builder: (context) {
                   var res = HandlingDataView(
                     loading: controller.loading,
-                    dataIsEmpty: controller.filteredContacts.isEmpty,
+                    dataIsEmpty: controller.filteredAds.isEmpty,
                   );
                   if (res.isValid) {
                     return res.response!;
@@ -127,7 +127,7 @@ class SfDataGridAds extends StatelessWidget {
                   return SfDataGrid(
                     gridLinesVisibility: GridLinesVisibility.none,
                     headerGridLinesVisibility: GridLinesVisibility.none,
-                    source: contactsDataSource,
+                    source: adsDataSource,
                     columnWidthMode: MediaQuery.sizeOf(context).width <= 475
                         ? ColumnWidthMode.auto
                         : ColumnWidthMode.fill,
@@ -146,23 +146,34 @@ class SfDataGridAds extends StatelessWidget {
                             )),
                       ),
                       GridColumn(
-                        columnName: 'Name',
+                        columnName: 'Start date',
                         label: Container(
                             color: AppColors.white,
                             alignment: Alignment.center,
                             child: Text(
-                              'Name',
+                              'Start date',
                               style: MyText.appStyle.fs16.wBold.reColorText
                                   .responsiveStyle(context),
                             )),
                       ),
                       GridColumn(
-                        columnName: 'URL',
+                        columnName: 'End date',
                         label: Container(
                             color: AppColors.white,
                             alignment: Alignment.center,
                             child: Text(
-                              'URL',
+                              'End date',
+                              style: MyText.appStyle.fs16.wBold.reColorText
+                                  .responsiveStyle(context),
+                            )),
+                      ),
+                      GridColumn(
+                        columnName: 'Active',
+                        label: Container(
+                            color: AppColors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Active',
                               style: MyText.appStyle.fs16.wBold.reColorText
                                   .responsiveStyle(context),
                             )),
@@ -183,14 +194,15 @@ class SfDataGridAds extends StatelessWidget {
                 }),
               ),
               ResponsiveSfDataPager(
-                  dataSource: contactsDataSource,
-                  onPageNavigationStart: (pageIndex) {},
-                  onPageNavigationEnd: (pageIndex) async {
-                    await controller.getContactsData(pageIndex: pageIndex + 1);
-                    controller.update();
-                  },
-                  rowsPerPage: controller.paganationDataModel.perPage,
-                  total: controller.paganationDataModel.total),
+                dataSource: adsDataSource,
+                onPageNavigationStart: (pageIndex) {},
+                onPageNavigationEnd: (pageIndex) async {
+                  await controller.getAdsData(pageIndex: pageIndex + 1);
+                  controller.update();
+                },
+                rowsPerPage: controller.paganationDataModel.perPage,
+                total: controller.paganationDataModel.total,
+              ),
             ],
           ),
           if (controller.loading)

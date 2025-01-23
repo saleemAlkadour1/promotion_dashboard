@@ -1,7 +1,7 @@
 class AdModel {
   final int id;
   final String image;
-  final String linkUrl;
+  final String? linkUrl;
   final DateTime startDate;
   final DateTime endDate;
   final bool isActive;
@@ -12,7 +12,7 @@ class AdModel {
   AdModel({
     required this.id,
     required this.image,
-    required this.linkUrl,
+    this.linkUrl,
     required this.startDate,
     required this.endDate,
     required this.isActive,

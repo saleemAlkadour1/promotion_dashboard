@@ -1,3 +1,4 @@
+import 'package:promotion_dashboard/core/functions/format_date.dart';
 import 'package:promotion_dashboard/data/model/home/ads/ad_model.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -22,9 +23,11 @@ class AdsDataSource extends DataGridSource {
         .map<DataGridRow>((ad) => DataGridRow(cells: [
               DataGridCell<String>(columnName: 'ID', value: ad.id.toString()),
               DataGridCell<String>(
-                  columnName: 'Start date', value: ad.startDate.toString()),
+                  columnName: 'Start date',
+                  value: formatDate(ad.startDate.toString())),
               DataGridCell<String>(
-                  columnName: 'End date', value: ad.endDate.toString()),
+                  columnName: 'End date',
+                  value: formatDate(ad.endDate.toString())),
               DataGridCell<String>(
                   columnName: 'Active', value: ad.isActive ? 'Yes' : 'No'),
               DataGridCell<AdModel>(columnName: 'Actions', value: ad),

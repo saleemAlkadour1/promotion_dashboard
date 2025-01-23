@@ -166,7 +166,7 @@ class CreateProduct extends StatelessWidget {
                               value: controller.requiredValue,
                               onChanged: controller.toggleRequired,
                             ),
-                            Text('required',
+                            Text('Required',
                                 style: MyText.appStyle.fs13.wMedium
                                     .reCustomColor(AppColors.black)
                                     .style),

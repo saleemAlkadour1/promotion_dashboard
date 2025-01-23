@@ -95,9 +95,9 @@ class UpdateContactControllerImp extends UpdateContactController {
       );
       return;
     }
+    File? imageToSend = isImageFind ? null : image;
     loading = true;
     update();
-    File? imageToSend = isImageFind ? null : image;
 
     var response = await contactsData.update(
       contactId,

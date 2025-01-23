@@ -83,8 +83,8 @@ class SFDataGridContacts extends StatelessWidget {
                           onTap: () {
                             if (cell.columnName == 'Actions' &&
                                 cell.value is ContactModel) {
-                              final category = cell.value as ContactModel;
-                              controller.showCategoryDetailsDialog(category.id);
+                              final contact = cell.value as ContactModel;
+                              controller.showContactDetailsDialog(contact.id);
                             }
                           },
                         ),
@@ -183,14 +183,15 @@ class SFDataGridContacts extends StatelessWidget {
                 }),
               ),
               ResponsiveSfDataPager(
-                  dataSource: contactsDataSource,
-                  onPageNavigationStart: (pageIndex) {},
-                  onPageNavigationEnd: (pageIndex) async {
-                    await controller.getContactsData(pageIndex: pageIndex + 1);
-                    controller.update();
-                  },
-                  rowsPerPage: controller.paganationDataModel.perPage,
-                  total: controller.paganationDataModel.total),
+                dataSource: contactsDataSource,
+                onPageNavigationStart: (pageIndex) {},
+                onPageNavigationEnd: (pageIndex) async {
+                  await controller.getContactsData(pageIndex: pageIndex + 1);
+                  controller.update();
+                },
+                rowsPerPage: controller.paganationDataModel.perPage,
+                total: controller.paganationDataModel.total,
+              ),
             ],
           ),
           if (controller.loading)

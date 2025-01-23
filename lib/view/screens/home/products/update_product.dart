@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/products/update_product_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
+import 'package:promotion_dashboard/core/functions/error_image.dart';
 import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
@@ -179,15 +181,6 @@ class UpdateProduct extends StatelessWidget {
                   onChanged: controller.updateSourceValue,
                 ),
                 const SizedBox(height: 16.0),
-
-                // Pick and Display Images
-                CustomImagePicker(
-                  images: controller.selectedImages,
-                  onAddImage: controller.pickImages,
-                  onRemoveImage: controller.removeImage,
-                ),
-                const SizedBox(height: 16.0),
-
                 // Numberly Dropdown
                 controller.typeValue == Product.manual.type
                     ? CustomDropdown(
@@ -197,6 +190,76 @@ class UpdateProduct extends StatelessWidget {
                         onChanged: controller.updateNumberlyValue,
                       )
                     : const SizedBox(),
+                const SizedBox(height: 16.0),
+
+                Row(
+                  children: [
+                    // Pick and Display Images
+                    CustomImagePicker(
+                      images: controller.selectedImages,
+                      onAddImage: controller.pickImages,
+                      onRemoveImage: controller.removeImage,
+                    ),
+                    const SizedBox(width: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        ...List.generate(controller.oldImages.length, (index) {
+                          return SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: CachedNetworkImage(
+                                    imageUrl: controller.oldImages[index],
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    errorWidget: myErrorWidget,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        controller.removeOldImage(
+                                            controller.oldImages[index]);
+                                        controller.update();
+                                      },
+                                      child: Container(
+                                        width: 15,
+                                        height: 15,
+                                        decoration: const BoxDecoration(
+                                          color: AppColors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.close,
+                                          color: AppColors.black,
+                                          size: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                  ],
+                ),
+
                 const SizedBox(height: 16.0),
 
                 // Buttons

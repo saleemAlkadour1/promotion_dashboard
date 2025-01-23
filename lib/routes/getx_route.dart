@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
 import 'package:promotion_dashboard/core/middleware/middleware.dart';
 import 'package:promotion_dashboard/view/screens/auth/login.dart';
+import 'package:promotion_dashboard/view/screens/home/ads/create_ad.dart';
+import 'package:promotion_dashboard/view/screens/home/ads/update_ad.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/create_category.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/update_category.dart';
@@ -46,4 +48,6 @@ List<GetPage<dynamic>> getPages = [
   GetPage(name: AppRoutes.store, page: () => const Store()),
   GetPage(name: AppRoutes.createContact, page: () => const CreateContact()),
   GetPage(name: AppRoutes.updateContact, page: () => const UpdateContact()),
+  GetPage(name: AppRoutes.createAd, page: () => const CreateAd()),
+  GetPage(name: AppRoutes.updateAd, page: () => const UpdateAd()),
 ];

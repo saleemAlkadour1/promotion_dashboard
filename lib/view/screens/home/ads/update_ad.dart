@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:promotion_dashboard/controller/home/ads/update_ad_controller.dart';
 import 'package:promotion_dashboard/core/classes/validator.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/functions/error_image.dart';
-import 'package:promotion_dashboard/core/localization/changelocale.dart';
 import 'package:promotion_dashboard/core/widgets/handling_data_view.dart';
-import 'package:promotion_dashboard/view/widgets/general/color_picker_dialog.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_image_picker.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
@@ -23,7 +22,7 @@ class UpdateAd extends StatelessWidget {
       builder: (controller) {
         var res = HandlingDataView(
           loading: controller.loading,
-          dataIsEmpty: controller.contactModel == null,
+          dataIsEmpty: controller.adModel == null,
         );
         if (res.isValid) {
           return res.response!;
@@ -36,7 +35,7 @@ class UpdateAd extends StatelessWidget {
             scrolledUnderElevation: 0,
             shadowColor: AppColors.transparent,
             title: Text(
-              'Update contact',
+              'Create ad',
               style: MyText.appStyle.fs16.wBold.reColorText.style,
             ),
             automaticallyImplyLeading: false,
@@ -62,91 +61,80 @@ class UpdateAd extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Name
-                    Text(
-                      'Name',
-                      style: MyText.appStyle.fs16.wBold.reColorText.style,
-                    ),
-                    const SizedBox(height: 16),
-                    ...List.generate(
-                      myLanguages.entries.toList().length,
-                      (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 16,
-                          ),
-                          child: CustomTextField(
-                            controller: controller.nameController[index],
-                            validator:
-                                (myLanguages.entries.toList()[index]).key ==
-                                        'en'
-                                    ? (value) => MyValidator.validate(
-                                          value,
-                                          type: ValidatorType.text,
-                                          fieldName: 'the name',
-                                        )
-                                    : null,
-                            label:
-                                '${(myLanguages.entries.toList()[index].value['name']).toString().capitalizeFirst}',
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
                     CustomTextField(
-                      controller: controller.urlController,
+                      controller: controller.startDateController,
+                      readOnly: true,
+                      mouseCursor: SystemMouseCursors.click,
                       validator: (value) => MyValidator.validate(
                         value,
                         type: ValidatorType.text,
-                        fieldName: 'The url',
+                        fieldName: 'the start date',
                       ),
-                      label: 'Url',
-                      inputType: TextInputType.text,
+                      label: 'Start date',
+                      inputType: TextInputType.datetime,
+                      onTap: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2025),
+                          lastDate: DateTime(2100),
+                        );
+                        if (picked != null) {
+                          controller.startDateController.text =
+                              DateFormat('yyyy-MM-dd').format(picked);
+                          controller.update();
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    CustomTextField(
+                      controller: controller.endDateController,
+                      readOnly: true,
+                      mouseCursor: SystemMouseCursors.click,
+                      validator: (value) => MyValidator.validate(
+                        value,
+                        type: ValidatorType.text,
+                        fieldName: 'the end date',
+                      ),
+                      label: 'End date',
+                      inputType: TextInputType.datetime,
+                      onTap: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2025),
+                          lastDate: DateTime(2100),
+                        );
+                        if (picked != null) {
+                          controller.endDateController.text =
+                              DateFormat('yyyy-MM-dd').format(picked);
+                          controller.update();
+                        }
+                      },
                     ),
                     const SizedBox(height: 16.0),
 
+                    CustomTextField(
+                      controller: controller.linkUrlController,
+                      label: 'Link url',
+                      inputType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 16.0),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return ColorPickerDialog(
-                                    initialColor: controller.selectedColor,
-                                    onColorSelected: (color) {
-                                      controller.selectedColor = color;
-                                      controller.update();
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: controller.selectedColor,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                          ),
+                        Checkbox(
+                          value: controller.activeValue,
+                          onChanged: controller.toggleActive,
                         ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Selected Color: ${controller.selectedColor.value.toRadixString(16).toUpperCase()}',
-                          style: MyText.appStyle.fs14.wRegular.style,
-                        ),
+                        Text('Active',
+                            style: MyText.appStyle.fs13.wMedium
+                                .reCustomColor(AppColors.black)
+                                .style),
                       ],
                     ),
-
                     const SizedBox(height: 32),
+
                     controller.isImageFind == true
                         ? SizedBox(
                             width: 100,
@@ -156,7 +144,7 @@ class UpdateAd extends StatelessWidget {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: CachedNetworkImage(
-                                    imageUrl: controller.contactModel!.icon,
+                                    imageUrl: controller.adModel!.image,
                                     height: 200,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
@@ -229,7 +217,7 @@ class UpdateAd extends StatelessWidget {
                               ? 'Loading...'
                               : 'Save',
                           onPressed: () async {
-                            await controller.updateContact();
+                            await controller.updateAd();
                           },
                         ),
                       ],

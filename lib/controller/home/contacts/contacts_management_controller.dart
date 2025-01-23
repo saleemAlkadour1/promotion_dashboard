@@ -8,15 +8,17 @@ import 'package:promotion_dashboard/data/resource/remote/home/contacts_data.dart
 import 'package:promotion_dashboard/view/widgets/home/contacts/contacts_details_dialog.dart';
 
 abstract class ContactsManagementController extends GetxController {
+  late TextEditingController searchController;
   Future<void> getContactsData({required int pageIndex});
   Future<void> deleteContact(int id);
-  late TextEditingController searchController;
   void filterContacts(String query);
   showContact(int id);
-  Future<void> showCategoryDetailsDialog(int id);
+  Future<void> showContactDetailsDialog(int id);
 }
 
 class ContactsManagementControllerImp extends ContactsManagementController {
+  bool loading = false;
+
   ContactsData contactsData = ContactsData();
 
   List<ContactModel> contacts = [];
@@ -25,7 +27,6 @@ class ContactsManagementControllerImp extends ContactsManagementController {
   ContactModel? contactModel;
   late PaganationDataModel paganationDataModel;
 
-  bool loading = false;
   @override
   void onInit() {
     super.onInit();
@@ -64,7 +65,7 @@ class ContactsManagementControllerImp extends ContactsManagementController {
   }
 
   @override
-  Future<void> showCategoryDetailsDialog(int id) async {
+  Future<void> showContactDetailsDialog(int id) async {
     await showContact(id);
     if (contactModel != null) {
       Get.dialog(

@@ -1,62 +1,67 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:promotion_dashboard/core/functions/show_delete_confirmation_dialog.dart';
 import 'package:promotion_dashboard/core/functions/snackbar.dart';
 import 'package:promotion_dashboard/data/model/general/paganiation_data_model.dart';
-import 'package:promotion_dashboard/data/model/home/contacts/contact_model.dart';
-import 'package:promotion_dashboard/data/resource/remote/home/contacts_data.dart';
-import 'package:promotion_dashboard/view/widgets/home/contacts/contacts_details_dialog.dart';
+import 'package:promotion_dashboard/data/model/home/ads/ad_model.dart';
+import 'package:promotion_dashboard/data/resource/remote/home/ads_data.dart';
+import 'package:promotion_dashboard/view/widgets/home/ads/ads_details_dialog.dart';
 
 abstract class AdsManagementController extends GetxController {
-  Future<void> getContactsData({required int pageIndex});
-  Future<void> deleteContact(int id);
-  late TextEditingController searchController;
-  void filterContacts(String query);
-  showContact(int id);
-  Future<void> showCategoryDetailsDialog(int id);
+  String? activeValue = 'All';
+
+  void updateActiveValue(String value);
+
+  Future<void> getAdsData({required int pageIndex});
+  Future<void> deleteAd(int id);
+  void filterAds();
+  showAd(int id);
+  Future<void> showAdDetailsDialog(int id);
 }
 
 class AdsManagementControllerImp extends AdsManagementController {
-  ContactsData contactsData = ContactsData();
-
-  List<ContactModel> contacts = [];
-  List<ContactModel> filteredContacts = [];
-
-  ContactModel? contactModel;
-  late PaganationDataModel paganationDataModel;
-
   bool loading = false;
+  AdsData adsData = AdsData();
+  List<AdModel> ads = [];
+  List<AdModel> filteredAds = [];
+  AdModel? adModel;
+  late PaganationDataModel paganationDataModel;
   @override
   void onInit() {
     super.onInit();
-    searchController = TextEditingController();
-    getContactsData(pageIndex: 1);
-    filterContacts('');
+    getAdsData(pageIndex: 1);
+    filterAds();
   }
 
   @override
-  Future<void> getContactsData({required int pageIndex}) async {
+  void updateActiveValue(String value) {
+    activeValue = value;
+    filterAds();
+    update();
+  }
+
+  @override
+  Future<void> getAdsData({required int pageIndex}) async {
     loading = true;
     update();
-    var response = await contactsData.get(indexPage: pageIndex);
+    var response = await adsData.get(indexPage: pageIndex);
     if (response.isSuccess) {
-      contacts = List.generate(response.data.length,
-          (index) => ContactModel.fromJson(response.data[index]));
+      ads = List.generate(response.data.length,
+          (index) => AdModel.fromJson(response.data[index]));
       paganationDataModel = PaganationDataModel.fromJson(response.body['meta']);
-      filterContacts('');
+      filterAds();
     }
     loading = false;
     update();
   }
 
   @override
-  Future<void> showContact(int id) async {
+  Future<void> showAd(int id) async {
     loading = true;
     update();
     Get.parameters.clear();
-    var response = await contactsData.show(id);
+    var response = await adsData.show(id);
     if (response.isSuccess) {
-      contactModel = ContactModel.fromJson(response.data);
+      adModel = AdModel.fromJson(response.data);
     }
 
     loading = false;
@@ -64,23 +69,26 @@ class AdsManagementControllerImp extends AdsManagementController {
   }
 
   @override
-  Future<void> showCategoryDetailsDialog(int id) async {
-    await showContact(id);
-    if (contactModel != null) {
+  Future<void> showAdDetailsDialog(int id) async {
+    await showAd(id);
+    if (adModel != null) {
       Get.dialog(
-        ContactDetailsDialog(
-          contactModel: contactModel!,
+        AdDetailsDialog(
+          adModel: adModel!,
         ),
       );
       update();
     } else {
-      customSnackBar('Error', 'Category details not found!',
-          snackType: SnackBarType.error);
+      customSnackBar(
+        'Error',
+        'Category details not found!',
+        snackType: SnackBarType.error,
+      );
     }
   }
 
   @override
-  Future<void> deleteContact(int id) async {
+  Future<void> deleteAd(int id) async {
     showDeleteConfirmationDialog(
       title: 'Delete Confirmation',
       message: 'Are you sure you want to delete this item?',
@@ -88,10 +96,10 @@ class AdsManagementControllerImp extends AdsManagementController {
         loading = true;
         update();
 
-        var response = await contactsData.delete(id);
+        var response = await adsData.delete(id);
 
         if (response.isSuccess) {
-          getContactsData(pageIndex: paganationDataModel.currentPage);
+          getAdsData(pageIndex: paganationDataModel.currentPage);
           customSnackBar(
             response.message!,
             '',
@@ -108,14 +116,14 @@ class AdsManagementControllerImp extends AdsManagementController {
   }
 
   @override
-  void filterContacts(String query) {
-    searchController.text = query;
-    if (query.isEmpty) {
-      filteredContacts = contacts;
+  void filterAds() {
+    if (activeValue == 'All') {
+      filteredAds = ads;
     } else {
-      filteredContacts = contacts
-          .where((contact) =>
-              contact.name.en.toLowerCase().contains(query.toLowerCase()))
+      filteredAds = ads
+          .where((ad) => (ad.isActive ? 'yes' : 'no')
+              .toLowerCase()
+              .contains(activeValue!.toLowerCase()))
           .toList();
     }
     update();

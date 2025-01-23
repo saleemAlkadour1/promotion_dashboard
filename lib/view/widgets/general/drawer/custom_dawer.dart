@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:promotion_dashboard/controller/home/general/drawer_controller.dart';
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/assets.dart';
+import 'package:promotion_dashboard/view/screens/home/ads/ads_management.dart';
 import 'package:promotion_dashboard/view/screens/home/categories/categories_management.dart';
 import 'package:promotion_dashboard/view/screens/home/chats/chats.dart';
 import 'package:promotion_dashboard/view/screens/home/contacts/contacts_management.dart';
@@ -198,7 +199,7 @@ enum DrawerItems {
   orders(3, OrdersManagement()),
   transactions(4, TransactionsManagement()),
   contacts(5, ContactsManagement()),
-  ads(6, SizedBox()),
+  ads(6, AdsManagement()),
   users(7, UsersManagement()),
   notifications(8, NotificationsManagement()),
   chats(9, Chats()),

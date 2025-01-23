@@ -4,9 +4,9 @@ import 'package:promotion_dashboard/controller/home/ads/ads_management_controlle
 import 'package:promotion_dashboard/core/constants/app_colors.dart';
 import 'package:promotion_dashboard/core/constants/app_text/app_text_styles.dart';
 import 'package:promotion_dashboard/core/constants/routes.dart';
+import 'package:promotion_dashboard/view/widgets/general/custom_drop_down.dart';
 import 'package:promotion_dashboard/view/widgets/home/ads/sf_data_grid_ads.dart';
 import 'package:promotion_dashboard/view/widgets/general/custom_button.dart';
-import 'package:promotion_dashboard/view/widgets/general/custom_text_field.dart';
 
 class AdsManagement extends StatelessWidget {
   const AdsManagement({super.key});
@@ -25,7 +25,7 @@ class AdsManagement extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Contacts',
+                  'Ads',
                   style: MyText.appStyle.fs24.wBold
                       .reCustomColor(AppColors.black)
                       .responsiveStyle(context),
@@ -35,20 +35,24 @@ class AdsManagement extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: CustomTextField(
-                        label: 'Search',
-                        controller: controller.searchController,
-                        onChanged: controller.filterContacts,
-                        inputType: TextInputType.text,
+                      child: CustomDropdown(
+                        label: 'Active',
+                        value: controller.activeValue,
+                        items: const [
+                          'All',
+                          'Yes',
+                          'No',
+                        ],
+                        onChanged: controller.updateActiveValue,
                       ),
                     ),
                     const SizedBox(width: 10),
                     CustomButton(
-                      title: 'Add contact',
+                      title: 'Add ad',
                       height: 45,
                       onPressed: () async {
-                        await Get.toNamed(AppRoutes.createContact);
-                        controller.getContactsData(
+                        await Get.toNamed(AppRoutes.createAd);
+                        await controller.getAdsData(
                             pageIndex:
                                 controller.paganationDataModel.currentPage);
                       },

@@ -49,10 +49,10 @@ class ContactsData {
 
   Future<ApiResponse> update(
     int id,
-    Map? name,
-    String? url,
+    Map name,
+    String url,
     File? icon,
-    String? color,
+    String color,
   ) async {
     var response = await apiService.post(
       EndPoints.contact.contact,
@@ -76,7 +76,9 @@ class ContactsData {
   Future<ApiResponse> delete(int id) async {
     var response = await apiService.delete(
       EndPoints.contact.contact,
-      pathVariables: {'id': id},
+      pathVariables: {
+        'id': id,
+      },
     );
     return response;
   }
